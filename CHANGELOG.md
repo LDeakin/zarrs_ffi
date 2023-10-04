@@ -8,8 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
- - Update to [`zarrs`](https://github.com/LDeakin/zarrs) `v0.3.0`
-   - No code changes, but the `blosc` dependency is replaced with `blosc-src` (builds from source)
+ - Update to [`zarrs`](https://github.com/LDeakin/zarrs) `v0.4.1`
 
 ## [0.2.0] - 2023-09-25
 

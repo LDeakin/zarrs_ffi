@@ -1,6 +1,5 @@
 use derive_more::Deref;
 use ffi_support::FfiStr;
-use std::sync::Arc;
 use zarrs::{
     array::{Array, ArrayMetadata},
     array_subset::ArraySubset,
@@ -11,7 +10,7 @@ use crate::{storage::ZarrsStorageRW, ZarrsResult, LAST_ERROR};
 
 #[doc(hidden)]
 #[derive(Deref)]
-pub struct ZarrsArrayRW_T(pub Array<Arc<dyn ReadableWritableStorageTraits>>);
+pub struct ZarrsArrayRW_T(pub Array<dyn ReadableWritableStorageTraits>);
 
 /// An opaque handle to a readable and writable array.
 pub type ZarrsArrayRW = *mut ZarrsArrayRW_T;
@@ -131,7 +130,7 @@ pub unsafe extern "C" fn zarrsArrayStoreMetadata(array: ZarrsArrayRW) -> ZarrsRe
 #[no_mangle]
 pub unsafe extern "C" fn zarrsArrayGetChunkSize(
     array: ZarrsArrayRW,
-    chunk_indices: *const usize,
+    chunk_indices: *const u64,
     chunk_indices_len: usize,
     chunk_bytes_length: *mut usize,
 ) -> ZarrsResult {
@@ -146,7 +145,7 @@ pub unsafe extern "C" fn zarrsArrayGetChunkSize(
     let chunk_representation = array.chunk_array_representation(chunk_indices, array.shape());
     match chunk_representation {
         Ok(chunk_representation) => {
-            *chunk_bytes_length = chunk_representation.size();
+            *chunk_bytes_length = usize::try_from(chunk_representation.size()).unwrap();
             ZarrsResult::ZARRS_SUCCESS
         }
         Err(err) => {
@@ -189,7 +188,7 @@ pub unsafe extern "C" fn zarrsArrayGetSubsetSize(
 #[no_mangle]
 pub unsafe extern "C" fn zarrsArrayStoreChunk(
     array: ZarrsArrayRW,
-    chunk_indices: *const usize,
+    chunk_indices: *const u64,
     chunk_indices_len: usize,
     chunk_bytes_length: usize,
     chunk_bytes: *const u8,
@@ -210,7 +209,7 @@ pub unsafe extern "C" fn zarrsArrayStoreChunk(
             return ZarrsResult::ZARRS_ERROR_INVALID_INDICES;
         }
     };
-    if chunk_bytes_length != chunk_representation.size() {
+    if chunk_bytes_length as u64 != chunk_representation.size() {
         *LAST_ERROR =
                         format!("zarrsArrayRetrieveChunk chunk_bytes_length {chunk_bytes_length} does not match expected length {}", chunk_representation.size());
         return ZarrsResult::ZARRS_ERROR_BUFFER_LENGTH;
@@ -234,8 +233,8 @@ pub unsafe extern "C" fn zarrsArrayStoreChunk(
 #[no_mangle]
 pub unsafe extern "C" fn zarrsArrayStoreSubset(
     array: ZarrsArrayRW,
-    subset_start: *const usize,
-    subset_shape: *const usize,
+    subset_start: *const u64,
+    subset_shape: *const u64,
     subset_dimensionality: usize,
     subset_bytes_length: usize,
     subset_bytes: *const u8,
@@ -244,7 +243,7 @@ pub unsafe extern "C" fn zarrsArrayStoreSubset(
     if array.is_null() {
         return ZarrsResult::ZARRS_ERROR_NULL_PTR;
     }
-    let array: &Array<Arc<dyn ReadableWritableStorageTraits>> = &*array;
+    let array = &**array;
     let subset_start = std::slice::from_raw_parts(subset_start, subset_dimensionality);
     let subset_shape = std::slice::from_raw_parts(subset_shape, subset_dimensionality);
     let subset_bytes = std::slice::from_raw_parts(subset_bytes, subset_bytes_length);
@@ -269,7 +268,7 @@ pub unsafe extern "C" fn zarrsArrayStoreSubset(
 #[no_mangle]
 pub unsafe extern "C" fn zarrsArrayRetrieveChunk(
     array: ZarrsArrayRW,
-    chunk_indices: *const usize,
+    chunk_indices: *const u64,
     chunk_indices_len: usize,
     chunk_bytes_length: usize,
     chunk_bytes: *mut u8,
@@ -310,8 +309,8 @@ pub unsafe extern "C" fn zarrsArrayRetrieveChunk(
 #[no_mangle]
 pub unsafe extern "C" fn zarrsArrayRetrieveSubset(
     array: ZarrsArrayRW,
-    subset_start: *const usize,
-    subset_shape: *const usize,
+    subset_start: *const u64,
+    subset_shape: *const u64,
     subset_dimensionality: usize,
     subset_bytes_length: usize,
     subset_bytes: *mut u8,
@@ -320,7 +319,7 @@ pub unsafe extern "C" fn zarrsArrayRetrieveSubset(
     if array.is_null() {
         return ZarrsResult::ZARRS_ERROR_NULL_PTR;
     }
-    let array: &Array<Arc<dyn ReadableWritableStorageTraits>> = &*array;
+    let array = &**array;
     let subset_start = std::slice::from_raw_parts(subset_start, subset_dimensionality);
     let subset_shape = std::slice::from_raw_parts(subset_shape, subset_dimensionality);
     let array_subset =
