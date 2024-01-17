@@ -142,7 +142,7 @@ pub unsafe extern "C" fn zarrsArrayGetChunkSize(
     let chunk_indices = std::slice::from_raw_parts(chunk_indices, chunk_indices_len);
 
     // Get the chunk size
-    let chunk_representation = array.chunk_array_representation(chunk_indices, array.shape());
+    let chunk_representation = array.chunk_array_representation(chunk_indices);
     match chunk_representation {
         Ok(chunk_representation) => {
             *chunk_bytes_length = usize::try_from(chunk_representation.size()).unwrap();
@@ -201,8 +201,7 @@ pub unsafe extern "C" fn zarrsArrayStoreChunk(
     let chunk_indices = std::slice::from_raw_parts(chunk_indices, chunk_indices_len);
     let chunk_bytes = std::slice::from_raw_parts(chunk_bytes, chunk_bytes_length);
 
-    let chunk_representation = match array.chunk_array_representation(chunk_indices, array.shape())
-    {
+    let chunk_representation = match array.chunk_array_representation(chunk_indices) {
         Ok(chunk_representation) => chunk_representation,
         Err(err) => {
             *LAST_ERROR = err.to_string();
@@ -216,7 +215,7 @@ pub unsafe extern "C" fn zarrsArrayStoreChunk(
     }
 
     // Store the chunk bytes
-    if let Err(err) = array.store_chunk(chunk_indices, chunk_bytes) {
+    if let Err(err) = array.store_chunk(chunk_indices, chunk_bytes.to_vec()) {
         *LAST_ERROR = err.to_string();
         ZarrsResult::ZARRS_ERROR_ARRAY
     } else {
@@ -251,7 +250,7 @@ pub unsafe extern "C" fn zarrsArrayStoreSubset(
         ArraySubset::new_with_start_shape_unchecked(subset_start.to_vec(), subset_shape.to_vec());
 
     // Store the subset bytes
-    if let Err(err) = array.store_array_subset(&array_subset, subset_bytes) {
+    if let Err(err) = array.store_array_subset(&array_subset, subset_bytes.to_vec()) {
         *LAST_ERROR = err.to_string();
         ZarrsResult::ZARRS_ERROR_ARRAY
     } else {

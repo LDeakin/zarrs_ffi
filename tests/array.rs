@@ -28,15 +28,15 @@ fn ffi_array_write_rust_read_c() {
         #[cfg(feature = "gzip")]
         Box::new(codec::GzipCodec::new(5).unwrap()),
     ])
-    .dimension_names(vec!["y".into(), "x".into()])
-    .storage_transformers(vec![])
+    .dimension_names(vec!["y".into(), "x".into()].into())
+    .storage_transformers(vec![].into())
     .build(store.clone(), array_path)
     .unwrap();
 
     array.store_metadata().unwrap();
 
     array
-        .store_chunk_elements::<f32>(&[0, 0], &(0..16).map(|f| f as f32).collect::<Vec<_>>())
+        .store_chunk_elements::<f32>(&[0, 0], (0..16).map(|f| f as f32).collect::<Vec<_>>())
         .unwrap();
 
     (assert_cxx! {
