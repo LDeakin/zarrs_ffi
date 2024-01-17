@@ -17,7 +17,7 @@ crate-type = ["staticlib", "cdylib"]
 inline-c = "0.1.7"
 
 [build-dependencies]
-cbindgen = "0.24.5"
+cbindgen = "0.26"
 
 [dependencies]
 derive_more = "0.99.17"
