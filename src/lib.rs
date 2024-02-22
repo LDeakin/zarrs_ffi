@@ -5,7 +5,7 @@
 //! **zarrs and zarrs-ffi are experimental and in limited production use. Use at your own risk!**
 //!
 //! ## Licence
-//! zarrs-ffi is licensed under either of
+//! `zarrs-ffi` is licensed under either of
 //!  - the Apache License, Version 2.0 [LICENSE-APACHE](./LICENCE-APACHE) or <http://www.apache.org/licenses/LICENSE-2.0> or
 //!  - the MIT license [LICENSE-MIT](./LICENCE-MIT) or <http://opensource.org/licenses/MIT>, at your option.
 //!

@@ -7,8 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+ - Add `examples/array_write_read.cpp`
+
 ### Changed
  - Bump `zarrs` to 0.12
+ - Move `C++` test code into separate files
+ - Cleanup `README.md`
 
 ## [0.2.1] - 2024-01-17
 
