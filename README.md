@@ -9,7 +9,7 @@ Developed at the [Department of Materials Physics](https://physics.anu.edu.au/re
 Example usage can be found in the [examples](./examples).
 
 > [!NOTE]
-> Currently, `zarrs-ffi` only supports a small subset of the [zarrs] API.
+> Currently `zarrs-ffi` only supports a small subset of the [zarrs] API.
 
 ## Install
 
