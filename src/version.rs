@@ -42,7 +42,7 @@ mod tests {
 
             int main() {
                 assert(zarrsVersionMajor() == 0);
-                assert(zarrsVersionMinor() == 11);
+                assert(zarrsVersionMinor() == 12);
             }
         })
         .success();

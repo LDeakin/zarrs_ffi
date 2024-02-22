@@ -28,7 +28,7 @@ fn ffi_array_write_rust_read_c() {
         #[cfg(feature = "gzip")]
         Box::new(codec::GzipCodec::new(5).unwrap()),
     ])
-    .dimension_names(vec!["y".into(), "x".into()].into())
+    .dimension_names(["y", "x"].into())
     .storage_transformers(vec![].into())
     .build(store.clone(), array_path)
     .unwrap();
