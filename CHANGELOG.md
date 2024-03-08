@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+ - Add `zarrs_assert`
+
 ### Changed
  - Remove `ZarrsStorageRW` and add `ZarrsStorage` that can hold any type of storage
  - Remove `ZarrsArrayRW` and add `ZarrsArray` that can hold any type of array

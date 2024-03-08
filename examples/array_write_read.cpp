@@ -1,7 +1,6 @@
 // This is tested by ffi_array_write_c_read_c
 
 #include "zarrs.h"
-#include <cassert>
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -68,11 +67,11 @@ int main()
     const std::filesystem::path tmp_path = get_tmp_path();
 
     ZarrsStorage storage = nullptr;
-    assert(ZARRS_SUCCESS == zarrsCreateStorageFilesystem(tmp_path.c_str(), &storage));
+    zarrs_assert(zarrsCreateStorageFilesystem(tmp_path.c_str(), &storage));
     assert(storage);
 
     ZarrsArray array = nullptr;
-    assert(ZARRS_SUCCESS == zarrsCreateArrayRWWithMetadata(storage, "/array", metadata, &array));
+    zarrs_assert(zarrsCreateArrayRWWithMetadata(storage, "/array", metadata, &array));
     assert(array);
 
     // Update a subset
@@ -81,19 +80,19 @@ int main()
     float subset_elements[] = {-1.0f, -2.0f, -3.0f, -4.0f};
     uint8_t *subset_bytes = reinterpret_cast<uint8_t *>(subset_elements);
     size_t subset_size;
-    assert(ZARRS_SUCCESS == zarrsArrayGetSubsetSize(array, subset_shape, 2, &subset_size));
+    zarrs_assert(zarrsArrayGetSubsetSize(array, subset_shape, 2, &subset_size));
     assert(subset_size == 4 * sizeof(float));
-    assert(ZARRS_SUCCESS == zarrsArrayStoreSubset(array, subset_start, subset_shape, 2, 4 * sizeof(float), subset_bytes));
+    zarrs_assert(zarrsArrayStoreSubset(array, subset_start, subset_shape, 2, 4 * sizeof(float), subset_bytes));
 
     // Get the chunk size
     size_t indices[] = {0, 0};
     size_t chunk_size;
-    assert(ZARRS_SUCCESS == zarrsArrayGetChunkSize(array, indices, 2, &chunk_size));
+    zarrs_assert(zarrsArrayGetChunkSize(array, indices, 2, &chunk_size));
     std::cout << chunk_size << std::endl;
 
     // Get chunk bytes
     std::unique_ptr<uint8_t[]> chunk_bytes(new uint8_t[chunk_size]);
-    assert(ZARRS_SUCCESS == zarrsArrayRetrieveChunk(array, indices, 2, chunk_size, chunk_bytes.get()));
+    zarrs_assert(zarrsArrayRetrieveChunk(array, indices, 2, chunk_size, chunk_bytes.get()));
 
     // Print the elements
     auto chunk_elements = reinterpret_cast<float *>(chunk_bytes.get());

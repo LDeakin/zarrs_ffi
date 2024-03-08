@@ -25,8 +25,17 @@ sys_includes = []
 includes = []
 no_includes = false
 cpp_compat = true
-after_includes = ""
+after_includes = """
 
+#undef NDEBUG
+#ifdef __cplusplus
+#include <cassert>
+#else // __cplusplus
+#include <assert.h>
+#endif // __cplusplus
+
+#define zarrs_assert(expr) assert(ZARRS_SUCCESS == expr)
+"""
 
 
 
