@@ -67,7 +67,7 @@ int main()
 {
     const std::filesystem::path tmp_path = get_tmp_path();
 
-    ZarrsStorageRW storage = nullptr;
+    ZarrsStorage storage = nullptr;
     assert(ZARRS_SUCCESS == zarrsCreateStorageFilesystem(tmp_path.c_str(), &storage));
     assert(storage);
 

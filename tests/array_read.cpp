@@ -5,7 +5,7 @@
 
 int main() {
     const char* tmp_path = getenv("TMP_PATH_WRITE_RUST_READ_C");
-    ZarrsStorageRW storage = nullptr;
+    ZarrsStorage storage = nullptr;
     assert(ZARRS_SUCCESS == zarrsCreateStorageFilesystem(tmp_path, &storage));
     assert(storage);
 

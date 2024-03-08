@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+ - Remove `ZarrsStorageRW` and add `ZarrsStorage` that can hold any type of storage
+
 ## [0.3.0] - 2024-02-23
 
 ### Added

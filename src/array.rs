@@ -6,7 +6,10 @@ use zarrs::{
     storage::ReadableWritableStorageTraits,
 };
 
-use crate::{storage::ZarrsStorageRW, ZarrsResult, LAST_ERROR};
+use crate::{
+    storage::{ZarrsStorage, ZarrsStorageEnum},
+    ZarrsResult, LAST_ERROR,
+};
 
 #[doc(hidden)]
 #[derive(Deref)]
@@ -24,7 +27,7 @@ pub type ZarrsArrayRW = *mut ZarrsArrayRW_T;
 /// `pArray` must be a valid pointer to a [`ZarrsArrayRW`] handle.
 #[no_mangle]
 pub unsafe extern "C" fn zarrsCreateArrayRW(
-    storage: ZarrsStorageRW,
+    storage: ZarrsStorage,
     path: FfiStr,
     pArray: *mut ZarrsArrayRW,
 ) -> ZarrsResult {
@@ -35,15 +38,20 @@ pub unsafe extern "C" fn zarrsCreateArrayRW(
 
     let storage = &**storage;
 
-    match Array::new(storage.clone(), path.into()) {
-        Ok(array) => {
-            *pArray = Box::into_raw(Box::new(ZarrsArrayRW_T(array)));
-            ZarrsResult::ZARRS_SUCCESS
+    if let ZarrsStorageEnum::RW(storage) = storage {
+        match Array::new(storage.clone(), path.into()) {
+            Ok(array) => {
+                *pArray = Box::into_raw(Box::new(ZarrsArrayRW_T(array)));
+                ZarrsResult::ZARRS_SUCCESS
+            }
+            Err(err) => {
+                *LAST_ERROR = err.to_string();
+                ZarrsResult::ZARRS_ERROR_ARRAY
+            }
         }
-        Err(err) => {
-            *LAST_ERROR = err.to_string();
-            ZarrsResult::ZARRS_ERROR_ARRAY
-        }
+    } else {
+        *LAST_ERROR = "storage does not support read and write".to_string();
+        ZarrsResult::ZARRS_ERROR_STORAGE_CAPABILITY
     }
 }
 
@@ -56,7 +64,7 @@ pub unsafe extern "C" fn zarrsCreateArrayRW(
 /// `pArray` must be a valid pointer to a [`ZarrsArrayRW`] handle.
 #[no_mangle]
 pub unsafe extern "C" fn zarrsCreateArrayRWWithMetadata(
-    storage: ZarrsStorageRW,
+    storage: ZarrsStorage,
     path: FfiStr,
     metadata: FfiStr,
     pArray: *mut ZarrsArrayRW,
@@ -76,15 +84,20 @@ pub unsafe extern "C" fn zarrsCreateArrayRWWithMetadata(
         }
     };
 
-    match Array::new_with_metadata(storage.clone(), path.into(), metadata) {
-        Ok(array) => {
-            *pArray = Box::into_raw(Box::new(ZarrsArrayRW_T(array)));
-            ZarrsResult::ZARRS_SUCCESS
+    if let ZarrsStorageEnum::RW(storage) = storage {
+        match Array::new_with_metadata(storage.clone(), path.into(), metadata) {
+            Ok(array) => {
+                *pArray = Box::into_raw(Box::new(ZarrsArrayRW_T(array)));
+                ZarrsResult::ZARRS_SUCCESS
+            }
+            Err(err) => {
+                *LAST_ERROR = err.to_string();
+                ZarrsResult::ZARRS_ERROR_ARRAY
+            }
         }
-        Err(err) => {
-            *LAST_ERROR = err.to_string();
-            ZarrsResult::ZARRS_ERROR_ARRAY
-        }
+    } else {
+        *LAST_ERROR = "storage does not support read and write".to_string();
+        ZarrsResult::ZARRS_ERROR_STORAGE_CAPABILITY
     }
 }
 
