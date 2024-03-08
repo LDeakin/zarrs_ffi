@@ -1,10 +1,10 @@
+pub mod array_read;
+pub mod array_read_write;
+pub mod array_write;
+
 use derive_more::Deref;
 use ffi_support::FfiStr;
-use zarrs::{
-    array::{Array, ArrayMetadata},
-    array_subset::ArraySubset,
-    storage::ReadableWritableStorageTraits,
-};
+use zarrs::array::{Array, ArrayMetadata};
 
 use crate::{
     storage::{ZarrsStorage, ZarrsStorageEnum},
@@ -12,24 +12,59 @@ use crate::{
 };
 
 #[doc(hidden)]
+pub enum ZarrsArrayEnum {
+    R(Array<dyn zarrs::storage::ReadableStorageTraits>),
+    W(Array<dyn zarrs::storage::WritableStorageTraits>),
+    L(Array<dyn zarrs::storage::ListableStorageTraits>),
+    RL(Array<dyn zarrs::storage::ReadableListableStorageTraits>),
+    RW(Array<dyn zarrs::storage::ReadableWritableStorageTraits>),
+    RWL(Array<dyn zarrs::storage::ReadableWritableListableStorageTraits>),
+}
+
+macro_rules! array_fn {
+    ($array:expr, $fn:ident ) => {
+        match $array {
+            ZarrsArrayEnum::R(array) => array.$fn(),
+            ZarrsArrayEnum::W(array) => array.$fn(),
+            ZarrsArrayEnum::L(array) => array.$fn(),
+            ZarrsArrayEnum::RL(array) => array.$fn(),
+            ZarrsArrayEnum::RW(array) => array.$fn(),
+            ZarrsArrayEnum::RWL(array) => array.$fn(),
+        }
+    };
+    ($array:expr, $fn:ident, $( $args:expr ),* ) => {
+        match $array {
+            ZarrsArrayEnum::R(array) => array.$fn($( $args ),*),
+            ZarrsArrayEnum::W(array) => array.$fn($( $args ),*),
+            ZarrsArrayEnum::L(array) => array.$fn($( $args ),*),
+            ZarrsArrayEnum::RL(array) => array.$fn($( $args ),*),
+            ZarrsArrayEnum::RW(array) => array.$fn($( $args ),*),
+            ZarrsArrayEnum::RWL(array) => array.$fn($( $args ),*),
+        }
+    };
+}
+
+pub(crate) use array_fn;
+
+#[doc(hidden)]
 #[derive(Deref)]
-pub struct ZarrsArrayRW_T(pub Array<dyn ReadableWritableStorageTraits>);
+pub struct ZarrsArray_T(pub ZarrsArrayEnum);
 
-/// An opaque handle to a readable and writable array.
-pub type ZarrsArrayRW = *mut ZarrsArrayRW_T;
+/// An opaque handle to an array.
+pub type ZarrsArray = *mut ZarrsArray_T;
 
-/// Create a readable and writable handle to an existing array.
+/// Create a handle to an existing array with read/write capability.
 ///
-/// `pArray` is a pointer to a handle in which the created [`ZarrsArrayRW`] is returned.
+/// `pArray` is a pointer to a handle in which the created [`ZarrsArray`] is returned.
 ///
 /// # Safety
 ///
-/// `pArray` must be a valid pointer to a [`ZarrsArrayRW`] handle.
+/// `pArray` must be a valid pointer to a [`ZarrsArray`] handle.
 #[no_mangle]
 pub unsafe extern "C" fn zarrsCreateArrayRW(
     storage: ZarrsStorage,
     path: FfiStr,
-    pArray: *mut ZarrsArrayRW,
+    pArray: *mut ZarrsArray,
 ) -> ZarrsResult {
     if storage.is_null() {
         *LAST_ERROR = "storage is null".to_string();
@@ -41,7 +76,7 @@ pub unsafe extern "C" fn zarrsCreateArrayRW(
     if let ZarrsStorageEnum::RW(storage) = storage {
         match Array::new(storage.clone(), path.into()) {
             Ok(array) => {
-                *pArray = Box::into_raw(Box::new(ZarrsArrayRW_T(array)));
+                *pArray = Box::into_raw(Box::new(ZarrsArray_T(ZarrsArrayEnum::RW(array))));
                 ZarrsResult::ZARRS_SUCCESS
             }
             Err(err) => {
@@ -55,19 +90,19 @@ pub unsafe extern "C" fn zarrsCreateArrayRW(
     }
 }
 
-/// Create a readable and writable handle to an array with metadata.
+/// Create a handle to a new array with given metadata with read/write capability.
 ///
-/// `pArray` is a pointer to a handle in which the created [`ZarrsArrayRW`] is returned.
+/// `pArray` is a pointer to a handle in which the created [`ZarrsArray`] is returned.
 ///
 /// # Safety
 ///
-/// `pArray` must be a valid pointer to a [`ZarrsArrayRW`] handle.
+/// `pArray` must be a valid pointer to a [`ZarrsArray`] handle.
 #[no_mangle]
 pub unsafe extern "C" fn zarrsCreateArrayRWWithMetadata(
     storage: ZarrsStorage,
     path: FfiStr,
     metadata: FfiStr,
-    pArray: *mut ZarrsArrayRW,
+    pArray: *mut ZarrsArray,
 ) -> ZarrsResult {
     if storage.is_null() {
         *LAST_ERROR = "storage is null".to_string();
@@ -87,7 +122,7 @@ pub unsafe extern "C" fn zarrsCreateArrayRWWithMetadata(
     if let ZarrsStorageEnum::RW(storage) = storage {
         match Array::new_with_metadata(storage.clone(), path.into(), metadata) {
             Ok(array) => {
-                *pArray = Box::into_raw(Box::new(ZarrsArrayRW_T(array)));
+                *pArray = Box::into_raw(Box::new(ZarrsArray_T(ZarrsArrayEnum::RW(array))));
                 ZarrsResult::ZARRS_SUCCESS
             }
             Err(err) => {
@@ -105,9 +140,9 @@ pub unsafe extern "C" fn zarrsCreateArrayRWWithMetadata(
 ///
 /// # Safety
 ///
-/// `array` must be a valid `ZarrsArrayRW` handle.
+/// `array` must be a valid `ZarrsArray` handle.
 #[no_mangle]
-pub unsafe extern "C" fn zarrsDestroyArrayRW(array: ZarrsArrayRW) {
+pub unsafe extern "C" fn zarrsDestroyArray(array: ZarrsArray) {
     if array.is_null() {
         return;
     }
@@ -115,34 +150,14 @@ pub unsafe extern "C" fn zarrsDestroyArrayRW(array: ZarrsArrayRW) {
     unsafe { array.to_owned().drop_in_place() };
 }
 
-/// Write array metadata to store.
-///
-/// # Safety
-///
-/// `array` must be a valid `ZarrsArrayRW` handle.
-#[no_mangle]
-pub unsafe extern "C" fn zarrsArrayStoreMetadata(array: ZarrsArrayRW) -> ZarrsResult {
-    if array.is_null() {
-        return ZarrsResult::ZARRS_ERROR_NULL_PTR;
-    }
-    let array = &**array;
-    match array.store_metadata() {
-        Ok(()) => ZarrsResult::ZARRS_SUCCESS,
-        Err(err) => {
-            *LAST_ERROR = err.to_string();
-            ZarrsResult::ZARRS_ERROR_STORAGE
-        }
-    }
-}
-
 /// Get the size of a chunk in bytes.
 ///
 /// # Safety
 ///
-/// `array` must be a valid `ZarrsArrayRW` handle.
+/// `array` must be a valid `ZarrsArray` handle.
 #[no_mangle]
 pub unsafe extern "C" fn zarrsArrayGetChunkSize(
-    array: ZarrsArrayRW,
+    array: ZarrsArray,
     chunk_indices: *const u64,
     chunk_indices_len: usize,
     chunk_bytes_length: *mut usize,
@@ -155,7 +170,7 @@ pub unsafe extern "C" fn zarrsArrayGetChunkSize(
     let chunk_indices = std::slice::from_raw_parts(chunk_indices, chunk_indices_len);
 
     // Get the chunk size
-    let chunk_representation = array.chunk_array_representation(chunk_indices);
+    let chunk_representation = array_fn!(array, chunk_array_representation, chunk_indices);
     match chunk_representation {
         Ok(chunk_representation) => {
             *chunk_bytes_length = usize::try_from(chunk_representation.size()).unwrap();
@@ -172,10 +187,10 @@ pub unsafe extern "C" fn zarrsArrayGetChunkSize(
 ///
 /// # Safety
 ///
-/// `array` must be a valid `ZarrsArrayRW` handle.
+/// `array` must be a valid `ZarrsArray` handle.
 #[no_mangle]
 pub unsafe extern "C" fn zarrsArrayGetSubsetSize(
-    array: ZarrsArrayRW,
+    array: ZarrsArray,
     subset_shape: *const usize,
     subset_dimensionality: usize,
     subset_bytes_length: *mut usize,
@@ -187,173 +202,10 @@ pub unsafe extern "C" fn zarrsArrayGetSubsetSize(
     let array = &**array;
     let subset_shape = std::slice::from_raw_parts(subset_shape, subset_dimensionality);
 
+    // Get the data type
+    let data_type = array_fn!(array, data_type);
+
     // Get the subset size
-    *subset_bytes_length = subset_shape.iter().product::<usize>() * array.data_type().size();
+    *subset_bytes_length = subset_shape.iter().product::<usize>() * data_type.size();
     ZarrsResult::ZARRS_SUCCESS
-}
-
-/// Write a chunk to an array.
-///
-/// # Safety
-///
-/// `array`  must be a valid `ZarrsArrayRW` handle.
-/// `path` and `chunk_indices` must have length `chunk_indices_len`.
-#[no_mangle]
-pub unsafe extern "C" fn zarrsArrayStoreChunk(
-    array: ZarrsArrayRW,
-    chunk_indices: *const u64,
-    chunk_indices_len: usize,
-    chunk_bytes_length: usize,
-    chunk_bytes: *const u8,
-) -> ZarrsResult {
-    // Validation
-    if array.is_null() {
-        return ZarrsResult::ZARRS_ERROR_NULL_PTR;
-    }
-    let array = &**array;
-    let chunk_indices = std::slice::from_raw_parts(chunk_indices, chunk_indices_len);
-    let chunk_bytes = std::slice::from_raw_parts(chunk_bytes, chunk_bytes_length);
-
-    let chunk_representation = match array.chunk_array_representation(chunk_indices) {
-        Ok(chunk_representation) => chunk_representation,
-        Err(err) => {
-            *LAST_ERROR = err.to_string();
-            return ZarrsResult::ZARRS_ERROR_INVALID_INDICES;
-        }
-    };
-    if chunk_bytes_length as u64 != chunk_representation.size() {
-        *LAST_ERROR =
-                        format!("zarrsArrayRetrieveChunk chunk_bytes_length {chunk_bytes_length} does not match expected length {}", chunk_representation.size());
-        return ZarrsResult::ZARRS_ERROR_BUFFER_LENGTH;
-    }
-
-    // Store the chunk bytes
-    if let Err(err) = array.store_chunk(chunk_indices, chunk_bytes.to_vec()) {
-        *LAST_ERROR = err.to_string();
-        ZarrsResult::ZARRS_ERROR_ARRAY
-    } else {
-        ZarrsResult::ZARRS_SUCCESS
-    }
-}
-
-/// Write an array subset to an array.
-///
-/// # Safety
-///
-/// `array`  must be a valid `ZarrsArrayRW` handle.
-/// `path` and `chunk_indices` must have length `chunk_indices_len`.
-#[no_mangle]
-pub unsafe extern "C" fn zarrsArrayStoreSubset(
-    array: ZarrsArrayRW,
-    subset_start: *const u64,
-    subset_shape: *const u64,
-    subset_dimensionality: usize,
-    subset_bytes_length: usize,
-    subset_bytes: *const u8,
-) -> ZarrsResult {
-    // Validation
-    if array.is_null() {
-        return ZarrsResult::ZARRS_ERROR_NULL_PTR;
-    }
-    let array = &**array;
-    let subset_start = std::slice::from_raw_parts(subset_start, subset_dimensionality);
-    let subset_shape = std::slice::from_raw_parts(subset_shape, subset_dimensionality);
-    let subset_bytes = std::slice::from_raw_parts(subset_bytes, subset_bytes_length);
-    let array_subset =
-        ArraySubset::new_with_start_shape_unchecked(subset_start.to_vec(), subset_shape.to_vec());
-
-    // Store the subset bytes
-    if let Err(err) = array.store_array_subset(&array_subset, subset_bytes.to_vec()) {
-        *LAST_ERROR = err.to_string();
-        ZarrsResult::ZARRS_ERROR_ARRAY
-    } else {
-        ZarrsResult::ZARRS_SUCCESS
-    }
-}
-
-/// Retrieve a chunk from an array.
-///
-/// # Safety
-///
-/// `array` must be a valid `ZarrsArrayRW` handle.
-/// `path` and `chunk_indices` must have length `chunk_indices_len`.
-#[no_mangle]
-pub unsafe extern "C" fn zarrsArrayRetrieveChunk(
-    array: ZarrsArrayRW,
-    chunk_indices: *const u64,
-    chunk_indices_len: usize,
-    chunk_bytes_length: usize,
-    chunk_bytes: *mut u8,
-) -> ZarrsResult {
-    if array.is_null() {
-        return ZarrsResult::ZARRS_ERROR_NULL_PTR;
-    }
-    let array = &**array;
-    let chunk_indices = std::slice::from_raw_parts(chunk_indices, chunk_indices_len);
-
-    // Get the chunk bytes
-    match array.retrieve_chunk(chunk_indices) {
-        Ok(bytes) => {
-            if bytes.len() != chunk_bytes_length {
-                *LAST_ERROR = format!(
-                    "chunk_bytes_length {chunk_bytes_length} does not match decoded chunk size {}",
-                    bytes.len()
-                );
-                ZarrsResult::ZARRS_ERROR_BUFFER_LENGTH
-            } else {
-                std::ptr::copy(bytes.as_ptr(), chunk_bytes, chunk_bytes_length);
-                ZarrsResult::ZARRS_SUCCESS
-            }
-        }
-        Err(err) => {
-            *LAST_ERROR = err.to_string();
-            ZarrsResult::ZARRS_ERROR_ARRAY
-        }
-    }
-}
-
-/// Retrieve a subset from an array.
-///
-/// # Safety
-///
-/// `array` must be a valid `ZarrsArrayRW` handle.
-/// `path` and `chunk_indices` must have length `chunk_indices_len`.
-#[no_mangle]
-pub unsafe extern "C" fn zarrsArrayRetrieveSubset(
-    array: ZarrsArrayRW,
-    subset_start: *const u64,
-    subset_shape: *const u64,
-    subset_dimensionality: usize,
-    subset_bytes_length: usize,
-    subset_bytes: *mut u8,
-) -> ZarrsResult {
-    // Validation
-    if array.is_null() {
-        return ZarrsResult::ZARRS_ERROR_NULL_PTR;
-    }
-    let array = &**array;
-    let subset_start = std::slice::from_raw_parts(subset_start, subset_dimensionality);
-    let subset_shape = std::slice::from_raw_parts(subset_shape, subset_dimensionality);
-    let array_subset =
-        ArraySubset::new_with_start_shape_unchecked(subset_start.to_vec(), subset_shape.to_vec());
-
-    // Get the subset bytes
-    match array.retrieve_array_subset(&array_subset) {
-        Ok(bytes) => {
-            if bytes.len() != subset_bytes_length {
-                *LAST_ERROR = format!(
-                    "subset_bytes_length {subset_bytes_length} does not match decoded subset size {}",
-                    bytes.len()
-                );
-                ZarrsResult::ZARRS_ERROR_BUFFER_LENGTH
-            } else {
-                std::ptr::copy(bytes.as_ptr(), subset_bytes, subset_bytes_length);
-                ZarrsResult::ZARRS_SUCCESS
-            }
-        }
-        Err(err) => {
-            *LAST_ERROR = err.to_string();
-            ZarrsResult::ZARRS_ERROR_ARRAY
-        }
-    }
 }

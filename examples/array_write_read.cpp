@@ -71,7 +71,7 @@ int main()
     assert(ZARRS_SUCCESS == zarrsCreateStorageFilesystem(tmp_path.c_str(), &storage));
     assert(storage);
 
-    ZarrsArrayRW array = nullptr;
+    ZarrsArray array = nullptr;
     assert(ZARRS_SUCCESS == zarrsCreateArrayRWWithMetadata(storage, "/array", metadata, &array));
     assert(array);
 
@@ -105,6 +105,6 @@ int main()
     chunk_bytes.reset();
 
     // Cleanup
-    zarrsDestroyArrayRW(array);
+    zarrsDestroyArray(array);
     zarrsDestroyStorage(storage);
 }

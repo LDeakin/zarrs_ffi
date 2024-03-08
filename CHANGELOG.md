@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
  - Remove `ZarrsStorageRW` and add `ZarrsStorage` that can hold any type of storage
+ - Remove `ZarrsArrayRW` and add `ZarrsArray` that can hold any type of array
 
 ## [0.3.0] - 2024-02-23
 

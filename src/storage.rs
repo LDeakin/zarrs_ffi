@@ -16,7 +16,7 @@ pub enum ZarrsStorageEnum {
 
 #[doc(hidden)]
 #[derive(Deref)]
-pub struct ZarrsStorage_T(ZarrsStorageEnum);
+pub struct ZarrsStorage_T(pub ZarrsStorageEnum);
 
 /// An opaque handle to zarr storage.
 pub type ZarrsStorage = *mut ZarrsStorage_T;

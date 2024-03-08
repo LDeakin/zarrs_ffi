@@ -9,7 +9,7 @@ int main() {
     assert(ZARRS_SUCCESS == zarrsCreateStorageFilesystem(tmp_path, &storage));
     assert(storage);
 
-    ZarrsArrayRW array = nullptr;
+    ZarrsArray array = nullptr;
     assert(ZARRS_SUCCESS == zarrsCreateArrayRW(storage, "/array", &array));
     assert(array);
 
@@ -39,6 +39,6 @@ int main() {
     chunk_bytes.reset();
 
     // Cleanup
-    zarrsDestroyArrayRW(array);
+    zarrsDestroyArray(array);
     zarrsDestroyStorage(storage);
 }
