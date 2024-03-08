@@ -13,9 +13,7 @@ fn zarrsArrayStoreMetadataImpl<T: WritableStorageTraits + ?Sized + 'static>(
     match array.store_metadata() {
         Ok(()) => ZarrsResult::ZARRS_SUCCESS,
         Err(err) => {
-            unsafe {
-                *LAST_ERROR = err.to_string();
-            }
+            unsafe { *LAST_ERROR = err.to_string() };
             ZarrsResult::ZARRS_ERROR_STORAGE
         }
     }
@@ -51,9 +49,7 @@ fn zarrsArrayStoreChunkImpl<T: WritableStorageTraits + ?Sized + 'static>(
     chunk_bytes: &[u8],
 ) -> ZarrsResult {
     if let Err(err) = array.store_chunk(chunk_indices, chunk_bytes.to_vec()) {
-        unsafe {
-            *LAST_ERROR = err.to_string();
-        }
+        unsafe { *LAST_ERROR = err.to_string() };
         ZarrsResult::ZARRS_ERROR_ARRAY
     } else {
         ZarrsResult::ZARRS_SUCCESS
