@@ -5,6 +5,7 @@ use std::sync::Arc;
 use crate::{ZarrsResult, LAST_ERROR};
 
 #[doc(hidden)]
+#[allow(clippy::upper_case_acronyms)]
 pub enum ZarrsStorageEnum {
     R(Arc<dyn zarrs::storage::ReadableStorageTraits>),
     W(Arc<dyn zarrs::storage::WritableStorageTraits>),
@@ -18,15 +19,14 @@ pub enum ZarrsStorageEnum {
 #[derive(Deref)]
 pub struct ZarrsStorage_T(pub ZarrsStorageEnum);
 
-/// An opaque handle to zarr storage.
+/// An opaque handle to a zarr store or storage transformer.
 pub type ZarrsStorage = *mut ZarrsStorage_T;
 
-/// Create a handle to a filesystem storage.
+/// Create a storage handle to a filesystem store.
 ///
 /// `pStorage` is a pointer to a handle in which the created [`ZarrsStorage`] is returned.
 ///
 /// # Safety
-///
 /// `pStorage` must be a valid pointer to a [`ZarrsStorage`] handle.
 #[no_mangle]
 pub unsafe extern "C" fn zarrsCreateStorageFilesystem(

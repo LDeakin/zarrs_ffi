@@ -20,9 +20,19 @@ use once_cell::sync::Lazy;
 
 extern crate zarrs;
 
-pub mod array;
-pub mod storage;
-pub mod version;
+mod array;
+mod storage;
+mod version;
+
+pub use array::{
+    array_read::{zarrsArrayRetrieveChunk, zarrsArrayRetrieveSubset},
+    array_read_write::zarrsArrayStoreSubset,
+    array_write::{zarrsArrayStoreChunk, zarrsArrayStoreMetadata},
+    zarrsArrayGetChunkSize, zarrsArrayGetSubsetSize, zarrsCreateArrayRW,
+    zarrsCreateArrayRWWithMetadata, zarrsDestroyArray, ZarrsArray,
+};
+pub use storage::{zarrsCreateStorageFilesystem, zarrsDestroyStorage, ZarrsStorage};
+pub use version::{zarrsVersion, zarrsVersionMajor, zarrsVersionMinor, zarrsVersionPatch};
 
 #[repr(i32)]
 pub enum ZarrsResult {

@@ -17,7 +17,7 @@ fn zarrsArrayStoreSubsetImpl<T: ReadableWritableStorageTraits + ?Sized + 'static
     }
 }
 
-/// Write an array subset to an array.
+/// Store an array subset.
 ///
 /// # Errors
 /// Returns an error if the array does not have read/write capability.

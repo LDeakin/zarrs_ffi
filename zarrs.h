@@ -47,12 +47,12 @@ typedef struct ZarrsArray_T ZarrsArray_T;
 typedef struct ZarrsStorage_T ZarrsStorage_T;
 
 /**
- * An opaque handle to an array.
+ * An opaque handle to a zarr array.
  */
 typedef struct ZarrsArray_T *ZarrsArray;
 
 /**
- * An opaque handle to zarr storage.
+ * An opaque handle to a zarr store or storage transformer.
  */
 typedef struct ZarrsStorage_T *ZarrsStorage;
 
@@ -64,7 +64,6 @@ extern "C" {
  * Get the size of a chunk in bytes.
  *
  * # Safety
- *
  * `array` must be a valid `ZarrsArray` handle.
  */
 ZarrsResult zarrsArrayGetChunkSize(ZarrsArray array,
@@ -76,7 +75,6 @@ ZarrsResult zarrsArrayGetChunkSize(ZarrsArray array,
  * Get the size of a subset in bytes.
  *
  * # Safety
- *
  * `array` must be a valid `ZarrsArray` handle.
  */
 ZarrsResult zarrsArrayGetSubsetSize(ZarrsArray array,
@@ -118,7 +116,7 @@ ZarrsResult zarrsArrayRetrieveSubset(ZarrsArray array,
                                      uint8_t *subset_bytes);
 
 /**
- * Write a chunk to an array.
+ * Store a chunk.
  *
  * # Errors
  * Returns an error if the array does not have write capability.
@@ -134,7 +132,7 @@ ZarrsResult zarrsArrayStoreChunk(ZarrsArray array,
                                  const uint8_t *chunk_bytes);
 
 /**
- * Write array metadata to store.
+ * Store array metadata.
  *
  * # Errors
  * Returns an error if the array does not have write capability.
@@ -145,7 +143,7 @@ ZarrsResult zarrsArrayStoreChunk(ZarrsArray array,
 ZarrsResult zarrsArrayStoreMetadata(ZarrsArray array);
 
 /**
- * Write an array subset to an array.
+ * Store an array subset.
  *
  * # Errors
  * Returns an error if the array does not have read/write capability.
@@ -162,23 +160,23 @@ ZarrsResult zarrsArrayStoreSubset(ZarrsArray array,
                                   const uint8_t *subset_bytes);
 
 /**
- * Create a handle to an existing array with read/write capability.
+ * Create a handle to an existing array (read/write capability).
  *
  * `pArray` is a pointer to a handle in which the created [`ZarrsArray`] is returned.
  *
  * # Safety
- *
  * `pArray` must be a valid pointer to a [`ZarrsArray`] handle.
  */
 ZarrsResult zarrsCreateArrayRW(ZarrsStorage storage, const char* path, ZarrsArray *pArray);
 
 /**
- * Create a handle to a new array with given metadata with read/write capability.
+ * Create a handle to a new array (read/write capability).
+ *
+ * `metadata` is expected to be a JSON string representing a zarr V3 array `zarr.json`.
  *
  * `pArray` is a pointer to a handle in which the created [`ZarrsArray`] is returned.
  *
  * # Safety
- *
  * `pArray` must be a valid pointer to a [`ZarrsArray`] handle.
  */
 ZarrsResult zarrsCreateArrayRWWithMetadata(ZarrsStorage storage,
@@ -187,12 +185,11 @@ ZarrsResult zarrsCreateArrayRWWithMetadata(ZarrsStorage storage,
                                            ZarrsArray *pArray);
 
 /**
- * Create a handle to a filesystem storage.
+ * Create a storage handle to a filesystem store.
  *
  * `pStorage` is a pointer to a handle in which the created [`ZarrsStorage`] is returned.
  *
  * # Safety
- *
  * `pStorage` must be a valid pointer to a [`ZarrsStorage`] handle.
  */
 ZarrsResult zarrsCreateStorageFilesystem(const char* path, ZarrsStorage *pStorage);
@@ -225,28 +222,28 @@ ZarrsResult zarrsDestroyStorage(ZarrsStorage storage);
 const char *zarrsLastError(void);
 
 /**
- * Get the version.
+ * Get the zarrs version.
  *
  * See [zarrs::version::version].
  */
 uint32_t zarrsVersion(void);
 
 /**
- * Get the major version.
+ * Get the zarrs major version.
  *
  * See [`zarrs::version::version_major`].
  */
 uint32_t zarrsVersionMajor(void);
 
 /**
- * Get the minor version.
+ * Get the zarrs minor version.
  *
  * See [`zarrs::version::version_minor`].
  */
 uint32_t zarrsVersionMinor(void);
 
 /**
- * Get the patch version.
+ * Get the zarrs patch version.
  *
  * See [`zarrs::version::version_patch`].
  */

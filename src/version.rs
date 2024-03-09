@@ -1,4 +1,4 @@
-/// Get the major version.
+/// Get the zarrs major version.
 ///
 /// See [`zarrs::version::version_major`].
 #[no_mangle]
@@ -6,7 +6,7 @@ pub extern "C" fn zarrsVersionMajor() -> u32 {
     zarrs::version::version_major()
 }
 
-/// Get the minor version.
+/// Get the zarrs minor version.
 ///
 /// See [`zarrs::version::version_minor`].
 #[no_mangle]
@@ -14,7 +14,7 @@ pub extern "C" fn zarrsVersionMinor() -> u32 {
     zarrs::version::version_minor()
 }
 
-/// Get the patch version.
+/// Get the zarrs patch version.
 ///
 /// See [`zarrs::version::version_patch`].
 #[no_mangle]
@@ -22,7 +22,7 @@ pub extern "C" fn zarrsVersionPatch() -> u32 {
     zarrs::version::version_patch()
 }
 
-/// Get the version.
+/// Get the zarrs version.
 ///
 /// See [zarrs::version::version].
 #[no_mangle]

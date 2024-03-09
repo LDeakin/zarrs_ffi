@@ -19,7 +19,7 @@ fn zarrsArrayStoreMetadataImpl<T: WritableStorageTraits + ?Sized + 'static>(
     }
 }
 
-/// Write array metadata to store.
+/// Store array metadata.
 ///
 /// # Errors
 /// Returns an error if the array does not have write capability.
@@ -56,7 +56,7 @@ fn zarrsArrayStoreChunkImpl<T: WritableStorageTraits + ?Sized + 'static>(
     }
 }
 
-/// Write a chunk to an array.
+/// Store a chunk.
 ///
 /// # Errors
 /// Returns an error if the array does not have write capability.

@@ -12,6 +12,7 @@ use crate::{
 };
 
 #[doc(hidden)]
+#[allow(clippy::upper_case_acronyms)]
 pub enum ZarrsArrayEnum {
     R(Array<dyn zarrs::storage::ReadableStorageTraits>),
     W(Array<dyn zarrs::storage::WritableStorageTraits>),
@@ -50,15 +51,14 @@ pub(crate) use array_fn;
 #[derive(Deref)]
 pub struct ZarrsArray_T(pub ZarrsArrayEnum);
 
-/// An opaque handle to an array.
+/// An opaque handle to a zarr array.
 pub type ZarrsArray = *mut ZarrsArray_T;
 
-/// Create a handle to an existing array with read/write capability.
+/// Create a handle to an existing array (read/write capability).
 ///
 /// `pArray` is a pointer to a handle in which the created [`ZarrsArray`] is returned.
 ///
 /// # Safety
-///
 /// `pArray` must be a valid pointer to a [`ZarrsArray`] handle.
 #[no_mangle]
 pub unsafe extern "C" fn zarrsCreateArrayRW(
@@ -90,12 +90,13 @@ pub unsafe extern "C" fn zarrsCreateArrayRW(
     }
 }
 
-/// Create a handle to a new array with given metadata with read/write capability.
+/// Create a handle to a new array (read/write capability).
+///
+/// `metadata` is expected to be a JSON string representing a zarr V3 array `zarr.json`.
 ///
 /// `pArray` is a pointer to a handle in which the created [`ZarrsArray`] is returned.
 ///
 /// # Safety
-///
 /// `pArray` must be a valid pointer to a [`ZarrsArray`] handle.
 #[no_mangle]
 pub unsafe extern "C" fn zarrsCreateArrayRWWithMetadata(
@@ -156,7 +157,6 @@ pub unsafe extern "C" fn zarrsDestroyArray(array: ZarrsArray) -> ZarrsResult {
 /// Get the size of a chunk in bytes.
 ///
 /// # Safety
-///
 /// `array` must be a valid `ZarrsArray` handle.
 #[no_mangle]
 pub unsafe extern "C" fn zarrsArrayGetChunkSize(
@@ -189,7 +189,6 @@ pub unsafe extern "C" fn zarrsArrayGetChunkSize(
 /// Get the size of a subset in bytes.
 ///
 /// # Safety
-///
 /// `array` must be a valid `ZarrsArray` handle.
 #[no_mangle]
 pub unsafe extern "C" fn zarrsArrayGetSubsetSize(
