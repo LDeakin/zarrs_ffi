@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+ - `zarrsDestroyArray` and `zarrsDestroyStorage` now return a `ZarrsResult`
+
 ## [0.4.0] - 2024-03-09
 
 ### Added

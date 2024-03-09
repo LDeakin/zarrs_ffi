@@ -50,14 +50,17 @@ pub unsafe extern "C" fn zarrsCreateStorageFilesystem(
 
 /// Destroy storage.
 ///
-/// # Safety
+/// # Errors
+/// Returns `ZarrsResult::ZARRS_ERROR_NULL_PTR` if `storage` is a null pointer.
 ///
-/// `storage` must be a valid storage device created with a `zarrsStorage` function.
+/// # Safety
+/// If not null, `storage` must be a valid storage device created with a `zarrsStorage` function.
 #[no_mangle]
-pub unsafe extern "C" fn zarrsDestroyStorage(storage: ZarrsStorage) {
+pub unsafe extern "C" fn zarrsDestroyStorage(storage: ZarrsStorage) -> ZarrsResult {
     if storage.is_null() {
-        return;
+        ZarrsResult::ZARRS_ERROR_NULL_PTR
+    } else {
+        unsafe { storage.to_owned().drop_in_place() };
+        ZarrsResult::ZARRS_SUCCESS
     }
-
-    unsafe { storage.to_owned().drop_in_place() };
 }

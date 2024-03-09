@@ -138,16 +138,19 @@ pub unsafe extern "C" fn zarrsCreateArrayRWWithMetadata(
 
 /// Destroy array.
 ///
-/// # Safety
+/// # Errors
+/// Returns `ZarrsResult::ZARRS_ERROR_NULL_PTR` if `array` is a null pointer.
 ///
-/// `array` must be a valid `ZarrsArray` handle.
+/// # Safety
+/// If not null, `array` must be a valid `ZarrsArray` handle.
 #[no_mangle]
-pub unsafe extern "C" fn zarrsDestroyArray(array: ZarrsArray) {
+pub unsafe extern "C" fn zarrsDestroyArray(array: ZarrsArray) -> ZarrsResult {
     if array.is_null() {
-        return;
+        ZarrsResult::ZARRS_ERROR_NULL_PTR
+    } else {
+        unsafe { array.to_owned().drop_in_place() };
+        ZarrsResult::ZARRS_SUCCESS
     }
-
-    unsafe { array.to_owned().drop_in_place() };
 }
 
 /// Get the size of a chunk in bytes.

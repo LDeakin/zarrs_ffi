@@ -101,6 +101,6 @@ int main() {
   chunk_bytes.reset();
 
   // Cleanup
-  zarrsDestroyArray(array);
-  zarrsDestroyStorage(storage);
+  zarrs_assert(zarrsDestroyArray(array));
+  zarrs_assert(zarrsDestroyStorage(storage));
 }
