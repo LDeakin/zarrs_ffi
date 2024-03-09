@@ -10,9 +10,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
  - `cbindgen` feature to generate `zarrs.h` in the source directory
    - `zarrs.h` is now version controlled in the source directory rather than placed in the build directory
- - Add `examples/cmake_project` demonstrating using `zarrs-ffi` in a `CMake` project
+ - Add `examples/cmake_project` demonstrating using `zarrs_ffi` in a `CMake` project
 
 ### Changed
+ - Rename package to `zarrs_ffi` from `zarrs-ffi` and move repository
  - **Breaking**: Changed output libraries from `[lib]zarrs_ffi.{a,dll,dylib,so}` to `[lib]zarrs.{a,dll,dylib,so}`
  - `zarrsDestroyArray` and `zarrsDestroyStorage` now return a `ZarrsResult`
 
@@ -46,8 +47,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
  - Initial public release
 
-[unreleased]: https://github.com/LDeakin/zarrs-ffi/compare/v0.4.0...HEAD
-[0.4.0]: https://github.com/LDeakin/zarrs-ffi/releases/tag/v0.4.0
-[0.3.0]: https://github.com/LDeakin/zarrs-ffi/releases/tag/v0.3.0
-[0.2.1]: https://github.com/LDeakin/zarrs-ffi/releases/tag/v0.2.1
-[0.2.0]: https://github.com/LDeakin/zarrs-ffi/releases/tag/v0.2.0
+[unreleased]: https://github.com/LDeakin/zarrs_ffi/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/LDeakin/zarrs_ffi/releases/tag/v0.5.0
+[0.4.0]: https://github.com/LDeakin/zarrs_ffi/releases/tag/v0.4.0
+[0.3.0]: https://github.com/LDeakin/zarrs_ffi/releases/tag/v0.3.0
+[0.2.1]: https://github.com/LDeakin/zarrs_ffi/releases/tag/v0.2.1
+[0.2.0]: https://github.com/LDeakin/zarrs_ffi/releases/tag/v0.2.0

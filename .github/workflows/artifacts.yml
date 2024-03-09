@@ -22,9 +22,9 @@ jobs:
           mkdir include lib &&
           cp zarrs.h include/ &&
           cp target/x86_64-unknown-linux-gnu/release/libzarrs* lib/ &&
-          tar czvf zarrs-ffi-x86_64-unknown-linux-gnu.tar.gz README.md CHANGELOG.md include/zarrs.h lib/libzarrs.a lib/libzarrs.so
+          tar czvf zarrs_ffi-x86_64-unknown-linux-gnu.tar.gz README.md CHANGELOG.md include/zarrs.h lib/libzarrs.a lib/libzarrs.so
       - name: upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: zarrs-ffi-x86_64-unknown-linux-gnu
-          path: zarrs-ffi-x86_64-unknown-linux-gnu.tar.gz
+          name: zarrs_ffi-x86_64-unknown-linux-gnu
+          path: zarrs_ffi-x86_64-unknown-linux-gnu.tar.gz

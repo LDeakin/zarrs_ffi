@@ -1,11 +1,11 @@
 [package]
-name = "zarrs-ffi"
+name = "zarrs_ffi"
 description = "FFI bindings for the zarrs crate"
 version = "0.5.0"
 authors = ["Lachlan Deakin <ljdgit@gmail.com>"]
 edition = "2021"
 license = "MIT OR Apache-2.0"
-repository = "https://github.com/LDeakin/zarrs-ffi"
+repository = "https://github.com/LDeakin/zarrs_ffi"
 keywords = ["zarr"]
 categories = ["encoding"]
 

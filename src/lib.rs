@@ -2,10 +2,10 @@
 //!
 //! Developed at the [Department of Materials Physics](https://physics.anu.edu.au/research/mp/), Australian National University, Canberra, Australia.
 //!
-//! **zarrs and zarrs-ffi are experimental and in limited production use. Use at your own risk!**
+//! **zarrs and zarrs_ffi are experimental and in limited production use. Use at your own risk!**
 //!
 //! ## Licence
-//! `zarrs-ffi` is licensed under either of
+//! `zarrs_ffi` is licensed under either of
 //!  - the Apache License, Version 2.0 [LICENSE-APACHE](./LICENCE-APACHE) or <http://www.apache.org/licenses/LICENSE-2.0> or
 //!  - the MIT license [LICENSE-MIT](./LICENCE-MIT) or <http://opensource.org/licenses/MIT>, at your option.
 //!

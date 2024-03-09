@@ -10,16 +10,16 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(Corrosion)
 
-# zarrs-ffi: C/C++ bindings to zarrs
+# zarrs_ffi: C/C++ bindings to zarrs
 FetchContent_Declare(
     zarrs_source
         # SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../.."
-        GIT_REPOSITORY https://github.com/LDeakin/zarrs-ffi.git
+        GIT_REPOSITORY https://github.com/LDeakin/zarrs_ffi.git
         GIT_TAG v0.5.0
 )
 FetchContent_Populate(zarrs_source)
 
-# Build zarrs-ffi, creates a zarrs target
+# Build zarrs_ffi, creates a zarrs target
 if(ZARRS_USE_EXPERIMENTAL_CODECS)
   set(ZARRS_FEATURES zarrs/bitround zarrs/zfp zarrs/bz2 zarrs/pcodec)
   message(STATUS "Enabling experimental zarrs codecs: ${ZARRS_FEATURES}")

@@ -1,15 +1,15 @@
-# zarrs-ffi &emsp; [![build](https://github.com/LDeakin/zarrs-ffi/actions/workflows/ci.yml/badge.svg)](https://github.com/LDeakin/zarrs-ffi/actions/workflows/ci.yml)
+# zarrs_ffi &emsp; [![build](https://github.com/LDeakin/zarrs_ffi/actions/workflows/ci.yml/badge.svg)](https://github.com/LDeakin/zarrs_ffi/actions/workflows/ci.yml)
 
 FFI bindings for the [zarrs] crate, a rust library for the [Zarr V3](https://zarr.dev) storage format for multidimensional arrays and metadata.
 
 Developed at the [Department of Materials Physics](https://physics.anu.edu.au/research/mp/), Australian National University, Canberra, Australia.
 
-**zarrs and zarrs-ffi are experimental and in limited production use. Use at your own risk!**
+**zarrs and zarrs_ffi are experimental and in limited production use. Use at your own risk!**
 
 Example usage can be found in the [examples](./examples).
 
 > [!NOTE]
-> Currently `zarrs-ffi` only supports a small subset of the [zarrs] API.
+> Currently `zarrs_ffi` only supports a small subset of the [zarrs] API.
 
 ## Install
 
@@ -35,7 +35,7 @@ cargo build --release --features cbindgen --features zarrs/bitround,zarrs/zfp,za
 ```
 
 ## Licence
-`zarrs-ffi` is licensed under either of
+`zarrs_ffi` is licensed under either of
  - the Apache License, Version 2.0 [LICENSE-APACHE](./LICENCE-APACHE) or <http://www.apache.org/licenses/LICENSE-2.0> or
  - the MIT license [LICENSE-MIT](./LICENCE-MIT) or <http://opensource.org/licenses/MIT>, at your option.
 
