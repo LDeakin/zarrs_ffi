@@ -13,7 +13,6 @@ categories = ["encoding"]
 cbindgen = []
 
 [lib]
-name = "zarrs"
 path = "src/lib.rs"
 crate-type = ["staticlib", "cdylib"]
 

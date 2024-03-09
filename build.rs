@@ -31,11 +31,11 @@ fn main() {
         "cargo:rustc-env=INLINE_C_RS_LDFLAGS={shared_object_dir}/{lib}",
         shared_object_dir = shared_object_dir,
         lib = if cfg!(target_os = "windows") {
-            "zarrs.dll".to_string()
+            "zarrs_ffi.dll".to_string()
         } else if cfg!(target_os = "macos") {
-            "libzarrs.dylib".to_string()
+            "libzarrs_ffi.dylib".to_string()
         } else {
-            "libzarrs.so".to_string()
+            "libzarrs_ffi.so".to_string()
         },
     );
 }
