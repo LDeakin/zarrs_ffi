@@ -7,7 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+ - `cbindgen` feature to generate `zarrs.h` in the source directory
+   - `zarrs.h` is now version controlled in the source directory rather than placed in the build directory
+ - Add `examples/cmake_project` demonstrating using `zarrs-ffi` in a `CMake` project
+
 ### Changed
+ - **Breaking**: Changed output libraries from `[lib]zarrs_ffi.{a,dll,dylib,so}` to `[lib]zarrs.{a,dll,dylib,so}`
  - `zarrsDestroyArray` and `zarrsDestroyStorage` now return a `ZarrsResult`
 
 ## [0.4.0] - 2024-03-09
