@@ -16,7 +16,7 @@ Example usage can be found in the [examples](./examples).
 ### Basic Build
 Building generates a header, static library, and dynamic library.
 ```bash
-cargo build --release # -> target/release/{zarrs.h,zarrs_ffi.a,zarrs_ffi.so}
+cargo build --release --features cbindgen # -> zarrs.h and target/release/[lib]{zarrs.a,zarrs.so,zarrs.dll,zarrs.dylib}
 ```
 
 ### Enabling SIMD intrinsics
@@ -31,7 +31,7 @@ Non-default `zarrs` codecs (see [`zarrs` crate features](https://docs.rs/zarrs/l
 
 For example:
 ```bash
-cargo build --release --features zarrs/bitround,zarrs/zfp,zarrs/bz2,zarrs/pcodec
+cargo build --release --features cbindgen --features zarrs/bitround,zarrs/zfp,zarrs/bz2,zarrs/pcodec
 ```
 
 ## Licence
