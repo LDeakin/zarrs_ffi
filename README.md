@@ -1,4 +1,9 @@
-# zarrs_ffi &emsp; [![build](https://github.com/LDeakin/zarrs_ffi/actions/workflows/ci.yml/badge.svg)](https://github.com/LDeakin/zarrs_ffi/actions/workflows/ci.yml)
+# zarrs_ffi
+
+[![Latest Version](https://img.shields.io/crates/v/zarrs_ffi.svg)](https://crates.io/crates/zarrs_ffi)
+[![zarrs documentation](https://docs.rs/zarrs_ffi/badge.svg)](https://docs.rs/zarrs_ffi)
+![msrv](https://img.shields.io/crates/msrv/zarrs_ffi)
+[![build](https://github.com/LDeakin/zarrs_ffi/actions/workflows/ci.yml/badge.svg)](https://github.com/LDeakin/zarrs_ffi/actions/workflows/ci.yml)
 
 FFI bindings for the [zarrs] crate, a rust library for the [Zarr V3](https://zarr.dev) storage format for multidimensional arrays and metadata.
 
