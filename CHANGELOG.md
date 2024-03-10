@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.0] - 2024-03-10
+
 ### Added
  - `cbindgen` feature to generate `zarrs.h` in the source directory
    - `zarrs.h` is now version controlled in the source directory rather than placed in the build directory
