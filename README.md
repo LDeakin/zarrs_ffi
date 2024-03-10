@@ -43,22 +43,20 @@ A more complete `CMake` example can be found in [examples/cmake_project](https:/
 ## Manual Install
 
 #### Basic Build
-Building generates a header, static library, and dynamic library.
+Building generates a header, and a platform-dependent static and dynamic library.
 ```bash
-cargo build --release --features cbindgen # -> zarrs.h and target/release/[lib]{zarrs.a,zarrs.so,zarrs.dll,zarrs.dylib}
+cargo build --release --features cbindgen # -> zarrs.h and target/release/[lib]zarrs_ffi{.a,.so,.dll,.dylib}
 ```
 `zarrs.h` is only re-generated if the `cbindgen` feature is enabled.
 
 #### Enabling SIMD intrinsics
 Encoding and decoding performance may be improved with `avx2`/`sse2` enabled (if supported).
-
-This can be enabled by compiling with either of:
+Compile with either of:
  - `RUSTFLAGS="-C target-cpu=native"`
  - `RUSTFLAGS="-C target-feature=+avx2,+sse2"`
 
 #### Enabling non-default `zarrs` codecs
 Non-default `zarrs` codecs (see [`zarrs` crate features](https://docs.rs/zarrs/latest/zarrs/#crate-features)) can be enabled by passing them as feature flags.
-
 For example:
 ```bash
 cargo build --release --features cbindgen --features zarrs/bitround,zarrs/zfp,zarrs/bz2,zarrs/pcodec
