@@ -11,7 +11,7 @@ Developed at the [Department of Materials Physics](https://physics.anu.edu.au/re
 
 **`zarrs` and `zarrs_ffi` are experimental and in limited production use. Use at your own risk!**
 
-Example usage can be found in the [examples](./examples).
+Example usage can be found in the [examples](https://github.com/LDeakin/zarrs_ffi/tree/main/examples).
 
 Currently `zarrs_ffi` only supports a small subset of the [zarrs] API.
 
