@@ -14,7 +14,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
  - Rename package to `zarrs_ffi` from `zarrs-ffi` and move repository
- - **Breaking**: Changed output libraries from `[lib]zarrs_ffi.{a,dll,dylib,so}` to `[lib]zarrs.{a,dll,dylib,so}`
  - `zarrsDestroyArray` and `zarrsDestroyStorage` now return a `ZarrsResult`
 
 ## [0.4.0] - 2024-03-09

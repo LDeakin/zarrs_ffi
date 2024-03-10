@@ -1,16 +1,4 @@
-//! FFI bindings for the [zarrs](https://github.com/LDeakin/zarrs) crate, a rust library for the [Zarr V3](https://zarr.dev) storage format for multidimensional arrays and metadata.
-//!
-//! Developed at the [Department of Materials Physics](https://physics.anu.edu.au/research/mp/), Australian National University, Canberra, Australia.
-//!
-//! **zarrs and zarrs_ffi are experimental and in limited production use. Use at your own risk!**
-//!
-//! ## Licence
-//! `zarrs_ffi` is licensed under either of
-//!  - the Apache License, Version 2.0 [LICENSE-APACHE](./LICENCE-APACHE) or <http://www.apache.org/licenses/LICENSE-2.0> or
-//!  - the MIT license [LICENSE-MIT](./LICENCE-MIT) or <http://opensource.org/licenses/MIT>, at your option.
-//!
-//! Unless you explicitly state otherwise, any contribution intentionally submitted for inclusion in the work by you, as defined in the Apache-2.0 license, shall be dual licensed as above, without any additional terms or conditions.
-
+#![doc = include_str!(concat!(env!("CARGO_MANIFEST_DIR"), "/README.md"))]
 #![allow(non_snake_case)]
 #![allow(non_camel_case_types)]
 
