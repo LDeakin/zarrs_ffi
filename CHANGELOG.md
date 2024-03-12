@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+ - Use `tempfile` rather than `tempdir` and move to dev dependency
+
 ### Fixed
  - Fixed link to examples in `README.md`
 

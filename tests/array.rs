@@ -14,7 +14,7 @@ fn ffi_array_write_rust_read_c() {
         storage::store::FilesystemStore,
     };
 
-    let tmp_path = tempdir::TempDir::new("write_rust_read_c").unwrap();
+    let tmp_path = tempfile::tempdir().unwrap();
     std::env::set_var(
         "INLINE_C_RS_TMP_PATH_WRITE_RUST_READ_C",
         tmp_path.path().to_string_lossy().to_string(),
@@ -52,7 +52,7 @@ fn ffi_array_write_rust_read_c() {
 
 #[test]
 fn ffi_array_write_c_read_c() {
-    let tmp_path = tempdir::TempDir::new("write_c_read_c").unwrap();
+    let tmp_path = tempfile::tempdir().unwrap();
     std::env::set_var(
         "INLINE_C_RS_TMP_PATH_WRITE_C_READ_C",
         tmp_path.path().to_string_lossy().to_string(),
