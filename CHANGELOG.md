@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
  - Use `tempfile` rather than `tempdir` and move to dev dependency
- - Remove `derive_more` dependency
+ - Remove `derive_more` and `serde_json` dependency
 
 ### Fixed
  - Fixed link to examples in `README.md`

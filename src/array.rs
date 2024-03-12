@@ -117,7 +117,7 @@ pub unsafe extern "C" fn zarrsCreateArrayRWWithMetadata(
 
     let storage = &**storage;
 
-    let metadata = match serde_json::from_str::<ArrayMetadata>(metadata.as_str()) {
+    let metadata = match ArrayMetadata::try_from(metadata.as_str()) {
         Ok(metadata) => metadata,
         Err(err) => {
             *LAST_ERROR = err.to_string();
