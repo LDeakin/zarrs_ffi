@@ -2,7 +2,6 @@ pub mod array_read;
 pub mod array_read_write;
 pub mod array_write;
 
-use derive_more::Deref;
 use ffi_support::FfiStr;
 use zarrs::array::{Array, ArrayMetadata};
 
@@ -48,8 +47,14 @@ macro_rules! array_fn {
 pub(crate) use array_fn;
 
 #[doc(hidden)]
-#[derive(Deref)]
 pub struct ZarrsArray_T(pub ZarrsArrayEnum);
+
+impl std::ops::Deref for ZarrsArray_T {
+    type Target = ZarrsArrayEnum;
+    fn deref(&self) -> &Self::Target {
+        &self.0
+    }
+}
 
 /// An opaque handle to a zarr array.
 pub type ZarrsArray = *mut ZarrsArray_T;

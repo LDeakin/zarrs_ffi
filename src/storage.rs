@@ -1,4 +1,3 @@
-use derive_more::Deref;
 use ffi_support::FfiStr;
 use std::sync::Arc;
 
@@ -16,8 +15,14 @@ pub enum ZarrsStorageEnum {
 }
 
 #[doc(hidden)]
-#[derive(Deref)]
 pub struct ZarrsStorage_T(pub ZarrsStorageEnum);
+
+impl std::ops::Deref for ZarrsStorage_T {
+    type Target = ZarrsStorageEnum;
+    fn deref(&self) -> &Self::Target {
+        &self.0
+    }
+}
 
 /// An opaque handle to a zarr store or storage transformer.
 pub type ZarrsStorage = *mut ZarrsStorage_T;
