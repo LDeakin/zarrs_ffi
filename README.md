@@ -16,31 +16,16 @@ Example usage can be found in the [examples](https://github.com/LDeakin/zarrs_ff
 Currently `zarrs_ffi` only supports a small subset of the [zarrs] API.
 
 ## CMake Quickstart
-`zarrs_ffi` can build from source and be available as the `zarrs::zarrs` target in a `CMake` project with the below snippet.
+1. Install the rust compiler (and cargo).
+2. Put [Findzarrs.cmake](https://github.com/LDeakin/zarrs_ffi/blob/main/examples/cmake_project/Findzarrs.cmake) in your `CMAKE_MODULE_PATH`
+3. `find_package(zarrs 0.5.0 REQUIRED COMPONENTS zarrs/bz2)`
+   - `zarrs` is retrieved from `GitHub` using [FetchContent](https://cmake.org/cmake/help/latest/module/FetchContent.html) and built using [corrosion](https://github.com/corrosion-rs/corrosion)
+   - Components are optional zarrs codecs
+4. the `zarrs` FFI library is available as the `zarrs::zarrs` target
 
-This uses [corrosion](https://github.com/corrosion-rs/corrosion).
-The rust compiler and cargo must be installed.
+A complete `CMake` example can be found in [examples/cmake_project](https://github.com/LDeakin/zarrs_ffi/tree/main/examples/cmake_project).
 
-```cmake
-include(FetchContent)
-FetchContent_Declare(Corrosion
-    GIT_REPOSITORY https://github.com/corrosion-rs/corrosion.git
-    GIT_TAG v0.4
-)
-FetchContent_MakeAvailable(Corrosion)
-FetchContent_Declare(zarrs_ffi_source
-    GIT_REPOSITORY https://github.com/LDeakin/zarrs_ffi.git
-    GIT_TAG v0.5.0
-)
-FetchContent_Populate(zarrs_ffi_source)
-corrosion_import_crate(MANIFEST_PATH ${zarrs_ffi_source_SOURCE_DIR}/Cargo.toml)
-target_include_directories(zarrs_ffi INTERFACE ${zarrs_ffi_source_SOURCE_DIR})
-add_library(zarrs::zarrs ALIAS zarrs_ffi)
-```
-
-A more complete `CMake` example can be found in [examples/cmake_project](https://github.com/LDeakin/zarrs_ffi/tree/main/examples/cmake_project).
-
-## Manual Install
+## Manual Build
 
 #### Basic Build
 Building generates a header, and a platform-dependent static and dynamic library.
