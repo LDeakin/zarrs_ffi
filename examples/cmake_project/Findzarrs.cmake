@@ -1,7 +1,7 @@
 include(FetchContent)
 
 # Example Usage
-# find_package(zarrs 0.5.0 REQUIRED COMPONENTS zarrs/bz2)
+# find_package(zarrs 0.5.1 REQUIRED COMPONENTS zarrs/bz2)
 # Components are zarrs optional codecs, such as:
 #   zarrs/bitround zarrs/zfp zarrs/bz2 zarrs/pcodec
 

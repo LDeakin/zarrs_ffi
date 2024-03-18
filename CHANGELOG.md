@@ -7,9 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.1] - 2024-03-18
+
 ### Changed
  - Use `tempfile` rather than `tempdir` and move to dev dependency
  - Remove `derive_more` and `serde_json` dependency
+ - Generalise `Findzarrs.cmake` and reference in `README.md`
 
 ### Fixed
  - Fixed link to examples in `README.md`
@@ -56,7 +59,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
  - Initial public release
 
-[unreleased]: https://github.com/LDeakin/zarrs_ffi/compare/v0.5.0...HEAD
+[unreleased]: https://github.com/LDeakin/zarrs_ffi/compare/v0.5.1...HEAD
+[0.5.1]: https://github.com/LDeakin/zarrs_ffi/releases/tag/v0.5.1
 [0.5.0]: https://github.com/LDeakin/zarrs_ffi/releases/tag/v0.5.0
 [0.4.0]: https://github.com/LDeakin/zarrs_ffi/releases/tag/v0.4.0
 [0.3.0]: https://github.com/LDeakin/zarrs_ffi/releases/tag/v0.3.0
