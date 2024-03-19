@@ -78,7 +78,7 @@ ZarrsResult zarrsArrayGetChunkSize(ZarrsArray array,
  * `array` must be a valid `ZarrsArray` handle.
  */
 ZarrsResult zarrsArrayGetSubsetSize(ZarrsArray array,
-                                    const size_t *subset_shape,
+                                    const uint64_t *subset_shape,
                                     size_t subset_dimensionality,
                                     size_t *subset_bytes_length);
 

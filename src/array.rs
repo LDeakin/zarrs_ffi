@@ -198,7 +198,7 @@ pub unsafe extern "C" fn zarrsArrayGetChunkSize(
 #[no_mangle]
 pub unsafe extern "C" fn zarrsArrayGetSubsetSize(
     array: ZarrsArray,
-    subset_shape: *const usize,
+    subset_shape: *const u64,
     subset_dimensionality: usize,
     subset_bytes_length: *mut usize,
 ) -> ZarrsResult {
@@ -213,6 +213,7 @@ pub unsafe extern "C" fn zarrsArrayGetSubsetSize(
     let data_type = array_fn!(array, data_type);
 
     // Get the subset size
-    *subset_bytes_length = subset_shape.iter().product::<usize>() * data_type.size();
+    *subset_bytes_length =
+        usize::try_from(subset_shape.iter().product::<u64>()).unwrap() * data_type.size();
     ZarrsResult::ZARRS_SUCCESS
 }
