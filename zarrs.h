@@ -180,10 +180,10 @@ ZarrsResult zarrsArrayStoreSubset(ZarrsArray array,
 /**
  * Create a handle to an existing array (read/write capability).
  *
- * `pArray` is a pointer to a handle in which the created [`ZarrsArray`] is returned.
+ * `pArray` is a pointer to a handle in which the created `ZarrsArray` is returned.
  *
  * # Safety
- * `pArray` must be a valid pointer to a [`ZarrsArray`] handle.
+ * `pArray` must be a valid pointer to a `ZarrsArray` handle.
  */
 ZarrsResult zarrsCreateArrayRW(ZarrsStorage storage, const char* path, ZarrsArray *pArray);
 
@@ -191,11 +191,10 @@ ZarrsResult zarrsCreateArrayRW(ZarrsStorage storage, const char* path, ZarrsArra
  * Create a handle to a new array (read/write capability).
  *
  * `metadata` is expected to be a JSON string representing a zarr V3 array `zarr.json`.
- *
- * `pArray` is a pointer to a handle in which the created [`ZarrsArray`] is returned.
+ * `pArray` is a pointer to a handle in which the created `ZarrsArray` is returned.
  *
  * # Safety
- * `pArray` must be a valid pointer to a [`ZarrsArray`] handle.
+ * `pArray` must be a valid pointer to a `ZarrsArray` handle.
  */
 ZarrsResult zarrsCreateArrayRWWithMetadata(ZarrsStorage storage,
                                            const char* path,
@@ -205,10 +204,10 @@ ZarrsResult zarrsCreateArrayRWWithMetadata(ZarrsStorage storage,
 /**
  * Create a storage handle to a filesystem store.
  *
- * `pStorage` is a pointer to a handle in which the created [`ZarrsStorage`] is returned.
+ * `pStorage` is a pointer to a handle in which the created `ZarrsStorage` is returned.
  *
  * # Safety
- * `pStorage` must be a valid pointer to a [`ZarrsStorage`] handle.
+ * `pStorage` must be a valid pointer to a `ZarrsStorage` handle.
  */
 ZarrsResult zarrsCreateStorageFilesystem(const char* path, ZarrsStorage *pStorage);
 
@@ -242,28 +241,22 @@ const char *zarrsLastError(void);
 /**
  * Get the zarrs version.
  *
- * See [zarrs::version::version].
+ * A u32 representation of the version encoded as `(zarrsVersionMajor() << 22) | (zarrsVersionMinor() << 12) | zarrsVersionPatch()`.
  */
 uint32_t zarrsVersion(void);
 
 /**
  * Get the zarrs major version.
- *
- * See [`zarrs::version::version_major`].
  */
 uint32_t zarrsVersionMajor(void);
 
 /**
  * Get the zarrs minor version.
- *
- * See [`zarrs::version::version_minor`].
  */
 uint32_t zarrsVersionMinor(void);
 
 /**
  * Get the zarrs patch version.
- *
- * See [`zarrs::version::version_patch`].
  */
 uint32_t zarrsVersionPatch(void);
 

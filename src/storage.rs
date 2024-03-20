@@ -29,10 +29,10 @@ pub type ZarrsStorage = *mut ZarrsStorage_T;
 
 /// Create a storage handle to a filesystem store.
 ///
-/// `pStorage` is a pointer to a handle in which the created [`ZarrsStorage`] is returned.
+/// `pStorage` is a pointer to a handle in which the created `ZarrsStorage` is returned.
 ///
 /// # Safety
-/// `pStorage` must be a valid pointer to a [`ZarrsStorage`] handle.
+/// `pStorage` must be a valid pointer to a `ZarrsStorage` handle.
 #[no_mangle]
 pub unsafe extern "C" fn zarrsCreateStorageFilesystem(
     path: FfiStr,

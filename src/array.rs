@@ -61,10 +61,10 @@ pub type ZarrsArray = *mut ZarrsArray_T;
 
 /// Create a handle to an existing array (read/write capability).
 ///
-/// `pArray` is a pointer to a handle in which the created [`ZarrsArray`] is returned.
+/// `pArray` is a pointer to a handle in which the created `ZarrsArray` is returned.
 ///
 /// # Safety
-/// `pArray` must be a valid pointer to a [`ZarrsArray`] handle.
+/// `pArray` must be a valid pointer to a `ZarrsArray` handle.
 #[no_mangle]
 pub unsafe extern "C" fn zarrsCreateArrayRW(
     storage: ZarrsStorage,
@@ -98,11 +98,10 @@ pub unsafe extern "C" fn zarrsCreateArrayRW(
 /// Create a handle to a new array (read/write capability).
 ///
 /// `metadata` is expected to be a JSON string representing a zarr V3 array `zarr.json`.
-///
-/// `pArray` is a pointer to a handle in which the created [`ZarrsArray`] is returned.
+/// `pArray` is a pointer to a handle in which the created `ZarrsArray` is returned.
 ///
 /// # Safety
-/// `pArray` must be a valid pointer to a [`ZarrsArray`] handle.
+/// `pArray` must be a valid pointer to a `ZarrsArray` handle.
 #[no_mangle]
 pub unsafe extern "C" fn zarrsCreateArrayRWWithMetadata(
     storage: ZarrsStorage,
