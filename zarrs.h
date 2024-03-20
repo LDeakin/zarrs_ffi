@@ -18,10 +18,6 @@
 #define zarrs_assert(expr) assert(ZARRS_SUCCESS == expr)
 
 
-#ifdef __cplusplus
-namespace  {
-#endif // __cplusplus
-
 enum ZarrsResult
 #ifdef __cplusplus
   : int32_t
@@ -262,8 +258,4 @@ uint32_t zarrsVersionPatch(void);
 
 #ifdef __cplusplus
 } // extern "C"
-#endif // __cplusplus
-
-#ifdef __cplusplus
-} // namespace 
 #endif // __cplusplus
