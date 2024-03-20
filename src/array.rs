@@ -161,27 +161,30 @@ pub unsafe extern "C" fn zarrsDestroyArray(array: ZarrsArray) -> ZarrsResult {
 
 /// Get the size of a chunk in bytes.
 ///
+/// `pChunkIndices` is a pointer to an array of length `chunkIndicesCount` holding the chunk indices.
+///
 /// # Safety
 /// `array` must be a valid `ZarrsArray` handle.
+/// `chunkIndicesCount` must match the dimensionality of the array and the length of the array pointed to by `pChunkIndices`.
 #[no_mangle]
 pub unsafe extern "C" fn zarrsArrayGetChunkSize(
     array: ZarrsArray,
-    chunk_indices: *const u64,
-    chunk_indices_len: usize,
-    chunk_bytes_length: *mut usize,
+    chunkIndicesCount: usize,
+    pChunkIndices: *const u64,
+    chunkSize: *mut usize,
 ) -> ZarrsResult {
     // Validation
     if array.is_null() {
         return ZarrsResult::ZARRS_ERROR_NULL_PTR;
     }
     let array = &**array;
-    let chunk_indices = std::slice::from_raw_parts(chunk_indices, chunk_indices_len);
+    let chunk_indices = std::slice::from_raw_parts(pChunkIndices, chunkIndicesCount);
 
     // Get the chunk size
     let chunk_representation = array_fn!(array, chunk_array_representation, chunk_indices);
     match chunk_representation {
         Ok(chunk_representation) => {
-            *chunk_bytes_length = usize::try_from(chunk_representation.size()).unwrap();
+            *chunkSize = usize::try_from(chunk_representation.size()).unwrap();
             ZarrsResult::ZARRS_SUCCESS
         }
         Err(err) => {
@@ -193,27 +196,29 @@ pub unsafe extern "C" fn zarrsArrayGetChunkSize(
 
 /// Get the size of a subset in bytes.
 ///
+/// `pSubsetShape` is a pointer to an array of length `subsetShapeCount` holding the shape of the subset.
+///
 /// # Safety
 /// `array` must be a valid `ZarrsArray` handle.
+/// `subsetShapeCount` must match the dimensionality of the array and the length of the array pointed to by `pSubsetShape`.
 #[no_mangle]
 pub unsafe extern "C" fn zarrsArrayGetSubsetSize(
     array: ZarrsArray,
-    subset_shape: *const u64,
-    subset_dimensionality: usize,
-    subset_bytes_length: *mut usize,
+    subsetShapeCount: usize,
+    pSubsetShape: *const u64,
+    subsetSize: *mut usize,
 ) -> ZarrsResult {
     // Validation
     if array.is_null() {
         return ZarrsResult::ZARRS_ERROR_NULL_PTR;
     }
     let array = &**array;
-    let subset_shape = std::slice::from_raw_parts(subset_shape, subset_dimensionality);
+    let subset_shape = std::slice::from_raw_parts(pSubsetShape, subsetShapeCount);
 
     // Get the data type
     let data_type = array_fn!(array, data_type);
 
     // Get the subset size
-    *subset_bytes_length =
-        usize::try_from(subset_shape.iter().product::<u64>()).unwrap() * data_type.size();
+    *subsetSize = usize::try_from(subset_shape.iter().product::<u64>()).unwrap() * data_type.size();
     ZarrsResult::ZARRS_SUCCESS
 }

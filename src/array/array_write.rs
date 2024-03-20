@@ -58,36 +58,39 @@ fn zarrsArrayStoreChunkImpl<T: WritableStorageTraits + ?Sized + 'static>(
 
 /// Store a chunk.
 ///
+/// `pChunkIndices` is a pointer to an array of length `chunkIndicesCount` holding the chunk indices.
+/// `pChunkBytes` is a pointer to an array of bytes of length `chunkBytesCount` that must match the expected size of the chunk as returned by `zarrsArrayGetChunkSize()`.
+///
 /// # Errors
 /// Returns an error if the array does not have write capability.
 ///
 /// # Safety
 /// `array`  must be a valid `ZarrsArray` handle.
-/// `path` and `chunk_indices` must have length `chunk_indices_len`.
+/// `chunkIndicesCount` must match the dimensionality of the array and the length of the array pointed to by `pChunkIndices`.
 #[no_mangle]
 pub unsafe extern "C" fn zarrsArrayStoreChunk(
     array: ZarrsArray,
-    chunk_indices: *const u64,
-    chunk_indices_len: usize,
-    chunk_bytes_length: usize,
-    chunk_bytes: *const u8,
+    chunkIndicesCount: usize,
+    pChunkIndices: *const u64,
+    chunkBytesCount: usize,
+    pChunkBytes: *const u8,
 ) -> ZarrsResult {
     // Validation
     if array.is_null() {
         return ZarrsResult::ZARRS_ERROR_NULL_PTR;
     }
     let array = &**array;
-    let chunk_indices = std::slice::from_raw_parts(chunk_indices, chunk_indices_len);
-    let chunk_bytes = std::slice::from_raw_parts(chunk_bytes, chunk_bytes_length);
+    let chunk_indices = std::slice::from_raw_parts(pChunkIndices, chunkIndicesCount);
+    let chunk_bytes = std::slice::from_raw_parts(pChunkBytes, chunkBytesCount);
 
     let chunk_representation = array_fn!(array, chunk_array_representation, chunk_indices);
     let Ok(chunk_representation) = chunk_representation else {
         unsafe { *LAST_ERROR = chunk_representation.unwrap_err_unchecked().to_string() };
         return ZarrsResult::ZARRS_ERROR_INVALID_INDICES;
     };
-    if chunk_bytes_length as u64 != chunk_representation.size() {
+    if chunkBytesCount as u64 != chunk_representation.size() {
         *LAST_ERROR =
-                        format!("zarrsArrayRetrieveChunk chunk_bytes_length {chunk_bytes_length} does not match expected length {}", chunk_representation.size());
+                        format!("zarrsArrayRetrieveChunk chunk_bytes_length {chunkBytesCount} does not match expected length {}", chunk_representation.size());
         return ZarrsResult::ZARRS_ERROR_BUFFER_LENGTH;
     }
 

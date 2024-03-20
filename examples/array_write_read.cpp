@@ -78,19 +78,19 @@ int main() {
   float subset_elements[] = {-1.0f, -2.0f, -3.0f, -4.0f};
   uint8_t *subset_bytes = reinterpret_cast<uint8_t *>(subset_elements);
   size_t subset_size;
-  zarrs_assert(zarrsArrayGetSubsetSize(array, subset_shape, 2, &subset_size));
+  zarrs_assert(zarrsArrayGetSubsetSize(array, 2, subset_shape, &subset_size));
   assert(subset_size == 4 * sizeof(float));
-  zarrs_assert(zarrsArrayStoreSubset(array, subset_start, subset_shape, 2, 4 * sizeof(float), subset_bytes));
+  zarrs_assert(zarrsArrayStoreSubset(array, 2, subset_start, subset_shape, 4 * sizeof(float), subset_bytes));
 
   // Get the chunk size
   size_t indices[] = {0, 0};
   size_t chunk_size;
-  zarrs_assert(zarrsArrayGetChunkSize(array, indices, 2, &chunk_size));
+  zarrs_assert(zarrsArrayGetChunkSize(array, 2, indices, &chunk_size));
   std::cout << chunk_size << std::endl;
 
   // Get chunk bytes
   std::unique_ptr<uint8_t[]> chunk_bytes(new uint8_t[chunk_size]);
-  zarrs_assert(zarrsArrayRetrieveChunk(array, indices, 2, chunk_size, chunk_bytes.get()));
+  zarrs_assert(zarrsArrayRetrieveChunk(array, 2, indices, chunk_size, chunk_bytes.get()));
 
   // Print the elements
   auto chunk_elements = reinterpret_cast<float *>(chunk_bytes.get());

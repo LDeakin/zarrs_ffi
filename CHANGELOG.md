@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
  - Change `subset_shape` in `zarrsArrayGetSubsetSize` to `*u64`
+ - Reorder parameters to various functions so counts come first
+ - Rename various function parameters to camel case, add `p` prefix to all pointers
+
+### Fixed
+ - Fixed various function docs referring to non-existent parameters
+ - Add more safety docs
 
 ## [0.5.1] - 2024-03-18
 
