@@ -1,13 +1,14 @@
 pub mod array_read;
 pub mod array_read_write;
 pub mod array_write;
+pub mod data_type;
 
 use ffi_support::FfiStr;
-use zarrs::array::{Array, ArrayMetadata};
+use zarrs::array::{Array, ArrayMetadata, DataType};
 
 use crate::{
     storage::{ZarrsStorage, ZarrsStorageEnum},
-    ZarrsResult, LAST_ERROR,
+    ZarrsDataType, ZarrsResult, LAST_ERROR,
 };
 
 #[doc(hidden)]
@@ -185,6 +186,7 @@ pub unsafe extern "C" fn zarrsArrayGetDimensionality(
 ///
 /// # Safety
 /// If not null, `array` must be a valid `ZarrsArray` handle.
+/// `dimensionality` must match the dimensionality of the array and the length of the array pointed to by `pShape`.
 #[no_mangle]
 pub unsafe extern "C" fn zarrsArrayGetShape(
     array: ZarrsArray,
@@ -198,6 +200,45 @@ pub unsafe extern "C" fn zarrsArrayGetShape(
     let shape = array_fn!(array, shape);
     let pShape = unsafe { std::slice::from_raw_parts_mut(pShape, dimensionality) };
     pShape.copy_from_slice(shape);
+    ZarrsResult::ZARRS_SUCCESS
+}
+
+/// Returns the data type of the array.
+///
+/// # Errors
+/// Returns `ZarrsResult::ZARRS_ERROR_NULL_PTR` if `array` is a null pointer.
+///
+/// # Safety
+/// If not null, `array` must be a valid `ZarrsArray` handle.
+#[no_mangle]
+pub unsafe extern "C" fn zarrsArrayGetDataType(
+    array: ZarrsArray,
+    pDataType: *mut ZarrsDataType,
+) -> ZarrsResult {
+    if array.is_null() {
+        return ZarrsResult::ZARRS_ERROR_NULL_PTR;
+    }
+    let array = &**array;
+    let data_type = array_fn!(array, data_type);
+    *pDataType = match data_type {
+        DataType::Bool => ZarrsDataType::ZARRS_BOOL,
+        DataType::Int8 => ZarrsDataType::ZARRS_INT8,
+        DataType::Int16 => ZarrsDataType::ZARRS_INT16,
+        DataType::Int32 => ZarrsDataType::ZARRS_INT32,
+        DataType::Int64 => ZarrsDataType::ZARRS_INT64,
+        DataType::UInt8 => ZarrsDataType::ZARRS_UINT8,
+        DataType::UInt16 => ZarrsDataType::ZARRS_UINT16,
+        DataType::UInt32 => ZarrsDataType::ZARRS_UINT32,
+        DataType::UInt64 => ZarrsDataType::ZARRS_UINT64,
+        DataType::Float16 => ZarrsDataType::ZARRS_FLOAT16,
+        DataType::Float32 => ZarrsDataType::ZARRS_FLOAT32,
+        DataType::Float64 => ZarrsDataType::ZARRS_FLOAT64,
+        DataType::BFloat16 => ZarrsDataType::ZARRS_BFLOAT16,
+        DataType::Complex64 => ZarrsDataType::ZARRS_COMPLEX64,
+        DataType::Complex128 => ZarrsDataType::ZARRS_COMPLEX128,
+        DataType::RawBits(_) => ZarrsDataType::ZARRS_RAW_BITS,
+        _ => ZarrsDataType::ZARRS_UNDEFINED,
+    };
     ZarrsResult::ZARRS_SUCCESS
 }
 

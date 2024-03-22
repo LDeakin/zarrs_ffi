@@ -16,6 +16,7 @@ pub use array::{
     array_read::{zarrsArrayRetrieveChunk, zarrsArrayRetrieveSubset},
     array_read_write::zarrsArrayStoreSubset,
     array_write::{zarrsArrayStoreChunk, zarrsArrayStoreMetadata},
+    data_type::ZarrsDataType,
     zarrsArrayGetChunkSize, zarrsArrayGetSubsetSize, zarrsCreateArrayRW,
     zarrsCreateArrayRWWithMetadata, zarrsDestroyArray, ZarrsArray,
 };

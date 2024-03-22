@@ -83,6 +83,10 @@ int main() {
   assert(shape[0] == 8);
   assert(shape[1] == 8);
 
+  ZarrsDataType data_type;
+  zarrs_assert(zarrsArrayGetDataType(array, &data_type));
+  assert(data_type == ZarrsDataType::ZARRS_FLOAT32);
+
   // Update a subset
   size_t subset_start[] = {1, 1};
   size_t subset_shape[] = {2, 2};

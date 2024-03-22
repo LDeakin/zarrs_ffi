@@ -18,6 +18,36 @@
 #define zarrs_assert(expr) assert(ZARRS_SUCCESS == expr)
 
 
+/**
+ * A zarrs data type.
+ */
+enum ZarrsDataType
+#ifdef __cplusplus
+  : int32_t
+#endif // __cplusplus
+ {
+  ZARRS_UNDEFINED = -1,
+  ZARRS_BOOL = 0,
+  ZARRS_INT8 = 1,
+  ZARRS_INT16 = 2,
+  ZARRS_INT32 = 3,
+  ZARRS_INT64 = 4,
+  ZARRS_UINT8 = 5,
+  ZARRS_UINT16 = 6,
+  ZARRS_UINT32 = 7,
+  ZARRS_UINT64 = 8,
+  ZARRS_FLOAT16 = 9,
+  ZARRS_FLOAT32 = 10,
+  ZARRS_FLOAT64 = 11,
+  ZARRS_COMPLEX64 = 12,
+  ZARRS_COMPLEX128 = 13,
+  ZARRS_RAW_BITS = 14,
+  ZARRS_BFLOAT16 = 15,
+};
+#ifndef __cplusplus
+typedef int32_t ZarrsDataType;
+#endif // __cplusplus
+
 enum ZarrsResult
 #ifdef __cplusplus
   : int32_t
@@ -71,6 +101,17 @@ ZarrsResult zarrsArrayGetChunkSize(ZarrsArray array,
                                    size_t *chunkSize);
 
 /**
+ * Returns the data type of the array.
+ *
+ * # Errors
+ * Returns `ZarrsResult::ZARRS_ERROR_NULL_PTR` if `array` is a null pointer.
+ *
+ * # Safety
+ * If not null, `array` must be a valid `ZarrsArray` handle.
+ */
+ZarrsResult zarrsArrayGetDataType(ZarrsArray array, ZarrsDataType *pDataType);
+
+/**
  * Returns the dimensionality of the array.
  *
  * # Errors
@@ -89,8 +130,11 @@ ZarrsResult zarrsArrayGetDimensionality(ZarrsArray array, size_t *dimensionality
  *
  * # Safety
  * If not null, `array` must be a valid `ZarrsArray` handle.
+ * `dimensionality` must match the dimensionality of the array and the length of the array pointed to by `pShape`.
  */
-ZarrsResult zarrsArrayGetShape(ZarrsArray array, size_t dimensionality, uint64_t *pShape);
+ZarrsResult zarrsArrayGetShape(ZarrsArray array,
+                               size_t dimensionality,
+                               uint64_t *pShape);
 
 /**
  * Get the size of a subset in bytes.

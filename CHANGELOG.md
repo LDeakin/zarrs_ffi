@@ -8,8 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
- - `zarrsArrayGetDimensionality`
- - `zarrsArrayGetShape`
+ - `zarrsArrayGetDimensionality()`
+ - `zarrsArrayGetShape()`
+ - `zarrsArrayGetDataType()` and `ZarrsDataType`
 
 ### Changed
  - Change `subset_shape` in `zarrsArrayGetSubsetSize` to `*u64`
