@@ -64,6 +64,7 @@ enum ZarrsResult
   ZARRS_ERROR_INVALID_METADATA = -8,
   ZARRS_ERROR_STORAGE_CAPABILITY = -9,
   ZARRS_ERROR_UNKNOWN_CHUNK_GRID_SHAPE = -10,
+  ZARRS_ERROR_UNKNOWN_INTERSECTING_CHUNKS = -11,
 };
 #ifndef __cplusplus
 typedef int32_t ZarrsResult;
@@ -115,6 +116,24 @@ ZarrsResult zarrsArrayGetChunkSize(ZarrsArray array,
                                    size_t dimensionality,
                                    const uint64_t *pChunkIndices,
                                    size_t *chunkSize);
+
+/**
+ * Return the chunks indicating the chunks intersecting `array_subset`.
+ *
+ * # Errors
+ * Returns `ZarrsResult::ZARRS_ERROR_NULL_PTR` if `array` is a null pointer.
+ * Returns `ZarrsResult::ZARRS_ERROR_UNKNOWN_INTERSECTING_CHUNKS` if the intersecting chunks cannot be determined.
+ *
+ * # Safety
+ * If not null, `array` must be a valid `ZarrsArray` handle.
+ * `dimensionality` must match the dimensionality of the array and the length of the arrays pointed to by `pSubsetStart`, `pSubsetShape`, `pChunksStart`, and `pChunksShape`.
+ */
+ZarrsResult zarrsArrayGetChunksInSubset(ZarrsArray array,
+                                        size_t dimensionality,
+                                        const uint64_t *pSubsetStart,
+                                        const uint64_t *pSubsetShape,
+                                        uint64_t *pChunksStart,
+                                        uint64_t *pChunksShape);
 
 /**
  * Returns the data type of the array.

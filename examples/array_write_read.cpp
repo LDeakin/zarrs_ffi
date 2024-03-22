@@ -77,8 +77,8 @@ int main() {
   zarrs_assert(zarrsArrayGetDimensionality(array, &dimensionality));
   assert(dimensionality == 2);
 
-  std::vector<uint64_t> shape(dimensionality);
-  zarrs_assert(zarrsArrayGetShape(array, dimensionality, shape.data()));
+  std::vector<uint64_t> shape(2);
+  zarrs_assert(zarrsArrayGetShape(array, 2, shape.data()));
   assert(shape[0] == 8);
   assert(shape[1] == 8);
 
@@ -86,11 +86,20 @@ int main() {
   zarrs_assert(zarrsArrayGetDataType(array, &data_type));
   assert(data_type == ZarrsDataType::ZARRS_FLOAT32);
   
-  std::vector<uint64_t> chunk_grid_shape(dimensionality);
-  zarrs_assert(zarrsArrayGetChunkGridShape(array, dimensionality, chunk_grid_shape.data()));
+  std::vector<uint64_t> chunk_grid_shape(2);
+  zarrs_assert(zarrsArrayGetChunkGridShape(array, 2, chunk_grid_shape.data()));
   assert(chunk_grid_shape[0] == 2);
   assert(chunk_grid_shape[1] == 2);
 
+  const std::vector<uint64_t> array_subset_start = {3, 4};
+  const std::vector<uint64_t> array_subset_shape = {2, 2};
+  std::vector<uint64_t> intersecting_chunks_start(2);
+  std::vector<uint64_t> intersecting_chunks_shape(2);
+  zarrs_assert(zarrsArrayGetChunksInSubset(array, 2, array_subset_start.data(), array_subset_shape.data(), intersecting_chunks_start.data(), intersecting_chunks_shape.data()));
+  assert(intersecting_chunks_start[0] == 0);
+  assert(intersecting_chunks_start[1] == 1);
+  assert(intersecting_chunks_shape[0] == 2);
+  assert(intersecting_chunks_shape[1] == 1);
 
   // Update a subset
   size_t subset_start[] = {1, 1};

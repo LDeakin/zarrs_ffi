@@ -4,7 +4,10 @@ pub mod array_write;
 pub mod data_type;
 
 use ffi_support::FfiStr;
-use zarrs::array::{Array, ArrayMetadata, DataType};
+use zarrs::{
+    array::{Array, ArrayMetadata, DataType},
+    array_subset::ArraySubset,
+};
 
 use crate::{
     storage::{ZarrsStorage, ZarrsStorageEnum},
@@ -269,6 +272,45 @@ pub unsafe extern "C" fn zarrsArrayGetChunkGridShape(
         ZarrsResult::ZARRS_SUCCESS
     } else {
         ZarrsResult::ZARRS_ERROR_UNKNOWN_CHUNK_GRID_SHAPE
+    }
+}
+
+/// Return the chunks indicating the chunks intersecting `array_subset`.
+///
+/// # Errors
+/// Returns `ZarrsResult::ZARRS_ERROR_NULL_PTR` if `array` is a null pointer.
+/// Returns `ZarrsResult::ZARRS_ERROR_UNKNOWN_INTERSECTING_CHUNKS` if the intersecting chunks cannot be determined.
+///
+/// # Safety
+/// If not null, `array` must be a valid `ZarrsArray` handle.
+/// `dimensionality` must match the dimensionality of the array and the length of the arrays pointed to by `pSubsetStart`, `pSubsetShape`, `pChunksStart`, and `pChunksShape`.
+#[no_mangle]
+pub unsafe extern "C" fn zarrsArrayGetChunksInSubset(
+    array: ZarrsArray,
+    dimensionality: usize,
+    pSubsetStart: *const u64,
+    pSubsetShape: *const u64,
+    pChunksStart: *mut u64,
+    pChunksShape: *mut u64,
+) -> ZarrsResult {
+    if array.is_null() {
+        return ZarrsResult::ZARRS_ERROR_NULL_PTR;
+    }
+    let array = &**array;
+    let pSubsetStart = unsafe { std::slice::from_raw_parts(pSubsetStart, dimensionality) };
+    let pSubsetShape = unsafe { std::slice::from_raw_parts(pSubsetShape, dimensionality) };
+    let array_subset = unsafe {
+        ArraySubset::new_with_start_shape_unchecked(pSubsetStart.to_vec(), pSubsetShape.to_vec())
+    };
+    let shape = array_fn!(array, chunks_in_array_subset, &array_subset);
+    if let Ok(Some(chunks_subset)) = shape {
+        let pChunksStart = unsafe { std::slice::from_raw_parts_mut(pChunksStart, dimensionality) };
+        pChunksStart.copy_from_slice(chunks_subset.start());
+        let pChunksShape = unsafe { std::slice::from_raw_parts_mut(pChunksShape, dimensionality) };
+        pChunksShape.copy_from_slice(chunks_subset.shape());
+        ZarrsResult::ZARRS_SUCCESS
+    } else {
+        ZarrsResult::ZARRS_ERROR_UNKNOWN_INTERSECTING_CHUNKS
     }
 }
 
