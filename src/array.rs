@@ -242,6 +242,36 @@ pub unsafe extern "C" fn zarrsArrayGetDataType(
     ZarrsResult::ZARRS_SUCCESS
 }
 
+/// Return the number of chunks in the chunk grid.
+///
+/// # Errors
+/// Returns `ZarrsResult::ZARRS_ERROR_NULL_PTR` if `array` is a null pointer.
+/// Returns `ZarrsResult::ZARRS_ERROR_UNKNOWN_CHUNK_GRID_SHAPE` if the chunk grid shape cannot be determined.
+///
+/// # Safety
+/// If not null, `array` must be a valid `ZarrsArray` handle.
+/// `dimensionality` must match the dimensionality of the array and the length of the array pointed to by `pChunkGridShape`.
+#[no_mangle]
+pub unsafe extern "C" fn zarrsArrayGetChunkGridShape(
+    array: ZarrsArray,
+    dimensionality: usize,
+    pChunkGridShape: *mut u64,
+) -> ZarrsResult {
+    if array.is_null() {
+        return ZarrsResult::ZARRS_ERROR_NULL_PTR;
+    }
+    let array = &**array;
+    let shape = array_fn!(array, chunk_grid_shape);
+    if let Some(shape) = shape {
+        let pChunkGridShape =
+            unsafe { std::slice::from_raw_parts_mut(pChunkGridShape, dimensionality) };
+        pChunkGridShape.copy_from_slice(&shape);
+        ZarrsResult::ZARRS_SUCCESS
+    } else {
+        ZarrsResult::ZARRS_ERROR_UNKNOWN_CHUNK_GRID_SHAPE
+    }
+}
+
 /// Get the size of a chunk in bytes.
 ///
 /// `pChunkIndices` is a pointer to an array of length `dimensionality` holding the chunk indices.

@@ -79,13 +79,18 @@ int main() {
 
   std::vector<uint64_t> shape(dimensionality);
   zarrs_assert(zarrsArrayGetShape(array, dimensionality, shape.data()));
-  assert(shape.size() == 2);
   assert(shape[0] == 8);
   assert(shape[1] == 8);
 
   ZarrsDataType data_type;
   zarrs_assert(zarrsArrayGetDataType(array, &data_type));
   assert(data_type == ZarrsDataType::ZARRS_FLOAT32);
+  
+  std::vector<uint64_t> chunk_grid_shape(dimensionality);
+  zarrs_assert(zarrsArrayGetChunkGridShape(array, dimensionality, chunk_grid_shape.data()));
+  assert(chunk_grid_shape[0] == 2);
+  assert(chunk_grid_shape[1] == 2);
+
 
   // Update a subset
   size_t subset_start[] = {1, 1};

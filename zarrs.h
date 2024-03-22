@@ -63,6 +63,7 @@ enum ZarrsResult
   ZARRS_ERROR_STORE_PREFIX = -7,
   ZARRS_ERROR_INVALID_METADATA = -8,
   ZARRS_ERROR_STORAGE_CAPABILITY = -9,
+  ZARRS_ERROR_UNKNOWN_CHUNK_GRID_SHAPE = -10,
 };
 #ifndef __cplusplus
 typedef int32_t ZarrsResult;
@@ -85,6 +86,21 @@ typedef struct ZarrsStorage_T *ZarrsStorage;
 #ifdef __cplusplus
 extern "C" {
 #endif // __cplusplus
+
+/**
+ * Return the number of chunks in the chunk grid.
+ *
+ * # Errors
+ * Returns `ZarrsResult::ZARRS_ERROR_NULL_PTR` if `array` is a null pointer.
+ * Returns `ZarrsResult::ZARRS_ERROR_UNKNOWN_CHUNK_GRID_SHAPE` if the chunk grid shape cannot be determined.
+ *
+ * # Safety
+ * If not null, `array` must be a valid `ZarrsArray` handle.
+ * `dimensionality` must match the dimensionality of the array and the length of the array pointed to by `pChunkGridShape`.
+ */
+ZarrsResult zarrsArrayGetChunkGridShape(ZarrsArray array,
+                                        size_t dimensionality,
+                                        uint64_t *pChunkGridShape);
 
 /**
  * Get the size of a chunk in bytes.
