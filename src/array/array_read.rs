@@ -34,7 +34,7 @@ fn zarrsArrayRetrieveChunkImpl<T: ReadableStorageTraits + ?Sized + 'static>(
 
 /// Retrieve a chunk from an array.
 ///
-/// `pChunkIndices` is a pointer to an array of length `chunkIndicesCount` holding the chunk indices.
+/// `pChunkIndices` is a pointer to an array of length `dimensionality` holding the chunk indices.
 /// `pChunkBytes` is a pointer to an array of bytes of length `chunkBytesCount` that must match the expected size of the chunk as returned by `zarrsArrayGetChunkSize()`.
 ///
 /// # Errors
@@ -42,11 +42,11 @@ fn zarrsArrayRetrieveChunkImpl<T: ReadableStorageTraits + ?Sized + 'static>(
 ///
 /// # Safety
 /// `array` must be a valid `ZarrsArray` handle.
-/// `chunkIndicesCount` must match the dimensionality of the array and the length of the array pointed to by `pChunkIndices`.
+/// `dimensionality` must match the dimensionality of the array and the length of the array pointed to by `pChunkIndices`.
 #[no_mangle]
 pub unsafe extern "C" fn zarrsArrayRetrieveChunk(
     array: ZarrsArray,
-    chunkIndicesCount: usize,
+    dimensionality: usize,
     pChunkIndices: *const u64,
     chunkBytesCount: usize,
     pChunkBytes: *mut u8,
@@ -55,7 +55,7 @@ pub unsafe extern "C" fn zarrsArrayRetrieveChunk(
         return ZarrsResult::ZARRS_ERROR_NULL_PTR;
     }
     let array = &**array;
-    let chunk_indices = std::slice::from_raw_parts(pChunkIndices, chunkIndicesCount);
+    let chunk_indices = std::slice::from_raw_parts(pChunkIndices, dimensionality);
 
     // Get the chunk bytes
     match array {
@@ -108,7 +108,7 @@ fn zarrsArrayRetrieveSubsetImpl<T: ReadableStorageTraits + ?Sized + 'static>(
 
 /// Retrieve a subset from an array.
 ///
-/// `pSubsetStart` and `pSubsetShape` are pointers to arrays of length `subsetDimensionality` holding the chunk start and shape respectively.
+/// `pSubsetStart` and `pSubsetShape` are pointers to arrays of length `dimensionality` holding the chunk start and shape respectively.
 /// `pSubsetBytes` is a pointer to an array of bytes of length `subsetBytesCount` that must match the expected size of the subset as returned by `zarrsArrayGetSubsetSize()`.
 ///
 /// # Errors
@@ -116,11 +116,11 @@ fn zarrsArrayRetrieveSubsetImpl<T: ReadableStorageTraits + ?Sized + 'static>(
 ///
 /// # Safety
 /// `array` must be a valid `ZarrsArray` handle.
-/// `subsetDimensionality` must match the dimensionality of the array and the length of the arrays pointed to by `pSubsetStart` and `pSubsetShape`.
+/// `dimensionality` must match the dimensionality of the array and the length of the arrays pointed to by `pSubsetStart` and `pSubsetShape`.
 #[no_mangle]
 pub unsafe extern "C" fn zarrsArrayRetrieveSubset(
     array: ZarrsArray,
-    subsetDimensionality: usize,
+    dimensionality: usize,
     pSubsetStart: *const u64,
     pSubsetShape: *const u64,
     subsetBytesCount: usize,
@@ -131,8 +131,8 @@ pub unsafe extern "C" fn zarrsArrayRetrieveSubset(
         return ZarrsResult::ZARRS_ERROR_NULL_PTR;
     }
     let array = &**array;
-    let subset_start = std::slice::from_raw_parts(pSubsetStart, subsetDimensionality);
-    let subset_shape = std::slice::from_raw_parts(pSubsetShape, subsetDimensionality);
+    let subset_start = std::slice::from_raw_parts(pSubsetStart, dimensionality);
+    let subset_shape = std::slice::from_raw_parts(pSubsetShape, dimensionality);
     let array_subset =
         ArraySubset::new_with_start_shape_unchecked(subset_start.to_vec(), subset_shape.to_vec());
 

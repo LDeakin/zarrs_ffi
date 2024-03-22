@@ -59,35 +59,57 @@ extern "C" {
 /**
  * Get the size of a chunk in bytes.
  *
- * `pChunkIndices` is a pointer to an array of length `chunkIndicesCount` holding the chunk indices.
+ * `pChunkIndices` is a pointer to an array of length `dimensionality` holding the chunk indices.
  *
  * # Safety
  * `array` must be a valid `ZarrsArray` handle.
- * `chunkIndicesCount` must match the dimensionality of the array and the length of the array pointed to by `pChunkIndices`.
+ * `dimensionality` must match the dimensionality of the array and the length of the array pointed to by `pChunkIndices`.
  */
 ZarrsResult zarrsArrayGetChunkSize(ZarrsArray array,
-                                   size_t chunkIndicesCount,
+                                   size_t dimensionality,
                                    const uint64_t *pChunkIndices,
                                    size_t *chunkSize);
 
 /**
+ * Returns the dimensionality of the array.
+ *
+ * # Errors
+ * Returns `ZarrsResult::ZARRS_ERROR_NULL_PTR` if `array` is a null pointer.
+ *
+ * # Safety
+ * If not null, `array` must be a valid `ZarrsArray` handle.
+ */
+ZarrsResult zarrsArrayGetDimensionality(ZarrsArray array, size_t *dimensionality);
+
+/**
+ * Returns the shape of the array.
+ *
+ * # Errors
+ * Returns `ZarrsResult::ZARRS_ERROR_NULL_PTR` if `array` is a null pointer.
+ *
+ * # Safety
+ * If not null, `array` must be a valid `ZarrsArray` handle.
+ */
+ZarrsResult zarrsArrayGetShape(ZarrsArray array, size_t dimensionality, uint64_t *pShape);
+
+/**
  * Get the size of a subset in bytes.
  *
- * `pSubsetShape` is a pointer to an array of length `subsetShapeCount` holding the shape of the subset.
+ * `pSubsetShape` is a pointer to an array of length `dimensionality` holding the shape of the subset.
  *
  * # Safety
  * `array` must be a valid `ZarrsArray` handle.
- * `subsetShapeCount` must match the dimensionality of the array and the length of the array pointed to by `pSubsetShape`.
+ * `dimensionality` must match the dimensionality of the array and the length of the array pointed to by `pSubsetShape`.
  */
 ZarrsResult zarrsArrayGetSubsetSize(ZarrsArray array,
-                                    size_t subsetShapeCount,
+                                    size_t dimensionality,
                                     const uint64_t *pSubsetShape,
                                     size_t *subsetSize);
 
 /**
  * Retrieve a chunk from an array.
  *
- * `pChunkIndices` is a pointer to an array of length `chunkIndicesCount` holding the chunk indices.
+ * `pChunkIndices` is a pointer to an array of length `dimensionality` holding the chunk indices.
  * `pChunkBytes` is a pointer to an array of bytes of length `chunkBytesCount` that must match the expected size of the chunk as returned by `zarrsArrayGetChunkSize()`.
  *
  * # Errors
@@ -95,10 +117,10 @@ ZarrsResult zarrsArrayGetSubsetSize(ZarrsArray array,
  *
  * # Safety
  * `array` must be a valid `ZarrsArray` handle.
- * `chunkIndicesCount` must match the dimensionality of the array and the length of the array pointed to by `pChunkIndices`.
+ * `dimensionality` must match the dimensionality of the array and the length of the array pointed to by `pChunkIndices`.
  */
 ZarrsResult zarrsArrayRetrieveChunk(ZarrsArray array,
-                                    size_t chunkIndicesCount,
+                                    size_t dimensionality,
                                     const uint64_t *pChunkIndices,
                                     size_t chunkBytesCount,
                                     uint8_t *pChunkBytes);
@@ -106,7 +128,7 @@ ZarrsResult zarrsArrayRetrieveChunk(ZarrsArray array,
 /**
  * Retrieve a subset from an array.
  *
- * `pSubsetStart` and `pSubsetShape` are pointers to arrays of length `subsetDimensionality` holding the chunk start and shape respectively.
+ * `pSubsetStart` and `pSubsetShape` are pointers to arrays of length `dimensionality` holding the chunk start and shape respectively.
  * `pSubsetBytes` is a pointer to an array of bytes of length `subsetBytesCount` that must match the expected size of the subset as returned by `zarrsArrayGetSubsetSize()`.
  *
  * # Errors
@@ -114,10 +136,10 @@ ZarrsResult zarrsArrayRetrieveChunk(ZarrsArray array,
  *
  * # Safety
  * `array` must be a valid `ZarrsArray` handle.
- * `subsetDimensionality` must match the dimensionality of the array and the length of the arrays pointed to by `pSubsetStart` and `pSubsetShape`.
+ * `dimensionality` must match the dimensionality of the array and the length of the arrays pointed to by `pSubsetStart` and `pSubsetShape`.
  */
 ZarrsResult zarrsArrayRetrieveSubset(ZarrsArray array,
-                                     size_t subsetDimensionality,
+                                     size_t dimensionality,
                                      const uint64_t *pSubsetStart,
                                      const uint64_t *pSubsetShape,
                                      size_t subsetBytesCount,
@@ -126,7 +148,7 @@ ZarrsResult zarrsArrayRetrieveSubset(ZarrsArray array,
 /**
  * Store a chunk.
  *
- * `pChunkIndices` is a pointer to an array of length `chunkIndicesCount` holding the chunk indices.
+ * `pChunkIndices` is a pointer to an array of length `dimensionality` holding the chunk indices.
  * `pChunkBytes` is a pointer to an array of bytes of length `chunkBytesCount` that must match the expected size of the chunk as returned by `zarrsArrayGetChunkSize()`.
  *
  * # Errors
@@ -134,10 +156,10 @@ ZarrsResult zarrsArrayRetrieveSubset(ZarrsArray array,
  *
  * # Safety
  * `array`  must be a valid `ZarrsArray` handle.
- * `chunkIndicesCount` must match the dimensionality of the array and the length of the array pointed to by `pChunkIndices`.
+ * `dimensionality` must match the dimensionality of the array and the length of the array pointed to by `pChunkIndices`.
  */
 ZarrsResult zarrsArrayStoreChunk(ZarrsArray array,
-                                 size_t chunkIndicesCount,
+                                 size_t dimensionality,
                                  const uint64_t *pChunkIndices,
                                  size_t chunkBytesCount,
                                  const uint8_t *pChunkBytes);
@@ -156,7 +178,7 @@ ZarrsResult zarrsArrayStoreMetadata(ZarrsArray array);
 /**
  * Store an array subset.
  *
- * `pSubsetStart` and `pSubsetShape` are pointers to arrays of length `subsetDimensionality` holding the chunk start and shape respectively.
+ * `pSubsetStart` and `pSubsetShape` are pointers to arrays of length `dimensionality` holding the chunk start and shape respectively.
  * `pSubsetBytes` is a pointer to an array of bytes of length `subsetBytesCount` that must match the expected size of the subset as returned by `zarrsArrayGetSubsetSize()`.
  *
  * # Errors
@@ -164,10 +186,10 @@ ZarrsResult zarrsArrayStoreMetadata(ZarrsArray array);
  *
  * # Safety
  * `array`  must be a valid `ZarrsArray` handle.
- * `subsetDimensionality` must match the dimensionality of the array and the length of the arrays pointed to by `pSubsetStart` and `pSubsetShape`.
+ * `dimensionality` must match the dimensionality of the array and the length of the arrays pointed to by `pSubsetStart` and `pSubsetShape`.
  */
 ZarrsResult zarrsArrayStoreSubset(ZarrsArray array,
-                                  size_t subsetDimensionality,
+                                  size_t dimensionality,
                                   const uint64_t *pSubsetStart,
                                   const uint64_t *pSubsetShape,
                                   size_t subsetBytesCount,

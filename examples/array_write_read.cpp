@@ -6,6 +6,7 @@
 #include <iostream>
 #include <memory>
 #include <string>
+#include <vector>
 
 const char *metadata = R""""(
 {
@@ -71,6 +72,16 @@ int main() {
   ZarrsArray array = nullptr;
   zarrs_assert(zarrsCreateArrayRWWithMetadata(storage, "/array", metadata, &array));
   assert(array);
+
+  size_t dimensionality;
+  zarrs_assert(zarrsArrayGetDimensionality(array, &dimensionality));
+  assert(dimensionality == 2);
+
+  std::vector<uint64_t> shape(dimensionality);
+  zarrs_assert(zarrsArrayGetShape(array, dimensionality, shape.data()));
+  assert(shape.size() == 2);
+  assert(shape[0] == 8);
+  assert(shape[1] == 8);
 
   // Update a subset
   size_t subset_start[] = {1, 1};

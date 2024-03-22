@@ -58,7 +58,7 @@ fn zarrsArrayStoreChunkImpl<T: WritableStorageTraits + ?Sized + 'static>(
 
 /// Store a chunk.
 ///
-/// `pChunkIndices` is a pointer to an array of length `chunkIndicesCount` holding the chunk indices.
+/// `pChunkIndices` is a pointer to an array of length `dimensionality` holding the chunk indices.
 /// `pChunkBytes` is a pointer to an array of bytes of length `chunkBytesCount` that must match the expected size of the chunk as returned by `zarrsArrayGetChunkSize()`.
 ///
 /// # Errors
@@ -66,11 +66,11 @@ fn zarrsArrayStoreChunkImpl<T: WritableStorageTraits + ?Sized + 'static>(
 ///
 /// # Safety
 /// `array`  must be a valid `ZarrsArray` handle.
-/// `chunkIndicesCount` must match the dimensionality of the array and the length of the array pointed to by `pChunkIndices`.
+/// `dimensionality` must match the dimensionality of the array and the length of the array pointed to by `pChunkIndices`.
 #[no_mangle]
 pub unsafe extern "C" fn zarrsArrayStoreChunk(
     array: ZarrsArray,
-    chunkIndicesCount: usize,
+    dimensionality: usize,
     pChunkIndices: *const u64,
     chunkBytesCount: usize,
     pChunkBytes: *const u8,
@@ -80,8 +80,8 @@ pub unsafe extern "C" fn zarrsArrayStoreChunk(
         return ZarrsResult::ZARRS_ERROR_NULL_PTR;
     }
     let array = &**array;
-    let chunk_indices = std::slice::from_raw_parts(pChunkIndices, chunkIndicesCount);
-    let chunk_bytes = std::slice::from_raw_parts(pChunkBytes, chunkBytesCount);
+    let chunk_indices = std::slice::from_raw_parts(pChunkIndices, dimensionality);
+    let chunk_bytes = std::slice::from_raw_parts(pChunkBytes, dimensionality);
 
     let chunk_representation = array_fn!(array, chunk_array_representation, chunk_indices);
     let Ok(chunk_representation) = chunk_representation else {

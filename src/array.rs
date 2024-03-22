@@ -158,17 +158,60 @@ pub unsafe extern "C" fn zarrsDestroyArray(array: ZarrsArray) -> ZarrsResult {
     }
 }
 
+/// Returns the dimensionality of the array.
+///
+/// # Errors
+/// Returns `ZarrsResult::ZARRS_ERROR_NULL_PTR` if `array` is a null pointer.
+///
+/// # Safety
+/// If not null, `array` must be a valid `ZarrsArray` handle.
+#[no_mangle]
+pub unsafe extern "C" fn zarrsArrayGetDimensionality(
+    array: ZarrsArray,
+    dimensionality: *mut usize,
+) -> ZarrsResult {
+    if array.is_null() {
+        return ZarrsResult::ZARRS_ERROR_NULL_PTR;
+    }
+    let array = &**array;
+    *dimensionality = array_fn!(array, dimensionality);
+    ZarrsResult::ZARRS_SUCCESS
+}
+
+/// Returns the shape of the array.
+///
+/// # Errors
+/// Returns `ZarrsResult::ZARRS_ERROR_NULL_PTR` if `array` is a null pointer.
+///
+/// # Safety
+/// If not null, `array` must be a valid `ZarrsArray` handle.
+#[no_mangle]
+pub unsafe extern "C" fn zarrsArrayGetShape(
+    array: ZarrsArray,
+    dimensionality: usize,
+    pShape: *mut u64,
+) -> ZarrsResult {
+    if array.is_null() {
+        return ZarrsResult::ZARRS_ERROR_NULL_PTR;
+    }
+    let array = &**array;
+    let shape = array_fn!(array, shape);
+    let pShape = unsafe { std::slice::from_raw_parts_mut(pShape, dimensionality) };
+    pShape.copy_from_slice(shape);
+    ZarrsResult::ZARRS_SUCCESS
+}
+
 /// Get the size of a chunk in bytes.
 ///
-/// `pChunkIndices` is a pointer to an array of length `chunkIndicesCount` holding the chunk indices.
+/// `pChunkIndices` is a pointer to an array of length `dimensionality` holding the chunk indices.
 ///
 /// # Safety
 /// `array` must be a valid `ZarrsArray` handle.
-/// `chunkIndicesCount` must match the dimensionality of the array and the length of the array pointed to by `pChunkIndices`.
+/// `dimensionality` must match the dimensionality of the array and the length of the array pointed to by `pChunkIndices`.
 #[no_mangle]
 pub unsafe extern "C" fn zarrsArrayGetChunkSize(
     array: ZarrsArray,
-    chunkIndicesCount: usize,
+    dimensionality: usize,
     pChunkIndices: *const u64,
     chunkSize: *mut usize,
 ) -> ZarrsResult {
@@ -177,7 +220,7 @@ pub unsafe extern "C" fn zarrsArrayGetChunkSize(
         return ZarrsResult::ZARRS_ERROR_NULL_PTR;
     }
     let array = &**array;
-    let chunk_indices = std::slice::from_raw_parts(pChunkIndices, chunkIndicesCount);
+    let chunk_indices = std::slice::from_raw_parts(pChunkIndices, dimensionality);
 
     // Get the chunk size
     let chunk_representation = array_fn!(array, chunk_array_representation, chunk_indices);
@@ -195,15 +238,15 @@ pub unsafe extern "C" fn zarrsArrayGetChunkSize(
 
 /// Get the size of a subset in bytes.
 ///
-/// `pSubsetShape` is a pointer to an array of length `subsetShapeCount` holding the shape of the subset.
+/// `pSubsetShape` is a pointer to an array of length `dimensionality` holding the shape of the subset.
 ///
 /// # Safety
 /// `array` must be a valid `ZarrsArray` handle.
-/// `subsetShapeCount` must match the dimensionality of the array and the length of the array pointed to by `pSubsetShape`.
+/// `dimensionality` must match the dimensionality of the array and the length of the array pointed to by `pSubsetShape`.
 #[no_mangle]
 pub unsafe extern "C" fn zarrsArrayGetSubsetSize(
     array: ZarrsArray,
-    subsetShapeCount: usize,
+    dimensionality: usize,
     pSubsetShape: *const u64,
     subsetSize: *mut usize,
 ) -> ZarrsResult {
@@ -212,7 +255,7 @@ pub unsafe extern "C" fn zarrsArrayGetSubsetSize(
         return ZarrsResult::ZARRS_ERROR_NULL_PTR;
     }
     let array = &**array;
-    let subset_shape = std::slice::from_raw_parts(pSubsetShape, subsetShapeCount);
+    let subset_shape = std::slice::from_raw_parts(pSubsetShape, dimensionality);
 
     // Get the data type
     let data_type = array_fn!(array, data_type);

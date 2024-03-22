@@ -19,7 +19,7 @@ fn zarrsArrayStoreSubsetImpl<T: ReadableWritableStorageTraits + ?Sized + 'static
 
 /// Store an array subset.
 ///
-/// `pSubsetStart` and `pSubsetShape` are pointers to arrays of length `subsetDimensionality` holding the chunk start and shape respectively.
+/// `pSubsetStart` and `pSubsetShape` are pointers to arrays of length `dimensionality` holding the chunk start and shape respectively.
 /// `pSubsetBytes` is a pointer to an array of bytes of length `subsetBytesCount` that must match the expected size of the subset as returned by `zarrsArrayGetSubsetSize()`.
 ///
 /// # Errors
@@ -27,11 +27,11 @@ fn zarrsArrayStoreSubsetImpl<T: ReadableWritableStorageTraits + ?Sized + 'static
 ///
 /// # Safety
 /// `array`  must be a valid `ZarrsArray` handle.
-/// `subsetDimensionality` must match the dimensionality of the array and the length of the arrays pointed to by `pSubsetStart` and `pSubsetShape`.
+/// `dimensionality` must match the dimensionality of the array and the length of the arrays pointed to by `pSubsetStart` and `pSubsetShape`.
 #[no_mangle]
 pub unsafe extern "C" fn zarrsArrayStoreSubset(
     array: ZarrsArray,
-    subsetDimensionality: usize,
+    dimensionality: usize,
     pSubsetStart: *const u64,
     pSubsetShape: *const u64,
     subsetBytesCount: usize,
@@ -42,8 +42,8 @@ pub unsafe extern "C" fn zarrsArrayStoreSubset(
         return ZarrsResult::ZARRS_ERROR_NULL_PTR;
     }
     let array = &**array;
-    let subset_start = std::slice::from_raw_parts(pSubsetStart, subsetDimensionality);
-    let subset_shape = std::slice::from_raw_parts(pSubsetShape, subsetDimensionality);
+    let subset_start = std::slice::from_raw_parts(pSubsetStart, dimensionality);
+    let subset_shape = std::slice::from_raw_parts(pSubsetShape, dimensionality);
     let subset_bytes = std::slice::from_raw_parts(pSubsetBytes, subsetBytesCount);
     let array_subset =
         ArraySubset::new_with_start_shape_unchecked(subset_start.to_vec(), subset_shape.to_vec());

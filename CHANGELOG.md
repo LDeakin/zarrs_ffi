@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+ - `zarrsArrayGetDimensionality`
+ - `zarrsArrayGetShape`
+
 ### Changed
  - Change `subset_shape` in `zarrsArrayGetSubsetSize` to `*u64`
  - Reorder parameters to various functions so counts come first
