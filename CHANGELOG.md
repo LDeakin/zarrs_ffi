@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
  - Change `subset_shape` in `zarrsArrayGetSubsetSize` to `*u64`
  - Reorder parameters to various functions so counts come first
  - Rename various function parameters to camel case, add `p` prefix to all pointers
+ - Use `find_package_handle_standard_args` in `Findzarrs.cmake`
 
 ### Fixed
  - Fixed various function docs referring to non-existent parameters

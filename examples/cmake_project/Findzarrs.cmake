@@ -24,3 +24,16 @@ corrosion_import_crate(MANIFEST_PATH ${zarrs_ffi_source_SOURCE_DIR}/Cargo.toml F
 # corrosion_experimental_cbindgen(TARGET zarrs_ffi HEADER_NAME "zarrs.h") # not working
 target_include_directories(zarrs_ffi INTERFACE ${zarrs_ffi_source_SOURCE_DIR}) # add zarrs.h to include directories
 add_library(zarrs::zarrs ALIAS zarrs_ffi)
+
+set(zarrs_INCLUDE_DIR ${zarrs_ffi_source_SOURCE_DIR})
+set(zarrs_VERSION_STRING ${zarrs_FIND_VERSION})
+
+mark_as_advanced(zarrs_INCLUDE_DIR ${zarrs_ffi_source_SOURCE_DIR})
+
+include(FindPackageHandleStandardArgs)
+find_package_handle_standard_args(zarrs
+    REQUIRED_VARS
+        zarrs_INCLUDE_DIR
+    VERSION_VAR
+        zarrs_FIND_VERSION
+)
