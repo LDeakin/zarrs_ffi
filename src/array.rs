@@ -5,7 +5,7 @@ pub mod data_type;
 
 use ffi_support::FfiStr;
 use zarrs::{
-    array::{Array, ArrayMetadata, DataType},
+    array::{chunk_shape_to_array_shape, Array, ArrayMetadata, DataType},
     array_subset::ArraySubset,
 };
 
@@ -340,6 +340,43 @@ pub unsafe extern "C" fn zarrsArrayGetChunkSize(
     match chunk_representation {
         Ok(chunk_representation) => {
             *chunkSize = usize::try_from(chunk_representation.size()).unwrap();
+            ZarrsResult::ZARRS_SUCCESS
+        }
+        Err(err) => {
+            *LAST_ERROR = err.to_string();
+            ZarrsResult::ZARRS_ERROR_INVALID_INDICES
+        }
+    }
+}
+
+/// Get the shape of a chunk.
+///
+/// `pChunkIndices` is a pointer to an array of length `dimensionality` holding the chunk indices.
+///
+/// # Safety
+/// `array` must be a valid `ZarrsArray` handle.
+/// `dimensionality` must match the dimensionality of the array and the length of the array pointed to by `pChunkIndices` and `pChunkShape`.
+#[no_mangle]
+pub unsafe extern "C" fn zarrsArrayGetChunkShape(
+    array: ZarrsArray,
+    dimensionality: usize,
+    pChunkIndices: *const u64,
+    pChunkShape: *mut u64,
+) -> ZarrsResult {
+    // Validation
+    if array.is_null() {
+        return ZarrsResult::ZARRS_ERROR_NULL_PTR;
+    }
+    let array = &**array;
+    let chunk_indices = std::slice::from_raw_parts(pChunkIndices, dimensionality);
+
+    // Get the chunk shape
+    let chunk_shape = array_fn!(array, chunk_shape, chunk_indices);
+    match chunk_shape {
+        Ok(chunk_shape) => {
+            let pChunkShape =
+                unsafe { std::slice::from_raw_parts_mut(pChunkShape, dimensionality) };
+            pChunkShape.copy_from_slice(&chunk_shape_to_array_shape(&chunk_shape));
             ZarrsResult::ZARRS_SUCCESS
         }
         Err(err) => {

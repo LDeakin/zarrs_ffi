@@ -60,5 +60,5 @@ fn ffi_array_write_c_read_c() {
 
     assert_cxx_str(include_str!("../examples/array_write_read.cpp"))
         .success()
-        .stdout("64\nnan nan nan nan nan -1 -2 nan nan -3 -4 nan nan nan nan nan\n");
+        .stdout("nan nan nan nan nan -1 -2 nan nan -3 -4 nan nan nan nan nan\n");
 }

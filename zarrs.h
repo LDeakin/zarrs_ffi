@@ -104,6 +104,20 @@ ZarrsResult zarrsArrayGetChunkGridShape(ZarrsArray array,
                                         uint64_t *pChunkGridShape);
 
 /**
+ * Get the shape of a chunk.
+ *
+ * `pChunkIndices` is a pointer to an array of length `dimensionality` holding the chunk indices.
+ *
+ * # Safety
+ * `array` must be a valid `ZarrsArray` handle.
+ * `dimensionality` must match the dimensionality of the array and the length of the array pointed to by `pChunkIndices` and `pChunkShape`.
+ */
+ZarrsResult zarrsArrayGetChunkShape(ZarrsArray array,
+                                    size_t dimensionality,
+                                    const uint64_t *pChunkIndices,
+                                    uint64_t *pChunkShape);
+
+/**
  * Get the size of a chunk in bytes.
  *
  * `pChunkIndices` is a pointer to an array of length `dimensionality` holding the chunk indices.

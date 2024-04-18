@@ -111,11 +111,15 @@ int main() {
   assert(subset_size == 4 * sizeof(float));
   zarrs_assert(zarrsArrayStoreSubset(array, 2, subset_start, subset_shape, 4 * sizeof(float), subset_bytes));
 
-  // Get the chunk size
+  // Get the chunk size and shape
   size_t indices[] = {0, 0};
   size_t chunk_size;
   zarrs_assert(zarrsArrayGetChunkSize(array, 2, indices, &chunk_size));
-  std::cout << chunk_size << std::endl;
+  assert(chunk_size == (4 * 4 * sizeof(float)));
+  uint64_t chunk_shape[2];
+  zarrs_assert(zarrsArrayGetChunkShape(array, 2, indices, chunk_shape));
+  assert(chunk_shape[0] == 4);
+  assert(chunk_shape[1] == 4);
 
   // Get chunk bytes
   std::unique_ptr<uint8_t[]> chunk_bytes(new uint8_t[chunk_size]);
