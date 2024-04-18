@@ -116,6 +116,10 @@ int main() {
   size_t chunk_size;
   zarrs_assert(zarrsArrayGetChunkSize(array, 2, indices, &chunk_size));
   assert(chunk_size == (4 * 4 * sizeof(float)));
+  uint64_t chunk_origin[2];
+  zarrs_assert(zarrsArrayGetChunkOrigin(array, 2, indices, chunk_origin));
+  assert(chunk_origin[0] == 0);
+  assert(chunk_origin[1] == 0);
   uint64_t chunk_shape[2];
   zarrs_assert(zarrsArrayGetChunkShape(array, 2, indices, chunk_shape));
   assert(chunk_shape[0] == 4);

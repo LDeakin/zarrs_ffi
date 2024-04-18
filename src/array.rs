@@ -349,6 +349,43 @@ pub unsafe extern "C" fn zarrsArrayGetChunkSize(
     }
 }
 
+/// Get the origin of a chunk.
+///
+/// `pChunkIndices` is a pointer to an array of length `dimensionality` holding the chunk indices.
+///
+/// # Safety
+/// `array` must be a valid `ZarrsArray` handle.
+/// `dimensionality` must match the dimensionality of the array and the length of the array pointed to by `pChunkIndices` and `pChunkOrigin`.
+#[no_mangle]
+pub unsafe extern "C" fn zarrsArrayGetChunkOrigin(
+    array: ZarrsArray,
+    dimensionality: usize,
+    pChunkIndices: *const u64,
+    pChunkOrigin: *mut u64,
+) -> ZarrsResult {
+    // Validation
+    if array.is_null() {
+        return ZarrsResult::ZARRS_ERROR_NULL_PTR;
+    }
+    let array = &**array;
+    let chunk_indices = std::slice::from_raw_parts(pChunkIndices, dimensionality);
+
+    // Get the chunk origin
+    let chunk_origin = array_fn!(array, chunk_origin, chunk_indices);
+    match chunk_origin {
+        Ok(chunk_origin) => {
+            let pChunkOrigin =
+                unsafe { std::slice::from_raw_parts_mut(pChunkOrigin, dimensionality) };
+            pChunkOrigin.copy_from_slice(&chunk_origin);
+            ZarrsResult::ZARRS_SUCCESS
+        }
+        Err(err) => {
+            *LAST_ERROR = err.to_string();
+            ZarrsResult::ZARRS_ERROR_INVALID_INDICES
+        }
+    }
+}
+
 /// Get the shape of a chunk.
 ///
 /// `pChunkIndices` is a pointer to an array of length `dimensionality` holding the chunk indices.
