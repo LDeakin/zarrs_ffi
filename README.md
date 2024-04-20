@@ -18,7 +18,7 @@ Currently `zarrs_ffi` only supports a small subset of the [zarrs] API.
 ## CMake Quickstart
 1. Install the rust compiler (and cargo).
 2. Put [Findzarrs.cmake](https://github.com/LDeakin/zarrs_ffi/blob/main/examples/cmake_project/Findzarrs.cmake) in your `CMAKE_MODULE_PATH`
-3. `find_package(zarrs 0.6.1 REQUIRED COMPONENTS zarrs/bz2)`
+3. `find_package(zarrs 0.6 REQUIRED COMPONENTS zarrs/bz2)`
    - `zarrs` is retrieved from `GitHub` using [FetchContent](https://cmake.org/cmake/help/latest/module/FetchContent.html) and built using [corrosion](https://github.com/corrosion-rs/corrosion)
    - Components are optional zarrs codecs
 4. the `zarrs` FFI library is available as the `zarrs::zarrs` target

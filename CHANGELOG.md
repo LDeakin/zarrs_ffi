@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.6.2] - 2024-04-20
+
 ### Fixed
  - Add new functions to `lib.rs` so they are visible in crate docs
 
@@ -90,7 +92,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
  - Initial public release
 
-[unreleased]: https://github.com/LDeakin/zarrs_ffi/compare/v0.6.1...HEAD
+[unreleased]: https://github.com/LDeakin/zarrs_ffi/compare/v0.6.2...HEAD
+[0.6.2]: https://github.com/LDeakin/zarrs_ffi/releases/tag/v0.6.2
 [0.6.1]: https://github.com/LDeakin/zarrs_ffi/releases/tag/v0.6.1
 [0.6.0]: https://github.com/LDeakin/zarrs_ffi/releases/tag/v0.6.0
 [0.5.1]: https://github.com/LDeakin/zarrs_ffi/releases/tag/v0.5.1
