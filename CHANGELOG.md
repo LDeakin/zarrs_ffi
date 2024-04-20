@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+ - Add new functions to `lib.rs` so they are visible in crate docs
+
 ## [0.6.1] - 2024-04-20
 
 ### Added

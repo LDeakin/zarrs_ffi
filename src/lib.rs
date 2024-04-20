@@ -17,7 +17,9 @@ pub use array::{
     array_read_write::zarrsArrayStoreSubset,
     array_write::{zarrsArrayStoreChunk, zarrsArrayStoreMetadata},
     data_type::ZarrsDataType,
-    zarrsArrayGetChunkSize, zarrsArrayGetSubsetSize, zarrsCreateArrayRW,
+    zarrsArrayGetChunkGridShape, zarrsArrayGetChunkOrigin, zarrsArrayGetChunkShape,
+    zarrsArrayGetChunkSize, zarrsArrayGetChunksInSubset, zarrsArrayGetDataType,
+    zarrsArrayGetDimensionality, zarrsArrayGetShape, zarrsArrayGetSubsetSize, zarrsCreateArrayRW,
     zarrsCreateArrayRWWithMetadata, zarrsDestroyArray, ZarrsArray,
 };
 pub use storage::{zarrsCreateStorageFilesystem, zarrsDestroyStorage, ZarrsStorage};
