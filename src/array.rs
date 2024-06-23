@@ -70,7 +70,7 @@ pub type ZarrsArray = *mut ZarrsArray_T;
 /// # Safety
 /// `pArray` must be a valid pointer to a `ZarrsArray` handle.
 #[no_mangle]
-pub unsafe extern "C" fn zarrsCreateArrayRW(
+pub unsafe extern "C" fn zarrsOpenArrayRW(
     storage: ZarrsStorage,
     path: FfiStr,
     pArray: *mut ZarrsArray,
@@ -107,7 +107,7 @@ pub unsafe extern "C" fn zarrsCreateArrayRW(
 /// # Safety
 /// `pArray` must be a valid pointer to a `ZarrsArray` handle.
 #[no_mangle]
-pub unsafe extern "C" fn zarrsCreateArrayRWWithMetadata(
+pub unsafe extern "C" fn zarrsCreateArrayRW(
     storage: ZarrsStorage,
     path: FfiStr,
     metadata: FfiStr,

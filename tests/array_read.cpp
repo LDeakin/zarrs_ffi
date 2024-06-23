@@ -10,7 +10,7 @@ int main() {
   assert(storage);
 
   ZarrsArray array = nullptr;
-  zarrs_assert(zarrsCreateArrayRW(storage, "/array", &array));
+  zarrs_assert(zarrsOpenArrayRW(storage, "/array", &array));
   assert(array);
 
   // Update a subset

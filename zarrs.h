@@ -303,16 +303,6 @@ ZarrsResult zarrsArrayStoreSubset(ZarrsArray array,
                                   const uint8_t *pSubsetBytes);
 
 /**
- * Create a handle to an existing array (read/write capability).
- *
- * `pArray` is a pointer to a handle in which the created `ZarrsArray` is returned.
- *
- * # Safety
- * `pArray` must be a valid pointer to a `ZarrsArray` handle.
- */
-ZarrsResult zarrsCreateArrayRW(ZarrsStorage storage, const char* path, ZarrsArray *pArray);
-
-/**
  * Create a handle to a new array (read/write capability).
  *
  * `metadata` is expected to be a JSON string representing a zarr V3 array `zarr.json`.
@@ -321,10 +311,10 @@ ZarrsResult zarrsCreateArrayRW(ZarrsStorage storage, const char* path, ZarrsArra
  * # Safety
  * `pArray` must be a valid pointer to a `ZarrsArray` handle.
  */
-ZarrsResult zarrsCreateArrayRWWithMetadata(ZarrsStorage storage,
-                                           const char* path,
-                                           const char* metadata,
-                                           ZarrsArray *pArray);
+ZarrsResult zarrsCreateArrayRW(ZarrsStorage storage,
+                               const char* path,
+                               const char* metadata,
+                               ZarrsArray *pArray);
 
 /**
  * Create a storage handle to a filesystem store.
@@ -362,6 +352,16 @@ ZarrsResult zarrsDestroyStorage(ZarrsStorage storage);
  * Get the last error string.
  */
 const char *zarrsLastError(void);
+
+/**
+ * Create a handle to an existing array (read/write capability).
+ *
+ * `pArray` is a pointer to a handle in which the created `ZarrsArray` is returned.
+ *
+ * # Safety
+ * `pArray` must be a valid pointer to a `ZarrsArray` handle.
+ */
+ZarrsResult zarrsOpenArrayRW(ZarrsStorage storage, const char* path, ZarrsArray *pArray);
 
 /**
  * Get the zarrs version.

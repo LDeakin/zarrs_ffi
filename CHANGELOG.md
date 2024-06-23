@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
  - Make `cbindgen` dependency optional
+ - **Breaking**: Rename `zarrsCreateArrayRWWithMetadata` to `zarrsCreateArrayRW` and `zarrsCreateArrayRW` to `zarrsOpenArrayRW`
 
 ## [0.6.2] - 2024-04-20
 

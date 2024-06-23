@@ -20,7 +20,7 @@ pub use array::{
     zarrsArrayGetChunkGridShape, zarrsArrayGetChunkOrigin, zarrsArrayGetChunkShape,
     zarrsArrayGetChunkSize, zarrsArrayGetChunksInSubset, zarrsArrayGetDataType,
     zarrsArrayGetDimensionality, zarrsArrayGetShape, zarrsArrayGetSubsetSize, zarrsCreateArrayRW,
-    zarrsCreateArrayRWWithMetadata, zarrsDestroyArray, ZarrsArray,
+    zarrsDestroyArray, zarrsOpenArrayRW, ZarrsArray,
 };
 pub use storage::{zarrsCreateStorageFilesystem, zarrsDestroyStorage, ZarrsStorage};
 pub use version::{zarrsVersion, zarrsVersionMajor, zarrsVersionMinor, zarrsVersionPatch};

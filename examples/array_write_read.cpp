@@ -70,7 +70,7 @@ int main() {
   assert(storage);
 
   ZarrsArray array = nullptr;
-  zarrs_assert(zarrsCreateArrayRWWithMetadata(storage, "/array", metadata, &array));
+  zarrs_assert(zarrsCreateArrayRW(storage, "/array", metadata, &array));
   assert(array);
 
   size_t dimensionality;
