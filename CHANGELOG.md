@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+ - Make `cbindgen` dependency optional
+
 ## [0.6.2] - 2024-04-20
 
 ### Fixed

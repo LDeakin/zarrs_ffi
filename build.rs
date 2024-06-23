@@ -1,13 +1,11 @@
-extern crate cbindgen;
-
-use cbindgen::Config;
 use std::{env, path::PathBuf};
 
 fn main() {
-    let config = Config::from_file("cbindgen.toml").unwrap();
-
     let crate_dir = env::var("CARGO_MANIFEST_DIR").unwrap();
-    if cfg!(feature = "cbindgen") {
+
+    #[cfg(feature = "cbindgen")]
+    {
+        let config = cbindgen::Config::from_file("cbindgen.toml").unwrap();
         cbindgen::generate_with_config(&crate_dir, config)
             .unwrap()
             .write_to_file("zarrs.h");
