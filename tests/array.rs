@@ -42,7 +42,7 @@ fn ffi_array_write_rust_read_c() {
     array.store_metadata().unwrap();
 
     array
-        .store_chunk_elements::<f32>(&[0, 0], (0..16).map(|f| f as f32).collect::<Vec<_>>())
+        .store_chunk_elements::<f32>(&[0, 0], &(0..16).map(|f| f as f32).collect::<Vec<_>>())
         .unwrap();
 
     assert_cxx_str(include_str!("array_read.cpp"))

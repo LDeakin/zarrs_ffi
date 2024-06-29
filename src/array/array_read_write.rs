@@ -9,7 +9,7 @@ fn zarrsArrayStoreSubsetImpl<T: ReadableWritableStorageTraits + ?Sized + 'static
     array_subset: &ArraySubset,
     subset_bytes: &[u8],
 ) -> ZarrsResult {
-    if let Err(err) = array.store_array_subset(array_subset, subset_bytes.to_vec()) {
+    if let Err(err) = array.store_array_subset(array_subset, subset_bytes) {
         unsafe { *LAST_ERROR = err.to_string() };
         ZarrsResult::ZARRS_ERROR_ARRAY
     } else {

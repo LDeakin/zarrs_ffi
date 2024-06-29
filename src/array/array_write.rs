@@ -48,7 +48,7 @@ fn zarrsArrayStoreChunkImpl<T: WritableStorageTraits + ?Sized + 'static>(
     chunk_indices: &[u64],
     chunk_bytes: &[u8],
 ) -> ZarrsResult {
-    if let Err(err) = array.store_chunk(chunk_indices, chunk_bytes.to_vec()) {
+    if let Err(err) = array.store_chunk(chunk_indices, chunk_bytes) {
         unsafe { *LAST_ERROR = err.to_string() };
         ZarrsResult::ZARRS_ERROR_ARRAY
     } else {

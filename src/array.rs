@@ -83,7 +83,7 @@ pub unsafe extern "C" fn zarrsOpenArrayRW(
     let storage = &**storage;
 
     if let ZarrsStorageEnum::RW(storage) = storage {
-        match Array::new(storage.clone(), path.into()) {
+        match Array::open(storage.clone(), path.into()) {
             Ok(array) => {
                 *pArray = Box::into_raw(Box::new(ZarrsArray_T(ZarrsArrayEnum::RW(array))));
                 ZarrsResult::ZARRS_SUCCESS
