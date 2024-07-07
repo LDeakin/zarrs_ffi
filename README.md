@@ -7,13 +7,10 @@
 
 FFI bindings for the [zarrs] crate, a rust library for the [Zarr V3](https://zarr.dev) storage format for multidimensional arrays and metadata.
 
-Developed at the [Department of Materials Physics](https://physics.anu.edu.au/research/mp/), Australian National University, Canberra, Australia.
-
-**`zarrs` and `zarrs_ffi` are experimental and in limited production use. Use at your own risk!**
-
-Example usage can be found in the [examples](https://github.com/LDeakin/zarrs_ffi/tree/main/examples).
-
 Currently `zarrs_ffi` only supports a small subset of the [zarrs] API.
+
+A changelog can be found [here](https://github.com/LDeakin/zarrs_ffi/blob/main/CHANGELOG.md).
+Example usage can be found in the [examples](https://github.com/LDeakin/zarrs_ffi/tree/main/examples).
 
 ## CMake Quickstart
 1. Install the rust compiler (and cargo).
