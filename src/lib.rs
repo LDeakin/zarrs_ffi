@@ -39,6 +39,7 @@ pub enum ZarrsResult {
     ZARRS_ERROR_STORAGE_CAPABILITY = -9,
     ZARRS_ERROR_UNKNOWN_CHUNK_GRID_SHAPE = -10,
     ZARRS_ERROR_UNKNOWN_INTERSECTING_CHUNKS = -11,
+    ZARRS_ERROR_UNSUPPORTED_DATA_TYPE = -12,
 }
 
 static mut LAST_ERROR: Lazy<String> = Lazy::new(|| "".to_string());

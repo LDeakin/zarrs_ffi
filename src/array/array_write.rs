@@ -88,9 +88,13 @@ pub unsafe extern "C" fn zarrsArrayStoreChunk(
         unsafe { *LAST_ERROR = chunk_representation.unwrap_err_unchecked().to_string() };
         return ZarrsResult::ZARRS_ERROR_INVALID_INDICES;
     };
-    if chunkBytesCount as u64 != chunk_representation.size() {
+    let Some(chunk_size) = chunk_representation.fixed_size() else {
+        *LAST_ERROR = "variable size data types are not supported".to_string();
+        return ZarrsResult::ZARRS_ERROR_UNSUPPORTED_DATA_TYPE;
+    };
+    if chunkBytesCount != chunk_size {
         *LAST_ERROR =
-                        format!("zarrsArrayRetrieveChunk chunk_bytes_length {chunkBytesCount} does not match expected length {}", chunk_representation.size());
+                        format!("zarrsArrayRetrieveChunk chunk_bytes_length {chunkBytesCount} does not match expected length {}", chunk_size);
         return ZarrsResult::ZARRS_ERROR_BUFFER_LENGTH;
     }
 
