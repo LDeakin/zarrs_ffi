@@ -12,6 +12,10 @@ fn zarrsArrayRetrieveChunkImpl<T: ReadableStorageTraits + ?Sized + 'static>(
 ) -> ZarrsResult {
     match array.retrieve_chunk(chunk_indices) {
         Ok(bytes) => {
+            let Ok(bytes) = bytes.into_fixed() else {
+                unsafe { *LAST_ERROR = "variable size data types are not supported".to_string() };
+                return ZarrsResult::ZARRS_ERROR_UNSUPPORTED_DATA_TYPE;
+            };
             if bytes.len() != chunk_bytes_length {
                 unsafe {
                     *LAST_ERROR = format!(
@@ -86,6 +90,10 @@ fn zarrsArrayRetrieveSubsetImpl<T: ReadableStorageTraits + ?Sized + 'static>(
 ) -> ZarrsResult {
     match array.retrieve_array_subset(array_subset) {
         Ok(bytes) => {
+            let Ok(bytes) = bytes.into_fixed() else {
+                unsafe { *LAST_ERROR = "variable size data types are not supported".to_string() };
+                return ZarrsResult::ZARRS_ERROR_UNSUPPORTED_DATA_TYPE;
+            };
             if bytes.len() != subset_bytes_length {
                 unsafe {
                     *LAST_ERROR = format!(

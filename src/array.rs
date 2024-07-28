@@ -339,8 +339,13 @@ pub unsafe extern "C" fn zarrsArrayGetChunkSize(
     let chunk_representation = array_fn!(array, chunk_array_representation, chunk_indices);
     match chunk_representation {
         Ok(chunk_representation) => {
-            *chunkSize = usize::try_from(chunk_representation.size()).unwrap();
-            ZarrsResult::ZARRS_SUCCESS
+            if let Some(chunk_size) = chunk_representation.fixed_size() {
+                *chunkSize = chunk_size;
+                ZarrsResult::ZARRS_SUCCESS
+            } else {
+                *LAST_ERROR = "variable size data types are not supported".to_string();
+                ZarrsResult::ZARRS_ERROR_UNSUPPORTED_DATA_TYPE
+            }
         }
         Err(err) => {
             *LAST_ERROR = err.to_string();
@@ -446,8 +451,12 @@ pub unsafe extern "C" fn zarrsArrayGetSubsetSize(
 
     // Get the data type
     let data_type = array_fn!(array, data_type);
+    let Some(data_type_size) = data_type.fixed_size() else {
+        *LAST_ERROR = "variable size data types are not supported".to_string();
+        return ZarrsResult::ZARRS_ERROR_UNSUPPORTED_DATA_TYPE;
+    };
 
     // Get the subset size
-    *subsetSize = usize::try_from(subset_shape.iter().product::<u64>()).unwrap() * data_type.size();
+    *subsetSize = usize::try_from(subset_shape.iter().product::<u64>()).unwrap() * data_type_size;
     ZarrsResult::ZARRS_SUCCESS
 }
