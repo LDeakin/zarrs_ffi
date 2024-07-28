@@ -344,7 +344,7 @@ pub unsafe extern "C" fn zarrsArrayGetChunkSize(
                 ZarrsResult::ZARRS_SUCCESS
             } else {
                 *LAST_ERROR = "variable size data types are not supported".to_string();
-                return ZarrsResult::ZARRS_ERROR_UNSUPPORTED_DATA_TYPE;
+                ZarrsResult::ZARRS_ERROR_UNSUPPORTED_DATA_TYPE
             }
         }
         Err(err) => {
