@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Add
+ - Add `zarrs::array::ArrayShardedReadableExtCache` related functionality
+   - `ZarrsShardIndexCache` type
+   - `zarrsArrayGetInnerChunkShape()`
+   - `zarrsCreateShardIndexCache()`, `zarrsDestroyShardIndexCache()`
+   - `zarrsArrayRetrieveInnerChunk`, `zarrsArrayRetrieveSubsetSharded()`
+
 ## [0.7.1] - 2024-07-28
 
 ### Changed

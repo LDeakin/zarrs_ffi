@@ -1,5 +1,6 @@
 pub mod array_read;
 pub mod array_read_write;
+pub mod array_sharded;
 pub mod array_write;
 pub mod data_type;
 
@@ -28,22 +29,22 @@ pub enum ZarrsArrayEnum {
 macro_rules! array_fn {
     ($array:expr, $fn:ident ) => {
         match $array {
-            ZarrsArrayEnum::R(array) => array.$fn(),
-            ZarrsArrayEnum::W(array) => array.$fn(),
-            ZarrsArrayEnum::L(array) => array.$fn(),
-            ZarrsArrayEnum::RL(array) => array.$fn(),
-            ZarrsArrayEnum::RW(array) => array.$fn(),
-            ZarrsArrayEnum::RWL(array) => array.$fn(),
+            crate::array::ZarrsArrayEnum::R(array) => array.$fn(),
+            crate::array::ZarrsArrayEnum::W(array) => array.$fn(),
+            crate::array::ZarrsArrayEnum::L(array) => array.$fn(),
+            crate::array::ZarrsArrayEnum::RL(array) => array.$fn(),
+            crate::array::ZarrsArrayEnum::RW(array) => array.$fn(),
+            crate::array::ZarrsArrayEnum::RWL(array) => array.$fn(),
         }
     };
     ($array:expr, $fn:ident, $( $args:expr ),* ) => {
         match $array {
-            ZarrsArrayEnum::R(array) => array.$fn($( $args ),*),
-            ZarrsArrayEnum::W(array) => array.$fn($( $args ),*),
-            ZarrsArrayEnum::L(array) => array.$fn($( $args ),*),
-            ZarrsArrayEnum::RL(array) => array.$fn($( $args ),*),
-            ZarrsArrayEnum::RW(array) => array.$fn($( $args ),*),
-            ZarrsArrayEnum::RWL(array) => array.$fn($( $args ),*),
+            crate::array::ZarrsArrayEnum::R(array) => array.$fn($( $args ),*),
+            crate::array::ZarrsArrayEnum::W(array) => array.$fn($( $args ),*),
+            crate::array::ZarrsArrayEnum::L(array) => array.$fn($( $args ),*),
+            crate::array::ZarrsArrayEnum::RL(array) => array.$fn($( $args ),*),
+            crate::array::ZarrsArrayEnum::RW(array) => array.$fn($( $args ),*),
+            crate::array::ZarrsArrayEnum::RWL(array) => array.$fn($( $args ),*),
         }
     };
 }

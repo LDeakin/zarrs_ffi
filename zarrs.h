@@ -73,12 +73,19 @@ typedef int32_t ZarrsResult;
 
 typedef struct ZarrsArray_T ZarrsArray_T;
 
+typedef struct ZarrsShardIndexCache_T ZarrsShardIndexCache_T;
+
 typedef struct ZarrsStorage_T ZarrsStorage_T;
 
 /**
  * An opaque handle to a zarr array.
  */
 typedef struct ZarrsArray_T *ZarrsArray;
+
+/**
+ * An opaque handle to a zarrs [`ArrayShardedReadableExtCache`].
+ */
+typedef struct ZarrsShardIndexCache_T *ZarrsShardIndexCache;
 
 /**
  * An opaque handle to a zarr store or storage transformer.
@@ -187,6 +194,21 @@ ZarrsResult zarrsArrayGetDataType(ZarrsArray array, ZarrsDataType *pDataType);
 ZarrsResult zarrsArrayGetDimensionality(ZarrsArray array, size_t *dimensionality);
 
 /**
+ * Get the inner chunk shape for a sharded array.
+ *
+ * `pIsSharded` is set to true if the array is sharded, otherwise false.
+ * If the array is not sharded, the contents of `pInnerChunkShape` will be undefined.
+ *
+ * # Safety
+ * `array` must be a valid `ZarrsArray` handle.
+ * `dimensionality` must match the dimensionality of the array and the length of the array pointed to by `pChunkShape`.
+ */
+ZarrsResult zarrsArrayGetInnerChunkShape(ZarrsArray array,
+                                         size_t dimensionality,
+                                         bool *pIsSharded,
+                                         uint64_t *pInnerChunkShape);
+
+/**
  * Returns the shape of the array.
  *
  * # Errors
@@ -234,6 +256,26 @@ ZarrsResult zarrsArrayRetrieveChunk(ZarrsArray array,
                                     uint8_t *pChunkBytes);
 
 /**
+ * Retrieve an inner chunk from a sharded array (or outer chunk for an unsharded array).
+ *
+ * `pChunkIndices` is a pointer to an array of length `dimensionality` holding the chunk indices.
+ * `pChunkBytes` is a pointer to an array of bytes of length `chunkBytesCount` that must match the expected size of the chunk as returned by `zarrsArrayGetChunkSize()`.
+ *
+ * # Errors
+ * Returns an error if the array does not have read capability.
+ *
+ * # Safety
+ * `array` must be a valid `ZarrsArray` handle.
+ * `dimensionality` must match the dimensionality of the array and the length of the array pointed to by `pChunkIndices`.
+ */
+ZarrsResult zarrsArrayRetrieveInnerChunk(ZarrsArray array,
+                                         ZarrsShardIndexCache cache,
+                                         size_t dimensionality,
+                                         const uint64_t *pChunkIndices,
+                                         size_t chunkBytesCount,
+                                         uint8_t *pChunkBytes);
+
+/**
  * Retrieve a subset from an array.
  *
  * `pSubsetStart` and `pSubsetShape` are pointers to arrays of length `dimensionality` holding the chunk start and shape respectively.
@@ -252,6 +294,27 @@ ZarrsResult zarrsArrayRetrieveSubset(ZarrsArray array,
                                      const uint64_t *pSubsetShape,
                                      size_t subsetBytesCount,
                                      uint8_t *pSubsetBytes);
+
+/**
+ * Retrieve a subset from an array (with a shard index cache).
+ *
+ * `pSubsetStart` and `pSubsetShape` are pointers to arrays of length `dimensionality` holding the chunk start and shape respectively.
+ * `pSubsetBytes` is a pointer to an array of bytes of length `subsetBytesCount` that must match the expected size of the subset as returned by `zarrsArrayGetSubsetSize()`.
+ *
+ * # Errors
+ * Returns an error if the array does not have read capability.
+ *
+ * # Safety
+ * `array` must be a valid `ZarrsArray` handle.
+ * `dimensionality` must match the dimensionality of the array and the length of the arrays pointed to by `pSubsetStart` and `pSubsetShape`.
+ */
+ZarrsResult zarrsArrayRetrieveSubsetSharded(ZarrsArray array,
+                                            ZarrsShardIndexCache cache,
+                                            size_t dimensionality,
+                                            const uint64_t *pSubsetStart,
+                                            const uint64_t *pSubsetShape,
+                                            size_t subsetBytesCount,
+                                            uint8_t *pSubsetBytes);
 
 /**
  * Store a chunk.
@@ -318,6 +381,17 @@ ZarrsResult zarrsCreateArrayRW(ZarrsStorage storage,
                                ZarrsArray *pArray);
 
 /**
+ * Create a handle to a new shard index cache.
+ *
+ * # Errors
+ * Returns an error if the array does not have read capability.
+ *
+ * # Safety
+ * `array` must be a valid `ZarrsArray` handle.
+ */
+ZarrsResult zarrsCreateShardIndexCache(ZarrsArray array, ZarrsShardIndexCache *pShardIndexCache);
+
+/**
  * Create a storage handle to a filesystem store.
  *
  * `pStorage` is a pointer to a handle in which the created `ZarrsStorage` is returned.
@@ -337,6 +411,17 @@ ZarrsResult zarrsCreateStorageFilesystem(const char* path, ZarrsStorage *pStorag
  * If not null, `array` must be a valid `ZarrsArray` handle.
  */
 ZarrsResult zarrsDestroyArray(ZarrsArray array);
+
+/**
+ * Destroy a shard index cache.
+ *
+ * # Errors
+ * Returns `ZarrsResult::ZARRS_ERROR_NULL_PTR` if `shardIndexCache` is a null pointer.
+ *
+ * # Safety
+ * If not null, `shardIndexCache` must be a valid `ZarrsShardIndexCache` handle.
+ */
+ZarrsResult zarrsDestroyShardIndexCache(ZarrsShardIndexCache shardIndexCache);
 
 /**
  * Destroy storage.
