@@ -4,6 +4,8 @@ pub mod array_sharded;
 pub mod array_write;
 pub mod data_type;
 
+use std::ffi::{c_char, CString};
+
 use ffi_support::FfiStr;
 use zarrs::{
     array::{chunk_shape_to_array_shape, Array, ArrayMetadata, DataType},
@@ -460,4 +462,74 @@ pub unsafe extern "C" fn zarrsArrayGetSubsetSize(
     // Get the subset size
     *subsetSize = usize::try_from(subset_shape.iter().product::<u64>()).unwrap() * data_type_size;
     ZarrsResult::ZARRS_SUCCESS
+}
+
+/// Get the array metadata as a JSON string.
+///
+/// The string must be freed with `zarrsFreeString`.
+///
+/// # Safety
+/// `array` must be a valid `ZarrsArray` handle.
+#[no_mangle]
+pub unsafe extern "C" fn zarrsArrayGetMetadataString(
+    array: ZarrsArray,
+    pretty: bool,
+    pMetadataString: *mut *const c_char,
+) -> ZarrsResult {
+    // Validation
+    if array.is_null() {
+        return ZarrsResult::ZARRS_ERROR_NULL_PTR;
+    }
+    let array = &**array;
+
+    let metadata = array_fn!(array, metadata);
+    let metadata_str = if pretty {
+        serde_json::to_string_pretty(&metadata)
+    } else {
+        serde_json::to_string(&metadata)
+    };
+    if let Ok(metadata_str) = metadata_str {
+        if let Ok(cstring) = CString::new(metadata_str) {
+            *pMetadataString = cstring.into_raw();
+            return ZarrsResult::ZARRS_SUCCESS;
+        }
+    }
+
+    *LAST_ERROR = "error converting metadata to a json string".to_string();
+    ZarrsResult::ZARRS_ERROR_INVALID_METADATA
+}
+
+/// Get the array attributes as a JSON string.
+///
+/// The string must be freed with `zarrsFreeString`.
+///
+/// # Safety
+/// `array` must be a valid `ZarrsArray` handle.
+#[no_mangle]
+pub unsafe extern "C" fn zarrsArrayGetAttributesString(
+    array: ZarrsArray,
+    pretty: bool,
+    pAttributesString: *mut *const c_char,
+) -> ZarrsResult {
+    // Validation
+    if array.is_null() {
+        return ZarrsResult::ZARRS_ERROR_NULL_PTR;
+    }
+    let array = &**array;
+
+    let attributes = array_fn!(array, attributes);
+    let attributes_str = if pretty {
+        serde_json::to_string_pretty(&attributes)
+    } else {
+        serde_json::to_string(&attributes)
+    };
+    if let Ok(attributes_str) = attributes_str {
+        if let Ok(cstring) = CString::new(attributes_str) {
+            *pAttributesString = cstring.into_raw();
+            return ZarrsResult::ZARRS_SUCCESS;
+        }
+    }
+
+    *LAST_ERROR = "error converting attributes to a json string".to_string();
+    ZarrsResult::ZARRS_ERROR_INVALID_METADATA
 }

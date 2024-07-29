@@ -97,6 +97,18 @@ extern "C" {
 #endif // __cplusplus
 
 /**
+ * Get the array attributes as a JSON string.
+ *
+ * The string must be freed with `zarrsFreeString`.
+ *
+ * # Safety
+ * `array` must be a valid `ZarrsArray` handle.
+ */
+ZarrsResult zarrsArrayGetAttributesString(ZarrsArray array,
+                                          bool pretty,
+                                          const char **pAttributesString);
+
+/**
  * Return the number of chunks in the chunk grid.
  *
  * # Errors
@@ -207,6 +219,18 @@ ZarrsResult zarrsArrayGetInnerChunkShape(ZarrsArray array,
                                          size_t dimensionality,
                                          bool *pIsSharded,
                                          uint64_t *pInnerChunkShape);
+
+/**
+ * Get the array metadata as a JSON string.
+ *
+ * The string must be freed with `zarrsFreeString`.
+ *
+ * # Safety
+ * `array` must be a valid `ZarrsArray` handle.
+ */
+ZarrsResult zarrsArrayGetMetadataString(ZarrsArray array,
+                                        bool pretty,
+                                        const char **pMetadataString);
 
 /**
  * Returns the shape of the array.
@@ -433,6 +457,14 @@ ZarrsResult zarrsDestroyShardIndexCache(ZarrsShardIndexCache shardIndexCache);
  * If not null, `storage` must be a valid storage device created with a `zarrsStorage` function.
  */
 ZarrsResult zarrsDestroyStorage(ZarrsStorage storage);
+
+/**
+ * Free a string created by zarrs.
+ *
+ * # Safety
+ * `array` must be a valid string created by zarrs.
+ */
+ZarrsResult zarrsFreeString(char *string);
 
 /**
  * Get the last error string.

@@ -43,3 +43,18 @@ pub extern "C" fn zarrsLastError() -> *const c_char {
     let c_str = CString::new(unsafe { LAST_ERROR.as_str() }).unwrap();
     c_str.into_raw()
 }
+
+/// Free a string created by zarrs.
+///
+/// # Safety
+/// `array` must be a valid string created by zarrs.
+#[no_mangle]
+pub unsafe extern "C" fn zarrsFreeString(string: *mut c_char) -> ZarrsResult {
+    if string.is_null() {
+        return ZarrsResult::ZARRS_ERROR_NULL_PTR;
+    }
+    unsafe {
+        let _ = CString::from_raw(string);
+    }
+    ZarrsResult::ZARRS_SUCCESS
+}

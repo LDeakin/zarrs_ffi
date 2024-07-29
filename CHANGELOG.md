@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
    - `zarrsArrayGetInnerChunkShape()`
    - `zarrsCreateShardIndexCache()`, `zarrsDestroyShardIndexCache()`
    - `zarrsArrayRetrieveInnerChunk`, `zarrsArrayRetrieveSubsetSharded()`
+ - Add `zarrsFreeString`
+ - Add `zarrsArrayGetMetadataString`, `zarrsArrayGetAttributesString`
 
 ## [0.7.1] - 2024-07-28
 
