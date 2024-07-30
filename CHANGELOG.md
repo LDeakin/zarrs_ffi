@@ -16,6 +16,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
  - Add `zarrsFreeString`
  - Add `zarrsArrayGetMetadataString`, `zarrsArrayGetAttributesString`
 
+### Fixed
+ - Add missing CMake library alias `zarrs::zarrs-static` for `zarrs_ffi-static`
+ - Set CMake `target_include_directories` for `zarrs_ffi-static`
+
 ## [0.7.1] - 2024-07-28
 
 ### Changed

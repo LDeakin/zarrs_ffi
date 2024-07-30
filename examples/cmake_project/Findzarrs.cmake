@@ -22,8 +22,14 @@ FetchContent_Populate(zarrs_ffi_source)
 # Build zarrs_ffi, creates a zarrs_ffi target aliased to zarrs::zarrs
 corrosion_import_crate(MANIFEST_PATH ${zarrs_ffi_source_SOURCE_DIR}/Cargo.toml FEATURES ${zarrs_FIND_COMPONENTS})
 # corrosion_experimental_cbindgen(TARGET zarrs_ffi HEADER_NAME "zarrs.h") # not working
-target_include_directories(zarrs_ffi INTERFACE ${zarrs_ffi_source_SOURCE_DIR}) # add zarrs.h to include directories
+
+# add zarrs.h to include directories
+target_include_directories(zarrs_ffi INTERFACE ${zarrs_ffi_source_SOURCE_DIR})
+target_include_directories(zarrs_ffi-static INTERFACE ${zarrs_ffi_source_SOURCE_DIR})
+
+# namespaced library aliases
 add_library(zarrs::zarrs ALIAS zarrs_ffi)
+add_library(zarrs::zarrs-static ALIAS zarrs_ffi-static)
 
 set(zarrs_INCLUDE_DIR ${zarrs_ffi_source_SOURCE_DIR})
 set(zarrs_VERSION_STRING ${zarrs_FIND_VERSION})
