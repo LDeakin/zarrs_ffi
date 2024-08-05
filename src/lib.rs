@@ -18,6 +18,7 @@ pub use array::{
 pub use storage::*;
 pub use version::*;
 
+#[non_exhaustive]
 #[repr(i32)]
 pub enum ZarrsResult {
     ZARRS_SUCCESS = 0,

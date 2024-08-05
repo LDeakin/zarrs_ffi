@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.8.0] - 2024-08-05
+
 ### Add
  - Add `zarrs::array::ArrayShardedReadableExtCache` related functionality
    - `ZarrsShardIndexCache` type
@@ -15,15 +17,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
    - `zarrsArrayRetrieveInnerChunk` and `zarrsArrayRetrieveSubsetSharded()`
  - Add `zarrsFreeString`
  - Add `zarrsArrayGetMetadataString` and `zarrsArrayGetAttributesString`
+ - Add `ZarrsResult:ZARRS_ERROR_UNSUPPORTED_DATA_TYPE`
+
+### Changed
+ - Bump `zarrs` to 0.16.2
+ - Mark `ZarrsResult` as non-exhaustive
 
 ### Fixed
  - Add missing CMake library alias `zarrs::zarrs-static` for `zarrs_ffi-static`
  - Set CMake `target_include_directories` for `zarrs_ffi-static`
-
-## [0.7.1] - 2024-07-28
-
-### Changed
- - Bump `zarrs` to 0.16.0
 
 ## [0.7.0] - 2024-07-07
 
@@ -117,7 +119,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
  - Initial public release
 
-[unreleased]: https://github.com/LDeakin/zarrs_ffi/compare/v0.7.1...HEAD
+[unreleased]: https://github.com/LDeakin/zarrs_ffi/compare/v0.7.2...HEAD
+[0.7.2]: https://github.com/LDeakin/zarrs_ffi/releases/tag/v0.7.2
 [0.7.1]: https://github.com/LDeakin/zarrs_ffi/releases/tag/v0.7.1
 [0.7.0]: https://github.com/LDeakin/zarrs_ffi/releases/tag/v0.7.0
 [0.6.2]: https://github.com/LDeakin/zarrs_ffi/releases/tag/v0.6.2
