@@ -206,6 +206,19 @@ ZarrsResult zarrsArrayGetDataType(ZarrsArray array, ZarrsDataType *pDataType);
 ZarrsResult zarrsArrayGetDimensionality(ZarrsArray array, size_t *dimensionality);
 
 /**
+ * Get the shape of the inner chunk grid of a sharded array.
+ *
+ * If the array is not sharded, the contents of `pInnerChunkGridShape` will equal the standard chunk grid shape.
+ *
+ * # Safety
+ * `array` must be a valid `ZarrsArray` handle.
+ * `dimensionality` must match the dimensionality of the array and the length of the array pointed to by `pInnerChunkGridShape`.
+ */
+ZarrsResult zarrsArrayGetInnerChunkGridShape(ZarrsArray array,
+                                             size_t dimensionality,
+                                             uint64_t *pInnerChunkGridShape);
+
+/**
  * Get the inner chunk shape for a sharded array.
  *
  * `pIsSharded` is set to true if the array is sharded, otherwise false.

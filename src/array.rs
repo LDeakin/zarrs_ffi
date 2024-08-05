@@ -267,11 +267,11 @@ pub unsafe extern "C" fn zarrsArrayGetChunkGridShape(
         return ZarrsResult::ZARRS_ERROR_NULL_PTR;
     }
     let array = &**array;
-    let shape = array_fn!(array, chunk_grid_shape);
-    if let Some(shape) = shape {
+    let chunk_grid_shape = array_fn!(array, chunk_grid_shape);
+    if let Some(chunk_grid_shape) = chunk_grid_shape {
         let pChunkGridShape =
             unsafe { std::slice::from_raw_parts_mut(pChunkGridShape, dimensionality) };
-        pChunkGridShape.copy_from_slice(&shape);
+        pChunkGridShape.copy_from_slice(&chunk_grid_shape);
         ZarrsResult::ZARRS_SUCCESS
     } else {
         ZarrsResult::ZARRS_ERROR_UNKNOWN_CHUNK_GRID_SHAPE

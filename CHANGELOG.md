@@ -10,11 +10,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Add
  - Add `zarrs::array::ArrayShardedReadableExtCache` related functionality
    - `ZarrsShardIndexCache` type
-   - `zarrsArrayGetInnerChunkShape()`
-   - `zarrsCreateShardIndexCache()`, `zarrsDestroyShardIndexCache()`
-   - `zarrsArrayRetrieveInnerChunk`, `zarrsArrayRetrieveSubsetSharded()`
+   - `zarrsArrayGetInnerChunkShape()` and `zarrsArrayGetInnerChunkGridShape()`
+   - `zarrsCreateShardIndexCache()` and `zarrsDestroyShardIndexCache()`
+   - `zarrsArrayRetrieveInnerChunk` and `zarrsArrayRetrieveSubsetSharded()`
  - Add `zarrsFreeString`
- - Add `zarrsArrayGetMetadataString`, `zarrsArrayGetAttributesString`
+ - Add `zarrsArrayGetMetadataString` and `zarrsArrayGetAttributesString`
 
 ### Fixed
  - Add missing CMake library alias `zarrs::zarrs-static` for `zarrs_ffi-static`

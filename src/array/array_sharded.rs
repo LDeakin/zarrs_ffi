@@ -24,6 +24,38 @@ impl std::ops::Deref for ZarrsShardIndexCache_T {
 /// An opaque handle to a zarrs [`ArrayShardedReadableExtCache`].
 pub type ZarrsShardIndexCache = *mut ZarrsShardIndexCache_T;
 
+/// Get the shape of the inner chunk grid of a sharded array.
+///
+/// If the array is not sharded, the contents of `pInnerChunkGridShape` will equal the standard chunk grid shape.
+///
+/// # Safety
+/// `array` must be a valid `ZarrsArray` handle.
+/// `dimensionality` must match the dimensionality of the array and the length of the array pointed to by `pInnerChunkGridShape`.
+#[no_mangle]
+pub unsafe extern "C" fn zarrsArrayGetInnerChunkGridShape(
+    array: ZarrsArray,
+    dimensionality: usize,
+    pInnerChunkGridShape: *mut u64,
+) -> ZarrsResult {
+    // Validation
+    if array.is_null() {
+        return ZarrsResult::ZARRS_ERROR_NULL_PTR;
+    }
+    let array = &**array;
+
+    // Get the inner chunk grid shape
+    let inner_chunk_grid_shape = array_fn!(array, inner_chunk_grid_shape);
+    match inner_chunk_grid_shape {
+        Some(inner_chunk_grid_shape) => {
+            let pInnerChunkShape =
+                unsafe { std::slice::from_raw_parts_mut(pInnerChunkGridShape, dimensionality) };
+            pInnerChunkShape.copy_from_slice(&inner_chunk_grid_shape);
+            ZarrsResult::ZARRS_SUCCESS
+        }
+        None => ZarrsResult::ZARRS_ERROR_UNKNOWN_CHUNK_GRID_SHAPE,
+    }
+}
+
 /// Get the inner chunk shape for a sharded array.
 ///
 /// `pIsSharded` is set to true if the array is sharded, otherwise false.
