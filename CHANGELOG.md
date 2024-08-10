@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
  - Bump `cbindgen` to 0.27
 
+### Fixed
+ - Bump MSRV to 1.75 (needed since 0.6.1)
+
 ## [0.8.1] - 2024-08-05
 
 ### Add
