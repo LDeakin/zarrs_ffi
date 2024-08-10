@@ -5,7 +5,7 @@
 ![msrv](https://img.shields.io/crates/msrv/zarrs_ffi)
 [![build](https://github.com/LDeakin/zarrs_ffi/actions/workflows/ci.yml/badge.svg)](https://github.com/LDeakin/zarrs_ffi/actions/workflows/ci.yml)
 
-FFI bindings for the [zarrs] crate, a rust library for the [Zarr V3](https://zarr.dev) storage format for multidimensional arrays and metadata.
+FFI bindings for the [zarrs] crate, a Rust library for the [Zarr](https://zarr.dev) storage format for multidimensional arrays and metadata.
 
 Currently `zarrs_ffi` only supports a small subset of the [zarrs] API.
 
@@ -13,12 +13,12 @@ A changelog can be found [here](https://github.com/LDeakin/zarrs_ffi/blob/main/C
 Example usage can be found in the [examples](https://github.com/LDeakin/zarrs_ffi/tree/main/examples).
 
 ## CMake Quickstart
-1. Install the rust compiler (and cargo).
+1. Install the Rust compiler (and cargo).
 2. Put [Findzarrs.cmake](https://github.com/LDeakin/zarrs_ffi/blob/main/examples/cmake_project/Findzarrs.cmake) in your `CMAKE_MODULE_PATH`
-3. `find_package(zarrs 0.7 REQUIRED COMPONENTS zarrs/bz2)`
-   - `zarrs` is retrieved from `GitHub` using [FetchContent](https://cmake.org/cmake/help/latest/module/FetchContent.html) and built using [corrosion](https://github.com/corrosion-rs/corrosion)
-   - Components are optional zarrs codecs
-4. the `zarrs` FFI library is available as the `zarrs::zarrs` target
+3. `find_package(zarrs 0.8 REQUIRED COMPONENTS zarrs/bz2)`
+   - [zarrs] is retrieved from `GitHub` using [FetchContent](https://cmake.org/cmake/help/latest/module/FetchContent.html) and built using [corrosion](https://github.com/corrosion-rs/corrosion)
+   - Components are optional [zarrs] codecs
+4. the `zarrs_ffi` library is available as the `zarrs::zarrs` or  `zarrs::zarrs-static` target
 
 A complete `CMake` example can be found in [examples/cmake_project](https://github.com/LDeakin/zarrs_ffi/tree/main/examples/cmake_project).
 
