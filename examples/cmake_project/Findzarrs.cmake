@@ -1,14 +1,14 @@
 include(FetchContent)
 
 # Example Usage
-# find_package(zarrs 0.7 REQUIRED COMPONENTS zarrs/bz2)
+# find_package(zarrs 0.8 REQUIRED COMPONENTS zarrs/bz2)
 # Components are zarrs optional codecs, such as:
 #   zarrs/bitround zarrs/zfp zarrs/bz2 zarrs/pcodec
 
 # Corrosion: integrate rust into a cmake project
 FetchContent_Declare(Corrosion
     GIT_REPOSITORY https://github.com/corrosion-rs/corrosion.git
-    GIT_TAG v0.4
+    GIT_TAG v0.5
 )
 FetchContent_MakeAvailable(Corrosion)
 
@@ -20,7 +20,7 @@ FetchContent_Declare(zarrs_ffi_source
 FetchContent_Populate(zarrs_ffi_source)
 
 # Build zarrs_ffi, creates a zarrs_ffi target aliased to zarrs::zarrs
-corrosion_import_crate(MANIFEST_PATH ${zarrs_ffi_source_SOURCE_DIR}/Cargo.toml FEATURES ${zarrs_FIND_COMPONENTS})
+corrosion_import_crate(MANIFEST_PATH ${zarrs_ffi_source_SOURCE_DIR}/Cargo.toml FEATURES ${zarrs_FIND_COMPONENTS}) # FLAGS --offline
 # corrosion_experimental_cbindgen(TARGET zarrs_ffi HEADER_NAME "zarrs.h") # not working
 
 # add zarrs.h to include directories
