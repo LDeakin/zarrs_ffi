@@ -517,5 +517,5 @@ uint32_t zarrsVersionMinor(void);
 uint32_t zarrsVersionPatch(void);
 
 #ifdef __cplusplus
-} // extern "C"
-#endif // __cplusplus
+}  // extern "C"
+#endif  // __cplusplus

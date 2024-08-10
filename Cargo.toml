@@ -23,7 +23,7 @@ inline-c = "0.1.7"
 tempfile = "3.10.1"
 
 [build-dependencies]
-cbindgen = { version = "0.26", optional = true }
+cbindgen = { version = "0.27", optional = true }
 
 [dependencies]
 ffi-support = "0.4.4"
