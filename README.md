@@ -38,10 +38,11 @@ Compile with either of:
  - `RUSTFLAGS="-C target-feature=+avx2,+sse2"`
 
 #### Enabling non-default `zarrs` codecs
-Non-default `zarrs` codecs (see [`zarrs` crate features](https://docs.rs/zarrs/latest/zarrs/#crate-features)) can be enabled by passing them as feature flags.
+Non-default `zarrs` codecs (see [`zarrs` crate features](https://docs.rs/zarrs/latest/zarrs/#crate-features)) can be enabled with the `all_codecs` feature.
+Alternatively, individual codecs can be enabled by passing them as feature flags.
 For example:
 ```bash
-cargo build --release --features cbindgen --features zarrs/bitround,zarrs/zfp,zarrs/bz2,zarrs/pcodec
+cargo build --release --features cbindgen --features zarrs/zstd,zarrs/bitround,zarrs/zfp,zarrs/bz2,zarrs/pcodec,zarrs/gdeflate
 ```
 
 ## Licence
