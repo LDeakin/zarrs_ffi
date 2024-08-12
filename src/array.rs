@@ -63,6 +63,12 @@ impl std::ops::Deref for ZarrsArray_T {
     }
 }
 
+impl std::ops::DerefMut for ZarrsArray_T {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.0
+    }
+}
+
 /// An opaque handle to a zarr array.
 pub type ZarrsArray = *mut ZarrsArray_T;
 
@@ -532,4 +538,38 @@ pub unsafe extern "C" fn zarrsArrayGetAttributesString(
 
     *LAST_ERROR = "error converting attributes to a json string".to_string();
     ZarrsResult::ZARRS_ERROR_INVALID_METADATA
+}
+
+/// Set the array attributes from a JSON string.
+/// 
+/// # Errors
+/// Returns `ZarrsResult::ZARRS_ERROR_INVALID_METADATA` if attributes is not a valid JSON object (map).
+///
+/// # Safety
+/// `array` must be a valid `ZarrsArray` handle.
+#[no_mangle]
+pub unsafe extern "C" fn zarrsArraySetAttributes(
+    array: ZarrsArray,
+    attributes: FfiStr,
+) -> ZarrsResult {
+    // Validation
+    if array.is_null() {
+        return ZarrsResult::ZARRS_ERROR_NULL_PTR;
+    }
+    let array = &mut **array;
+
+    // Deserialise the attributes
+    let Ok(serde_json::Value::Object(mut attributes)) =
+        serde_json::from_str::<serde_json::Value>(attributes.into())
+    else {
+        *LAST_ERROR = "error interpreting attributes to a json map".to_string();
+        return ZarrsResult::ZARRS_ERROR_INVALID_METADATA;
+    };
+
+    // Set the array attributes
+    let array_attributes = array_fn!(array, attributes_mut);
+    array_attributes.clear();
+    array_attributes.append(&mut attributes);
+
+    ZarrsResult::ZARRS_SUCCESS
 }

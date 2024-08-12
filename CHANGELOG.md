@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+ - Add `zarrsArraySetAttributes`
+
 ### Changed
  - Bump `cbindgen` to 0.27
  - Change `zarrs{LastError,ArrayGetMetadataString,ArrayGetAttributesString}` to return non-const pointers

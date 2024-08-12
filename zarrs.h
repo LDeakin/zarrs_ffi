@@ -350,6 +350,18 @@ ZarrsResult zarrsArrayRetrieveSubsetSharded(ZarrsArray array,
                                             uint8_t *pSubsetBytes);
 
 /**
+ * Set the array attributes from a JSON string.
+ *
+ * # Errors
+ * Returns `ZarrsResult::ZARRS_ERROR_INVALID_METADATA` if attributes is not a valid JSON object (map).
+ *
+ * # Safety
+ * `array` must be a valid `ZarrsArray` handle.
+ */
+ZarrsResult zarrsArraySetAttributes(ZarrsArray array,
+                                    const char* attributes);
+
+/**
  * Store a chunk.
  *
  * `pChunkIndices` is a pointer to an array of length `dimensionality` holding the chunk indices.
