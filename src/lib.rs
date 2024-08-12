@@ -39,8 +39,10 @@ pub enum ZarrsResult {
 static mut LAST_ERROR: Lazy<String> = Lazy::new(|| "".to_string());
 
 /// Get the last error string.
+///
+/// The string must be freed with `zarrsFreeString`.
 #[no_mangle]
-pub extern "C" fn zarrsLastError() -> *const c_char {
+pub extern "C" fn zarrsLastError() -> *mut c_char {
     let c_str = CString::new(unsafe { LAST_ERROR.as_str() }).unwrap();
     c_str.into_raw()
 }

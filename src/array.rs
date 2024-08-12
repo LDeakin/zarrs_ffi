@@ -474,7 +474,7 @@ pub unsafe extern "C" fn zarrsArrayGetSubsetSize(
 pub unsafe extern "C" fn zarrsArrayGetMetadataString(
     array: ZarrsArray,
     pretty: bool,
-    pMetadataString: *mut *const c_char,
+    pMetadataString: *mut *mut c_char,
 ) -> ZarrsResult {
     // Validation
     if array.is_null() {
@@ -509,7 +509,7 @@ pub unsafe extern "C" fn zarrsArrayGetMetadataString(
 pub unsafe extern "C" fn zarrsArrayGetAttributesString(
     array: ZarrsArray,
     pretty: bool,
-    pAttributesString: *mut *const c_char,
+    pAttributesString: *mut *mut c_char,
 ) -> ZarrsResult {
     // Validation
     if array.is_null() {

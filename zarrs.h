@@ -104,9 +104,7 @@ extern "C" {
  * # Safety
  * `array` must be a valid `ZarrsArray` handle.
  */
-ZarrsResult zarrsArrayGetAttributesString(ZarrsArray array,
-                                          bool pretty,
-                                          const char **pAttributesString);
+ZarrsResult zarrsArrayGetAttributesString(ZarrsArray array, bool pretty, char **pAttributesString);
 
 /**
  * Return the number of chunks in the chunk grid.
@@ -241,9 +239,7 @@ ZarrsResult zarrsArrayGetInnerChunkShape(ZarrsArray array,
  * # Safety
  * `array` must be a valid `ZarrsArray` handle.
  */
-ZarrsResult zarrsArrayGetMetadataString(ZarrsArray array,
-                                        bool pretty,
-                                        const char **pMetadataString);
+ZarrsResult zarrsArrayGetMetadataString(ZarrsArray array, bool pretty, char **pMetadataString);
 
 /**
  * Returns the shape of the array.
@@ -481,8 +477,10 @@ ZarrsResult zarrsFreeString(char *string);
 
 /**
  * Get the last error string.
+ *
+ * The string must be freed with `zarrsFreeString`.
  */
-const char *zarrsLastError(void);
+char *zarrsLastError(void);
 
 /**
  * Create a handle to an existing array (read/write capability).
