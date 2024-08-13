@@ -541,7 +541,7 @@ pub unsafe extern "C" fn zarrsArrayGetAttributesString(
 }
 
 /// Set the array attributes from a JSON string.
-/// 
+///
 /// # Errors
 /// Returns `ZarrsResult::ZARRS_ERROR_INVALID_METADATA` if attributes is not a valid JSON object (map).
 ///
