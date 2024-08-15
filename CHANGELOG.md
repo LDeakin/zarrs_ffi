@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+ - Use `--locked` in `Findzarrs.cmake` for cargo fetch
+
 ## [0.8.3] - 2024-08-15
 
 ### Added

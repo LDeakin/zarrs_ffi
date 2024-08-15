@@ -21,7 +21,7 @@ FetchContent_Populate(zarrs_ffi_source)
 
 # Fetch the dependencies at configure time using cargo fetch
 get_property(CARGO_EXECUTABLE TARGET Rust::Cargo PROPERTY IMPORTED_LOCATION)
-execute_process(COMMAND ${CARGO_EXECUTABLE} fetch WORKING_DIRECTORY ${zarrs_ffi_source_SOURCE_DIR})
+execute_process(COMMAND ${CARGO_EXECUTABLE} fetch --locked WORKING_DIRECTORY ${zarrs_ffi_source_SOURCE_DIR})
 
 # Build zarrs_ffi, creates a zarrs_ffi target aliased to zarrs::zarrs
 corrosion_import_crate(MANIFEST_PATH ${zarrs_ffi_source_SOURCE_DIR}/Cargo.toml FEATURES ${zarrs_FIND_COMPONENTS} FLAGS --frozen)
