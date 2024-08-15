@@ -17,7 +17,7 @@ FetchContent_Declare(zarrs_ffi_source
     GIT_REPOSITORY https://github.com/LDeakin/zarrs_ffi.git
     GIT_TAG v${zarrs_FIND_VERSION}
 )
-FetchContent_Populate(zarrs_ffi_source)
+FetchContent_MakeAvailable(zarrs_ffi_source)
 
 # Fetch the dependencies at configure time using cargo fetch
 get_property(CARGO_EXECUTABLE TARGET Rust::Cargo PROPERTY IMPORTED_LOCATION)

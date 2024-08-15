@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+ - Use `FetchContent_MakeAvailable` for `zarrs_ffi` source in `Findzarrs.cmake`
+
 ### Fixed
  - Use `--locked` in `Findzarrs.cmake` for cargo fetch
 
