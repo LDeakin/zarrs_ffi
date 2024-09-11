@@ -5,7 +5,7 @@
 ![msrv](https://img.shields.io/crates/msrv/zarrs_ffi)
 [![build](https://github.com/LDeakin/zarrs_ffi/actions/workflows/ci.yml/badge.svg)](https://github.com/LDeakin/zarrs_ffi/actions/workflows/ci.yml)
 
-FFI bindings for the [zarrs] crate, a Rust library for the [Zarr](https://zarr.dev) storage format for multidimensional arrays and metadata.
+C/C++ bindings for the [zarrs] crate, a Rust library for the [Zarr](https://zarr.dev) storage format for multidimensional arrays and metadata.
 
 Currently `zarrs_ffi` only supports a small subset of the [zarrs] API.
 
