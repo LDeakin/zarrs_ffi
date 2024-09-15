@@ -39,7 +39,7 @@ pub unsafe extern "C" fn zarrsCreateStorageFilesystem(
     pStorage: *mut ZarrsStorage,
 ) -> ZarrsResult {
     let path = std::path::Path::new(path.as_str());
-    match zarrs::storage::store::FilesystemStore::new(path) {
+    match zarrs_filesystem::FilesystemStore::new(path) {
         Ok(store) => {
             *pStorage = Box::into_raw(Box::new(ZarrsStorage_T(ZarrsStorageEnum::RW(Arc::new(
                 store,
