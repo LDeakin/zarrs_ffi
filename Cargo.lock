@@ -1708,9 +1708,9 @@ dependencies = [
 
 [[package]]
 name = "zarrs"
-version = "0.17.0-beta.1"
+version = "0.17.0-beta.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "036929bc687c4028f6dd18445f445d9650cc21e93d080320b8b3240c32f93a74"
+checksum = "6d0f2f73225d1a6ffd7bce1737906d368e0e91ab4c65f305811e4d0c1ce4be0a"
 dependencies = [
  "blosc-src",
  "bytemuck",
@@ -1736,6 +1736,7 @@ dependencies = [
  "thiserror",
  "thread_local",
  "unsafe_cell_slice",
+ "zarrs_filesystem",
  "zarrs_metadata",
  "zarrs_storage",
  "zfp-sys",
@@ -1753,7 +1754,6 @@ dependencies = [
  "serde_json",
  "tempfile",
  "zarrs",
- "zarrs_filesystem",
 ]
 
 [[package]]
@@ -1792,9 +1792,9 @@ dependencies = [
 
 [[package]]
 name = "zarrs_storage"
-version = "0.2.0"
+version = "0.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d251ae27d0b8a1bb24d926c34210b9f6af112e35b5397fddb7f170375d361d2a"
+checksum = "a9edd30d0781dab48665e309e8097220b1ad9e32ab594f0871856e05291de72c"
 dependencies = [
  "bytes",
  "derive_more",

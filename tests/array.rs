@@ -10,7 +10,7 @@ pub fn assert_cxx_str(input_as_string: &str) -> Assert {
 fn ffi_array_write_rust_read_c() {
     use std::sync::Arc;
     use zarrs::array::{DataType, FillValue};
-    use zarrs_filesystem::FilesystemStore;
+    use zarrs::filesystem::FilesystemStore;
 
     let tmp_path = tempfile::tempdir().unwrap();
     std::env::set_var(

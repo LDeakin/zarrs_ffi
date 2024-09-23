@@ -12,10 +12,10 @@ use crate::{ZarrsResult, LAST_ERROR};
 use super::{array_fn, ZarrsArray, ZarrsArrayEnum};
 
 #[doc(hidden)]
-pub struct ZarrsShardIndexCache_T(pub ArrayShardedReadableExtCache<'static>);
+pub struct ZarrsShardIndexCache_T(pub ArrayShardedReadableExtCache);
 
 impl std::ops::Deref for ZarrsShardIndexCache_T {
-    type Target = ArrayShardedReadableExtCache<'static>;
+    type Target = ArrayShardedReadableExtCache;
     fn deref(&self) -> &Self::Target {
         &self.0
     }
@@ -155,9 +155,9 @@ pub unsafe extern "C" fn zarrsDestroyShardIndexCache(
     }
 }
 
-fn zarrsArrayRetrieveInnerChunkImpl<'a, T: ReadableStorageTraits + ?Sized + 'static>(
-    array: &'a Array<T>,
-    cache: &'a ArrayShardedReadableExtCache<'a>,
+fn zarrsArrayRetrieveInnerChunkImpl<T: ReadableStorageTraits + ?Sized + 'static>(
+    array: &Array<T>,
+    cache: &ArrayShardedReadableExtCache,
     chunk_indices: &[u64],
     chunk_bytes_length: usize,
     chunk_bytes: *mut u8,
@@ -252,9 +252,9 @@ pub unsafe extern "C" fn zarrsArrayRetrieveInnerChunk(
     }
 }
 
-fn zarrsArrayRetrieveSubsetShardedImpl<'a, T: ReadableStorageTraits + ?Sized + 'static>(
-    array: &'a Array<T>,
-    cache: &'a ArrayShardedReadableExtCache<'a>,
+fn zarrsArrayRetrieveSubsetShardedImpl<T: ReadableStorageTraits + ?Sized + 'static>(
+    array: &Array<T>,
+    cache: &ArrayShardedReadableExtCache,
     array_subset: &ArraySubset,
     subset_bytes_length: usize,
     subset_bytes: *mut u8,
