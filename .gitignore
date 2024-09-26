@@ -18,3 +18,4 @@ target/
 
 build
 install
+docs/build
