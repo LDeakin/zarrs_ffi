@@ -7,9 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+ - Add `doxygen` docs
+ - Add example to `README.md`
+
 ### Changed
  - Use `FetchContent_MakeAvailable` for `zarrs_ffi` source in `Findzarrs.cmake`
- - Bump `zarrs` to 0.17.0-beta.2
+ - Bump `zarrs` to 0.17.0-beta.3
  - Raise MSRV to 1.76
 
 ### Fixed

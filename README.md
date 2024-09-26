@@ -1,16 +1,47 @@
 # zarrs_ffi
 
 [![Latest Version](https://img.shields.io/crates/v/zarrs_ffi.svg)](https://crates.io/crates/zarrs_ffi)
-[![zarrs documentation](https://docs.rs/zarrs_ffi/badge.svg)](https://docs.rs/zarrs_ffi)
+[![zarrs documentation](https://img.shields.io/badge/docs-Doxygen-green)](https://ldeakin.github.io/zarrs_ffi/)
+[![zarrs documentation](https://img.shields.io/badge/docs-docs.rs-green)](https://docs.rs/zarrs_ffi)
 ![msrv](https://img.shields.io/crates/msrv/zarrs_ffi)
 [![build](https://github.com/LDeakin/zarrs_ffi/actions/workflows/ci.yml/badge.svg)](https://github.com/LDeakin/zarrs_ffi/actions/workflows/ci.yml)
 
 C/C++ bindings for the [zarrs] crate, a Rust library for the [Zarr](https://zarr.dev) storage format for multidimensional arrays and metadata.
 
+`zarrs_ffi` is a single header library: `zarrs.h` [(docs)](https://ldeakin.github.io/zarrs_ffi/zarrs_8h.html).
+
 Currently `zarrs_ffi` only supports a small subset of the [zarrs] API.
 
 A changelog can be found [here](https://github.com/LDeakin/zarrs_ffi/blob/main/CHANGELOG.md).
-Example usage can be found in the [examples](https://github.com/LDeakin/zarrs_ffi/tree/main/examples).
+
+## Example
+```C++
+#include "zarrs.h"
+
+void main() {
+  // Open a filesystem store pointing to a zarr hierarchy
+  ZarrsStorage storage = nullptr;
+  zarrs_assert(zarrsCreateStorageFilesystem("/path/to/hierarchy.zarr", &storage));
+
+  // Open an array in the hierarchy
+  ZarrsArray array = nullptr;
+  zarrsOpenArrayRW(storage, "/array", metadata, &array);
+
+  // Get the array dimensionality
+  size_t dimensionality;
+  zarrs_assert(zarrsArrayGetDimensionality(array, &dimensionality));
+  assert(dimensionality == 2);
+
+  // Retrieve the decoded bytes of the chunk at [0, 0]
+  size_t indices[] = {0, 0};
+  size_t chunk_size;
+  zarrs_assert(zarrsArrayGetChunkSize(array, 2, indices, &chunk_size));
+  std::unique_ptr<uint8_t[]> chunk_bytes(new uint8_t[chunk_size]);
+  zarrs_assert(zarrsArrayRetrieveChunk(array, 2, indices, chunk_size, chunk_bytes.get()));
+}
+```
+
+See a more comprehensive example in the [examples](https://github.com/LDeakin/zarrs_ffi/tree/main/examples) directory.
 
 ## CMake Quickstart
 1. Install the Rust compiler (and cargo).
