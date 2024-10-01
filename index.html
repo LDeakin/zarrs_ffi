@@ -87,11 +87,39 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <div class="title">zarrs_ffi </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="md_README"></a> <a href="https://crates.io/crates/zarrs_ffi"><img src="https://img.shields.io/crates/v/zarrs_ffi.svg" alt="Latest Version" style="pointer-events: none;" class="inline"/></a> <a href="https://docs.rs/zarrs_ffi"><img src="https://docs.rs/zarrs_ffi/badge.svg" alt="zarrs documentation" style="pointer-events: none;" class="inline"/></a> <img src="https://img.shields.io/crates/msrv/zarrs_ffi" alt="msrv" class="inline"/> <a href="https://github.com/LDeakin/zarrs_ffi/actions/workflows/ci.yml"><img src="https://github.com/LDeakin/zarrs_ffi/actions/workflows/ci.yml/badge.svg" alt="build" style="pointer-events: none;" class="inline"/></a></p>
+<div class="textblock"><p><a class="anchor" id="md_README"></a> <a href="https://crates.io/crates/zarrs_ffi"><img src="https://img.shields.io/crates/v/zarrs_ffi.svg" alt="Latest Version" style="pointer-events: none;" class="inline"/></a> <a href="https://ldeakin.github.io/zarrs_ffi/"><img src="https://img.shields.io/badge/docs-Doxygen-green" alt="zarrs documentation" class="inline"/></a> <a href="https://docs.rs/zarrs_ffi"><img src="https://img.shields.io/badge/docs-docs.rs-green" alt="zarrs documentation" class="inline"/></a> <img src="https://img.shields.io/crates/msrv/zarrs_ffi" alt="msrv" class="inline"/> <a href="https://github.com/LDeakin/zarrs_ffi/actions/workflows/ci.yml"><img src="https://github.com/LDeakin/zarrs_ffi/actions/workflows/ci.yml/badge.svg" alt="build" style="pointer-events: none;" class="inline"/></a></p>
 <p>C/C++ bindings for the <a href="https://github.com/LDeakin/zarrs">zarrs</a> crate, a Rust library for the <a href="https://zarr.dev">Zarr</a> storage format for multidimensional arrays and metadata.</p>
+<p><code>zarrs_ffi</code> is a single header library: <code><a class="el" href="zarrs_8h.html">zarrs.h</a></code> <a href="https://ldeakin.github.io/zarrs_ffi/zarrs_8h.html">(docs)</a>.</p>
 <p>Currently <code>zarrs_ffi</code> only supports a small subset of the <a href="https://github.com/LDeakin/zarrs">zarrs</a> API.</p>
-<p>A changelog can be found <a href="https://github.com/LDeakin/zarrs_ffi/blob/main/CHANGELOG.md">here</a>. Example usage can be found in the <a href="https://github.com/LDeakin/zarrs_ffi/tree/main/examples">examples</a>.</p>
+<p>A changelog can be found <a href="https://github.com/LDeakin/zarrs_ffi/blob/main/CHANGELOG.md">here</a>.</p>
 <h1><a class="anchor" id="autotoc_md47"></a>
+Example</h1>
+<div class="fragment"><div class="line"> {C++}</div>
+<div class="line">#include &quot;zarrs.h&quot;</div>
+<div class="line"> </div>
+<div class="line">void main() {</div>
+<div class="line">  // Open a filesystem store pointing to a zarr hierarchy</div>
+<div class="line">  ZarrsStorage storage = nullptr;</div>
+<div class="line">  zarrs_assert(zarrsCreateStorageFilesystem(&quot;/path/to/hierarchy.zarr&quot;, &amp;storage));</div>
+<div class="line"> </div>
+<div class="line">  // Open an array in the hierarchy</div>
+<div class="line">  ZarrsArray array = nullptr;</div>
+<div class="line">  zarrsOpenArrayRW(storage, &quot;/array&quot;, metadata, &amp;array);</div>
+<div class="line"> </div>
+<div class="line">  // Get the array dimensionality</div>
+<div class="line">  size_t dimensionality;</div>
+<div class="line">  zarrs_assert(zarrsArrayGetDimensionality(array, &amp;dimensionality));</div>
+<div class="line">  assert(dimensionality == 2);</div>
+<div class="line"> </div>
+<div class="line">  // Retrieve the decoded bytes of the chunk at [0, 0]</div>
+<div class="line">  size_t indices[] = {0, 0};</div>
+<div class="line">  size_t chunk_size;</div>
+<div class="line">  zarrs_assert(zarrsArrayGetChunkSize(array, 2, indices, &amp;chunk_size));</div>
+<div class="line">  std::unique_ptr&lt;uint8_t[]&gt; chunk_bytes(new uint8_t[chunk_size]);</div>
+<div class="line">  zarrs_assert(zarrsArrayRetrieveChunk(array, 2, indices, chunk_size, chunk_bytes.get()));</div>
+<div class="line">}</div>
+</div><!-- fragment --><p>See a more comprehensive example in the <a href="https://github.com/LDeakin/zarrs_ffi/tree/main/examples">examples</a> directory.</p>
+<h1><a class="anchor" id="autotoc_md48"></a>
 CMake Quickstart</h1>
 <ol type="1">
 <li>Install the Rust compiler (and cargo).</li>
@@ -104,22 +132,22 @@ CMake Quickstart</h1>
 <li>the <code>zarrs_ffi</code> library is available as the <code>zarrs::zarrs</code> or <code>zarrs::zarrs-static</code> target</li>
 </ol>
 <p>A complete <code>CMake</code> example can be found in <a href="https://github.com/LDeakin/zarrs_ffi/tree/main/examples/cmake_project">examples/cmake_project</a>.</p>
-<h1><a class="anchor" id="autotoc_md48"></a>
+<h1><a class="anchor" id="autotoc_md49"></a>
 Manual Build</h1>
-<h3><a class="anchor" id="autotoc_md49"></a>
+<h3><a class="anchor" id="autotoc_md50"></a>
 Basic Build</h3>
 <p>Building generates a header, and a platform-dependent static and dynamic library. </p><div class="fragment"><div class="line">cargo build --release --features cbindgen # -&gt; zarrs.h and target/release/[lib]zarrs_ffi{.a,.so,.dll,.dylib}</div>
 </div><!-- fragment --><p> <code><a class="el" href="zarrs_8h.html">zarrs.h</a></code> is only re-generated if the <code>cbindgen</code> feature is enabled.</p>
-<h3><a class="anchor" id="autotoc_md50"></a>
+<h3><a class="anchor" id="autotoc_md51"></a>
 Enabling SIMD intrinsics</h3>
 <p>Encoding and decoding performance may be improved with <code>avx2</code>/<code>sse2</code> enabled (if supported). Compile with either of:</p><ul>
 <li><code>RUSTFLAGS="-C target-cpu=native"</code></li>
 <li><code>RUSTFLAGS="-C target-feature=+avx2,+sse2"</code></li>
 </ul>
-<h3><a class="anchor" id="autotoc_md51"></a>
+<h3><a class="anchor" id="autotoc_md52"></a>
 Enabling non-default zarrs codecs</h3>
 <p>Non-default <code>zarrs</code> codecs (see <a href="https://docs.rs/zarrs/latest/zarrs/#crate-features"><code>zarrs</code> crate features</a>) can be enabled with the <code>all_codecs</code> feature. Alternatively, individual codecs can be enabled by passing them as feature flags. For example: </p><div class="fragment"><div class="line">cargo build --release --features cbindgen --features zarrs/zstd,zarrs/bitround,zarrs/zfp,zarrs/bz2,zarrs/pcodec,zarrs/gdeflate</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md52"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md53"></a>
 Licence</h1>
 <p><code>zarrs_ffi</code> is licensed under either of</p><ul>
 <li>the Apache License, Version 2.0 <a href="./LICENCE-APACHE">LICENSE-APACHE</a> or <a href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a> or</li>

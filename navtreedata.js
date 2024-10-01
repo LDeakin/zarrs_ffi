@@ -25,9 +25,10 @@
 var NAVTREE =
 [
   [ "zarrs_ffi", "index.html", [
-    [ "CMake Quickstart", "index.html#autotoc_md47", null ],
-    [ "Manual Build", "index.html#autotoc_md48", null ],
-    [ "Licence", "index.html#autotoc_md52", null ],
+    [ "Example", "index.html#autotoc_md47", null ],
+    [ "CMake Quickstart", "index.html#autotoc_md48", null ],
+    [ "Manual Build", "index.html#autotoc_md49", null ],
+    [ "Licence", "index.html#autotoc_md53", null ],
     [ "Files", "files.html", [
       [ "File List", "files.html", "files_dup" ],
       [ "File Members", "globals.html", [
