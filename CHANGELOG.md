@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
  - Bump `zarrs` to 0.19.0
 
+### Fixed
+ - fix: `static_mut_refs` lint and `zarrsLastError` safety
+
 ## [0.8.5] - 2024-11-23
 
 ### Changed

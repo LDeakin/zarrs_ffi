@@ -2,7 +2,10 @@
 #![allow(non_snake_case)]
 #![allow(non_camel_case_types)]
 
-use std::ffi::{c_char, CString};
+use std::{
+    ffi::{c_char, CString},
+    sync::Mutex,
+};
 
 use once_cell::sync::Lazy;
 
@@ -36,14 +39,14 @@ pub enum ZarrsResult {
     ZARRS_ERROR_UNSUPPORTED_DATA_TYPE = -12,
 }
 
-static mut LAST_ERROR: Lazy<String> = Lazy::new(|| "".to_string());
+static LAST_ERROR: Lazy<Mutex<String>> = Lazy::new(|| Mutex::new("".to_string()));
 
 /// Get the last error string.
 ///
 /// The string must be freed with `zarrsFreeString`.
 #[no_mangle]
 pub extern "C" fn zarrsLastError() -> *mut c_char {
-    let c_str = CString::new(unsafe { LAST_ERROR.as_str() }).unwrap();
+    let c_str = CString::new(LAST_ERROR.lock().unwrap().as_str()).unwrap();
     c_str.into_raw()
 }
 

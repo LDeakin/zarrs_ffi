@@ -85,7 +85,7 @@ pub unsafe extern "C" fn zarrsOpenArrayRW(
     pArray: *mut ZarrsArray,
 ) -> ZarrsResult {
     if storage.is_null() {
-        *LAST_ERROR = "storage is null".to_string();
+        *LAST_ERROR.lock().unwrap() = "storage is null".to_string();
         return ZarrsResult::ZARRS_ERROR_NULL_PTR;
     }
 
@@ -98,12 +98,12 @@ pub unsafe extern "C" fn zarrsOpenArrayRW(
                 ZarrsResult::ZARRS_SUCCESS
             }
             Err(err) => {
-                *LAST_ERROR = err.to_string();
+                *LAST_ERROR.lock().unwrap() = err.to_string();
                 ZarrsResult::ZARRS_ERROR_ARRAY
             }
         }
     } else {
-        *LAST_ERROR = "storage does not support read and write".to_string();
+        *LAST_ERROR.lock().unwrap() = "storage does not support read and write".to_string();
         ZarrsResult::ZARRS_ERROR_STORAGE_CAPABILITY
     }
 }
@@ -123,7 +123,7 @@ pub unsafe extern "C" fn zarrsCreateArrayRW(
     pArray: *mut ZarrsArray,
 ) -> ZarrsResult {
     if storage.is_null() {
-        *LAST_ERROR = "storage is null".to_string();
+        *LAST_ERROR.lock().unwrap() = "storage is null".to_string();
         return ZarrsResult::ZARRS_ERROR_NULL_PTR;
     }
 
@@ -132,7 +132,7 @@ pub unsafe extern "C" fn zarrsCreateArrayRW(
     let metadata = match ArrayMetadata::try_from(metadata.as_str()) {
         Ok(metadata) => metadata,
         Err(err) => {
-            *LAST_ERROR = err.to_string();
+            *LAST_ERROR.lock().unwrap() = err.to_string();
             return ZarrsResult::ZARRS_ERROR_INVALID_METADATA;
         }
     };
@@ -144,12 +144,12 @@ pub unsafe extern "C" fn zarrsCreateArrayRW(
                 ZarrsResult::ZARRS_SUCCESS
             }
             Err(err) => {
-                *LAST_ERROR = err.to_string();
+                *LAST_ERROR.lock().unwrap() = err.to_string();
                 ZarrsResult::ZARRS_ERROR_ARRAY
             }
         }
     } else {
-        *LAST_ERROR = "storage does not support read and write".to_string();
+        *LAST_ERROR.lock().unwrap() = "storage does not support read and write".to_string();
         ZarrsResult::ZARRS_ERROR_STORAGE_CAPABILITY
     }
 }
@@ -352,12 +352,13 @@ pub unsafe extern "C" fn zarrsArrayGetChunkSize(
                 *chunkSize = chunk_size;
                 ZarrsResult::ZARRS_SUCCESS
             } else {
-                *LAST_ERROR = "variable size data types are not supported".to_string();
+                *LAST_ERROR.lock().unwrap() =
+                    "variable size data types are not supported".to_string();
                 ZarrsResult::ZARRS_ERROR_UNSUPPORTED_DATA_TYPE
             }
         }
         Err(err) => {
-            *LAST_ERROR = err.to_string();
+            *LAST_ERROR.lock().unwrap() = err.to_string();
             ZarrsResult::ZARRS_ERROR_INVALID_INDICES
         }
     }
@@ -394,7 +395,7 @@ pub unsafe extern "C" fn zarrsArrayGetChunkOrigin(
             ZarrsResult::ZARRS_SUCCESS
         }
         Err(err) => {
-            *LAST_ERROR = err.to_string();
+            *LAST_ERROR.lock().unwrap() = err.to_string();
             ZarrsResult::ZARRS_ERROR_INVALID_INDICES
         }
     }
@@ -431,7 +432,7 @@ pub unsafe extern "C" fn zarrsArrayGetChunkShape(
             ZarrsResult::ZARRS_SUCCESS
         }
         Err(err) => {
-            *LAST_ERROR = err.to_string();
+            *LAST_ERROR.lock().unwrap() = err.to_string();
             ZarrsResult::ZARRS_ERROR_INVALID_INDICES
         }
     }
@@ -461,7 +462,7 @@ pub unsafe extern "C" fn zarrsArrayGetSubsetSize(
     // Get the data type
     let data_type = array_fn!(array, data_type);
     let Some(data_type_size) = data_type.fixed_size() else {
-        *LAST_ERROR = "variable size data types are not supported".to_string();
+        *LAST_ERROR.lock().unwrap() = "variable size data types are not supported".to_string();
         return ZarrsResult::ZARRS_ERROR_UNSUPPORTED_DATA_TYPE;
     };
 
@@ -501,7 +502,7 @@ pub unsafe extern "C" fn zarrsArrayGetMetadataString(
         }
     }
 
-    *LAST_ERROR = "error converting metadata to a json string".to_string();
+    *LAST_ERROR.lock().unwrap() = "error converting metadata to a json string".to_string();
     ZarrsResult::ZARRS_ERROR_INVALID_METADATA
 }
 
@@ -536,7 +537,7 @@ pub unsafe extern "C" fn zarrsArrayGetAttributesString(
         }
     }
 
-    *LAST_ERROR = "error converting attributes to a json string".to_string();
+    *LAST_ERROR.lock().unwrap() = "error converting attributes to a json string".to_string();
     ZarrsResult::ZARRS_ERROR_INVALID_METADATA
 }
 
@@ -562,7 +563,7 @@ pub unsafe extern "C" fn zarrsArraySetAttributes(
     let Ok(serde_json::Value::Object(mut attributes)) =
         serde_json::from_str::<serde_json::Value>(attributes.into())
     else {
-        *LAST_ERROR = "error interpreting attributes to a json map".to_string();
+        *LAST_ERROR.lock().unwrap() = "error interpreting attributes to a json map".to_string();
         return ZarrsResult::ZARRS_ERROR_INVALID_METADATA;
     };
 

@@ -13,7 +13,7 @@ fn zarrsArrayStoreMetadataImpl<T: WritableStorageTraits + ?Sized + 'static>(
     match array.store_metadata() {
         Ok(()) => ZarrsResult::ZARRS_SUCCESS,
         Err(err) => {
-            unsafe { *LAST_ERROR = err.to_string() };
+            *LAST_ERROR.lock().unwrap() = err.to_string();
             ZarrsResult::ZARRS_ERROR_STORAGE
         }
     }
@@ -37,7 +37,7 @@ pub unsafe extern "C" fn zarrsArrayStoreMetadata(array: ZarrsArray) -> ZarrsResu
         ZarrsArrayEnum::RW(array) => zarrsArrayStoreMetadataImpl(array),
         ZarrsArrayEnum::RWL(array) => zarrsArrayStoreMetadataImpl(array),
         _ => {
-            *LAST_ERROR = "storage does not have write capability".to_string();
+            *LAST_ERROR.lock().unwrap() = "storage does not have write capability".to_string();
             ZarrsResult::ZARRS_ERROR_STORAGE_CAPABILITY
         }
     }
@@ -49,7 +49,7 @@ fn zarrsArrayStoreChunkImpl<T: WritableStorageTraits + ?Sized + 'static>(
     chunk_bytes: &[u8],
 ) -> ZarrsResult {
     if let Err(err) = array.store_chunk(chunk_indices, chunk_bytes) {
-        unsafe { *LAST_ERROR = err.to_string() };
+        *LAST_ERROR.lock().unwrap() = err.to_string();
         ZarrsResult::ZARRS_ERROR_ARRAY
     } else {
         ZarrsResult::ZARRS_SUCCESS
@@ -85,15 +85,17 @@ pub unsafe extern "C" fn zarrsArrayStoreChunk(
 
     let chunk_representation = array_fn!(array, chunk_array_representation, chunk_indices);
     let Ok(chunk_representation) = chunk_representation else {
-        unsafe { *LAST_ERROR = chunk_representation.unwrap_err_unchecked().to_string() };
+        unsafe {
+            *LAST_ERROR.lock().unwrap() = chunk_representation.unwrap_err_unchecked().to_string()
+        };
         return ZarrsResult::ZARRS_ERROR_INVALID_INDICES;
     };
     let Some(chunk_size) = chunk_representation.fixed_size() else {
-        *LAST_ERROR = "variable size data types are not supported".to_string();
+        *LAST_ERROR.lock().unwrap() = "variable size data types are not supported".to_string();
         return ZarrsResult::ZARRS_ERROR_UNSUPPORTED_DATA_TYPE;
     };
     if chunkBytesCount != chunk_size {
-        *LAST_ERROR =
+        *LAST_ERROR.lock().unwrap() =
                         format!("zarrsArrayRetrieveChunk chunk_bytes_length {chunkBytesCount} does not match expected length {}", chunk_size);
         return ZarrsResult::ZARRS_ERROR_BUFFER_LENGTH;
     }
@@ -104,7 +106,7 @@ pub unsafe extern "C" fn zarrsArrayStoreChunk(
         ZarrsArrayEnum::RW(array) => zarrsArrayStoreChunkImpl(array, chunk_indices, chunk_bytes),
         ZarrsArrayEnum::RWL(array) => zarrsArrayStoreChunkImpl(array, chunk_indices, chunk_bytes),
         _ => {
-            *LAST_ERROR = "storage does not have write capability".to_string();
+            *LAST_ERROR.lock().unwrap() = "storage does not have write capability".to_string();
             ZarrsResult::ZARRS_ERROR_STORAGE_CAPABILITY
         }
     }

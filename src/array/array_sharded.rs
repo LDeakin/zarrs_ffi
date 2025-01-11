@@ -128,7 +128,7 @@ pub unsafe extern "C" fn zarrsCreateShardIndexCache(
             )));
         }
         _ => {
-            *LAST_ERROR = "storage does not have read capability".to_string();
+            *LAST_ERROR.lock().unwrap() = "storage does not have read capability".to_string();
             return ZarrsResult::ZARRS_ERROR_STORAGE_CAPABILITY;
         }
     }
@@ -165,16 +165,15 @@ fn zarrsArrayRetrieveInnerChunkImpl<T: ReadableStorageTraits + ?Sized + 'static>
     match array.retrieve_inner_chunk_opt(cache, chunk_indices, &CodecOptions::default()) {
         Ok(bytes) => {
             let Ok(bytes) = bytes.into_fixed() else {
-                unsafe { *LAST_ERROR = "variable size data types are not supported".to_string() };
+                *LAST_ERROR.lock().unwrap() =
+                    "variable size data types are not supported".to_string();
                 return ZarrsResult::ZARRS_ERROR_UNSUPPORTED_DATA_TYPE;
             };
             if bytes.len() != chunk_bytes_length {
-                unsafe {
-                    *LAST_ERROR = format!(
+                *LAST_ERROR.lock().unwrap() = format!(
                     "chunk_bytes_length {chunk_bytes_length} does not match decoded chunk size {}",
                     bytes.len()
-                )
-                };
+                );
                 ZarrsResult::ZARRS_ERROR_BUFFER_LENGTH
             } else {
                 unsafe { std::ptr::copy(bytes.as_ptr(), chunk_bytes, chunk_bytes_length) };
@@ -182,7 +181,7 @@ fn zarrsArrayRetrieveInnerChunkImpl<T: ReadableStorageTraits + ?Sized + 'static>
             }
         }
         Err(err) => {
-            unsafe { *LAST_ERROR = err.to_string() };
+            *LAST_ERROR.lock().unwrap() = err.to_string();
             ZarrsResult::ZARRS_ERROR_ARRAY
         }
     }
@@ -246,7 +245,7 @@ pub unsafe extern "C" fn zarrsArrayRetrieveInnerChunk(
             pChunkBytes,
         ),
         _ => {
-            *LAST_ERROR = "storage does not have read capability".to_string();
+            *LAST_ERROR.lock().unwrap() = "storage does not have read capability".to_string();
             ZarrsResult::ZARRS_ERROR_STORAGE_CAPABILITY
         }
     }
@@ -262,16 +261,15 @@ fn zarrsArrayRetrieveSubsetShardedImpl<T: ReadableStorageTraits + ?Sized + 'stat
     match array.retrieve_array_subset_sharded_opt(cache, array_subset, &CodecOptions::default()) {
         Ok(bytes) => {
             let Ok(bytes) = bytes.into_fixed() else {
-                unsafe { *LAST_ERROR = "variable size data types are not supported".to_string() };
+                *LAST_ERROR.lock().unwrap() =
+                    "variable size data types are not supported".to_string();
                 return ZarrsResult::ZARRS_ERROR_UNSUPPORTED_DATA_TYPE;
             };
             if bytes.len() != subset_bytes_length {
-                unsafe {
-                    *LAST_ERROR = format!(
+                *LAST_ERROR.lock().unwrap() = format!(
                     "subset_bytes_length {subset_bytes_length} does not match decoded subset size {}",
                     bytes.len()
-                )
-                };
+                );
                 ZarrsResult::ZARRS_ERROR_BUFFER_LENGTH
             } else {
                 unsafe { std::ptr::copy(bytes.as_ptr(), subset_bytes, subset_bytes_length) };
@@ -279,7 +277,7 @@ fn zarrsArrayRetrieveSubsetShardedImpl<T: ReadableStorageTraits + ?Sized + 'stat
             }
         }
         Err(err) => {
-            unsafe { *LAST_ERROR = err.to_string() };
+            *LAST_ERROR.lock().unwrap() = err.to_string();
             ZarrsResult::ZARRS_ERROR_ARRAY
         }
     }
@@ -350,7 +348,7 @@ pub unsafe extern "C" fn zarrsArrayRetrieveSubsetSharded(
             pSubsetBytes,
         ),
         _ => {
-            *LAST_ERROR = "storage does not have read capability".to_string();
+            *LAST_ERROR.lock().unwrap() = "storage does not have read capability".to_string();
             ZarrsResult::ZARRS_ERROR_STORAGE_CAPABILITY
         }
     }

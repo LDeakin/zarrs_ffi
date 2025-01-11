@@ -47,7 +47,7 @@ pub unsafe extern "C" fn zarrsCreateStorageFilesystem(
             ZarrsResult::ZARRS_SUCCESS
         }
         Err(err) => {
-            *LAST_ERROR = err.to_string();
+            *LAST_ERROR.lock().unwrap() = err.to_string();
             ZarrsResult::ZARRS_ERROR_STORAGE
         }
     }

@@ -10,7 +10,7 @@ fn zarrsArrayStoreSubsetImpl<T: ReadableWritableStorageTraits + ?Sized + 'static
     subset_bytes: &[u8],
 ) -> ZarrsResult {
     if let Err(err) = array.store_array_subset(array_subset, subset_bytes) {
-        unsafe { *LAST_ERROR = err.to_string() };
+        *LAST_ERROR.lock().unwrap() = err.to_string();
         ZarrsResult::ZARRS_ERROR_ARRAY
     } else {
         ZarrsResult::ZARRS_SUCCESS
@@ -53,7 +53,7 @@ pub unsafe extern "C" fn zarrsArrayStoreSubset(
         ZarrsArrayEnum::RW(array) => zarrsArrayStoreSubsetImpl(array, &array_subset, subset_bytes),
         ZarrsArrayEnum::RWL(array) => zarrsArrayStoreSubsetImpl(array, &array_subset, subset_bytes),
         _ => {
-            *LAST_ERROR = "storage does not have read/write capability".to_string();
+            *LAST_ERROR.lock().unwrap() = "storage does not have read/write capability".to_string();
             ZarrsResult::ZARRS_ERROR_STORAGE_CAPABILITY
         }
     }
