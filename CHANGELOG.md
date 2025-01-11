@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
  - Bump `zarrs` to 0.19.0
+ - **Breaking**: Bump MSRV to Rust 1.82
 
 ### Fixed
  - fix: `static_mut_refs` lint and `zarrsLastError` safety
