@@ -182,9 +182,9 @@ checksum = "9ac0150caa2ae65ca5bd83f25c7de183dea78d4d366469f148435e2acfbad0da"
 
 [[package]]
 name = "bzip2"
-version = "0.4.4"
+version = "0.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bdb116a6ef3f6c3698828873ad02c3014b3c85cadb88496095628e3ef1e347f8"
+checksum = "bafdbf26611df8c14810e268ddceda071c297570a5fb360ceddf617fe417ef58"
 dependencies = [
  "bzip2-sys",
  "libc",
@@ -577,6 +577,15 @@ name = "itertools"
 version = "0.13.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "413ee7dfc52ee1a4949ceeb7dbc8a33f2d6c088194d9f922fb8318faf1f01186"
+dependencies = [
+ "either",
+]
+
+[[package]]
+name = "itertools"
+version = "0.14.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2b192c782037fadd9cfa75548310488aabdbf3d2da73885b31bd0abd03351285"
 dependencies = [
  "either",
 ]
@@ -1685,9 +1694,9 @@ dependencies = [
 
 [[package]]
 name = "zarrs"
-version = "0.18.0"
+version = "0.19.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a2957fbdc365a192c71fe61ab2e759d4e77fbad598e032102b87b4188c32369d"
+checksum = "38db7cfe076520e2f7ecbe2555e540472389a9322e53a9bed6e2a40ca663625c"
 dependencies = [
  "blosc-src",
  "bytemuck",
@@ -1699,7 +1708,7 @@ dependencies = [
  "gdeflate-sys",
  "half",
  "inventory",
- "itertools 0.13.0",
+ "itertools 0.14.0",
  "lru",
  "moka",
  "ndarray",
@@ -1753,9 +1762,9 @@ dependencies = [
 
 [[package]]
 name = "zarrs_metadata"
-version = "0.2.0"
+version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "902f67415f15036895770fab4dd3b274fb4a6cd44390d68feaa21b3f0dfabba4"
+checksum = "502559b979fcf9ae7a24815a86f8aa80ee76cf5b5bb197686e965a104c60b6cc"
 dependencies = [
  "derive_more",
  "half",
@@ -1783,9 +1792,9 @@ dependencies = [
 
 [[package]]
 name = "zfp-sys"
-version = "0.2.0"
+version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2081d64fbc47b2bed9bc8652a0f10f383c1512d7c0fa186d136f6487ea132d04"
+checksum = "1c73bc0ccabf2001b5230d7f837cc892f2efd2587270128a2e84cd64d3344fc3"
 dependencies = [
  "bindgen",
  "cmake",
