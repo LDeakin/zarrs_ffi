@@ -1821,7 +1821,7 @@ dependencies = [
 
 [[package]]
 name = "zarrs_ffi"
-version = "0.8.5"
+version = "0.9.0"
 dependencies = [
  "cbindgen",
  "ffi-support",

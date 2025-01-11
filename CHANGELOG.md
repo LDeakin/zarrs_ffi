@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.0] - 2025-01-12
+
 ### Changed
  - Bump `zarrs` to 0.19.0
  - **Breaking**: Bump MSRV to Rust 1.82
@@ -174,7 +176,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
  - Initial public release
 
-[unreleased]: https://github.com/LDeakin/zarrs_ffi/compare/v0.8.5...HEAD
+[unreleased]: https://github.com/LDeakin/zarrs_ffi/compare/v0.9.0...HEAD
+[0.9.0]: https://github.com/LDeakin/zarrs_ffi/releases/tag/v0.9.0
 [0.8.5]: https://github.com/LDeakin/zarrs_ffi/releases/tag/v0.8.5
 [0.8.4]: https://github.com/LDeakin/zarrs_ffi/releases/tag/v0.8.4
 [0.8.3]: https://github.com/LDeakin/zarrs_ffi/releases/tag/v0.8.3
