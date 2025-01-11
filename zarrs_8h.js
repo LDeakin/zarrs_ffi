@@ -71,7 +71,7 @@ var zarrs_8h =
     [ "zarrsDestroyShardIndexCache", "zarrs_8h.html#ac20cb33e41e742110d1c7b55bd8768a4", null ],
     [ "zarrsDestroyStorage", "zarrs_8h.html#a99505fccdc6117399b54925f8b77bd93", null ],
     [ "zarrsFreeString", "zarrs_8h.html#a5762993192e5d0ec36c3b29f356e05ae", null ],
-    [ "zarrsLastError", "zarrs_8h.html#a8de555f742c0f8f006bfb0f13f50106a", null ],
+    [ "zarrsLastError", "zarrs_8h.html#a6c9ea03b2c2440f0c44ac0010a83fe7c", null ],
     [ "zarrsOpenArrayRW", "zarrs_8h.html#a07fa6c2495c685e2b58977260e048387", null ],
     [ "zarrsVersion", "zarrs_8h.html#ad427b61281c3dee20edebe4e4410c7c3", null ],
     [ "zarrsVersionMajor", "zarrs_8h.html#ae02dd076406c33121a132fb4b61e4c8a", null ],

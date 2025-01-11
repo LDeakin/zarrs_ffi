@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['readme_2emd_0',['README.md',['../README_8md.html',1,'']]]
+  ['basic_20build_0',['Basic Build',['../index.html#autotoc_md50',1,'']]],
+  ['build_1',['build',['../index.html#autotoc_md50',1,'Basic Build'],['../index.html#autotoc_md49',1,'Manual Build']]]
 ];
