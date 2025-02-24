@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Bump `cbindgen` to 0.28
+- Bump all dependencies in lockfile
+  - `zarrs` has had a number of metadata compatibility fixes with `zarr-python`
+
 ## [0.9.0] - 2025-01-12
 
 ### Changed
