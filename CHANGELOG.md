@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.1] - 2025-02-24
+
 ### Changed
 - Bump `cbindgen` to 0.28
 - Bump all dependencies in lockfile
@@ -181,7 +183,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
  - Initial public release
 
-[unreleased]: https://github.com/LDeakin/zarrs_ffi/compare/v0.9.0...HEAD
+[unreleased]: https://github.com/LDeakin/zarrs_ffi/compare/v0.9.1...HEAD
+[0.9.1]: https://github.com/LDeakin/zarrs_ffi/releases/tag/v0.9.1
 [0.9.0]: https://github.com/LDeakin/zarrs_ffi/releases/tag/v0.9.0
 [0.8.5]: https://github.com/LDeakin/zarrs_ffi/releases/tag/v0.8.5
 [0.8.4]: https://github.com/LDeakin/zarrs_ffi/releases/tag/v0.8.4
